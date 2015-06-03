@@ -84,3 +84,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Gsevol settings
+GSEVOL_COMMAND = 'python2 /home/is/Projekty/Licencjat/gsevol-web/gsevol2013/src/gsevol.py'
