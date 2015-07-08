@@ -1,13 +1,3 @@
-*.pyc
-*~
-*.tmp
-*.log
-*.svg
-
-###################################
-# Gumby.css gitignore
-###################################
-
 # Numerous always-ignore extensions
 *.bak
 *.diff

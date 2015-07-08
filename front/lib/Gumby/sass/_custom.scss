@@ -1,0 +1,66 @@
+$slight-padding: 10px;
+
+//colour palette
+$deepred: #71150c;
+$turquoise: #016b6b;
+$darkgray: #262626;
+$background: #f9f8f7;
+$beige: #d4d0d0;
+$gray: #8d8f8a;
+
+$accent1: $turquoise;
+$background: $beige;
+$tittlefont: #0d0403;
+
+
+.logo {
+    font: bold 45px 'Anita';
+    color: $tittlefont;
+    a {
+        color: $tittlefont;
+    }
+
+}
+
+#main {
+
+    margin-top: 0px;
+    padding: $slight-padding;
+    //padding-right: $slight-padding;
+}
+
+body {
+    background: #f9f8f7;
+}
+
+#topbar{
+    background: $accent1;
+    color: $tittlefont;
+
+}
+table tr td:first-child {
+    font-weight: normal;
+}
+
+.cal {
+    height: 50%;
+    padding: 0 4px 0 4px;
+    color: $gray;
+}
+
+.chal {
+    background: $background;
+}
+.past {
+    color: black;
+}
+
+/* label {
+    float: left;
+    text-align: right;
+    margin-right: 5px;
+}
+input.input, .picker {
+    float: right;
+    margin-left: 15px;
+} */
