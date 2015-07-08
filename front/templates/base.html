@@ -1,0 +1,34 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+	 <meta charset="utf-8">
+		<link rel="stylesheet" href="{% static 'Gumby/css/style.css' %}" />
+		<link rel="stylesheet" href="{% static 'Gumby/css/gumby.css' %}" />
+		<script src="{% static 'Gumby/js/libs/jquery-1.10.1.min.js' %}"></script>
+		<script src="{% static 'd3.v3.js' %}"></script>
+		<title>GSevol - phylogenetic analysis tool</title>
+	</head>
+	<body>
+	    <div class="navbar" id="topbar">
+        <div class="row">
+            <h1 class="six columns logo">GSevol</h1>
+            <ul class="six columns">
+				{% block header %}
+				<li> Menu item </li>
+				{{ header }}
+				{% endblock %}
+            </ul>
+        </div>
+	    </div>
+	    <div class="row">
+			<div class="centered twelve columns" id="main">
+			{% autoescape off %}
+				{% block content %}
+				{{ content }}
+				{% endblock %}
+			{% endautoescape %}
+			</div>
+		</div>
+	</body>
+</html>
