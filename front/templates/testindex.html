@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+	 <meta charset="utf-8">
+		<!-- <link rel="stylesheet" href="lib/Gumby/css/style.css" /> -->
+		<!-- <link rel="stylesheet" href="lib/Gumby/css/gumby.css" /> -->
+		<!--  <script src="lib/jquery-1.10.2.js"></script> -->
+		<!--  <script src="lib/d3.v3.js"></script> -->
+		<title>GSevol - phylogenetic analysis tool</title>
+	</head>
+	<body>
+		<div class="row">
+			<div class="centered twelve columns text-left" id="menu" style="border:1px solid">
+				{% block header %}
+				{{ header }}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="centered twelve columns text-left" id="main" style="border:1px solid">
+			{% autoescape off %}
+				{% block content %}
+				{{ content }}
+				{% endblock %}
+			{% endautoescape %}
+			</div>
+		</div>
+	</body>
+</html>

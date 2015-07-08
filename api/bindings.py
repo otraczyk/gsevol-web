@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import subprocess
 import time
 from exceptions import RuntimeError
@@ -48,6 +49,14 @@ def draw_randbin_s():
     """
     Demo: return random tree svg.
     """
-    return launch_command(
+    svg_source = launch_command(
         '-g &randbin(a-f) -s &randbin(a-f) -dgS -C outputfile="/dev/stdout"'
-        )
+    )
+    return svg_source
+
+def as_tag(source):
+    """Removes <?xml.  > header from svg source.
+
+    May not be needed after all.
+    """
+    return re.sub(r'^<\?xml[^>]*>(\n)?','',  source)

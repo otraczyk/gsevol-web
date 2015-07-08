@@ -24,6 +24,13 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    },
+]
+
 ALLOWED_HOSTS = []
 
 
@@ -79,12 +86,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    'front/lib/',
+
+)
+
 
 # Gsevol settings
-GSEVOL_COMMAND = 'python2 /home/is/Projekty/Licencjat/gsevol-web/gsevol2013/src/gsevol.py'
+GSEVOL_COMMAND = 'python2 /home/is/Projekty/Licencjat/gsevol/gsevol2013/src/gsevol.py'
