@@ -4,14 +4,14 @@
     <script src="{% static 'app.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <form id="input-form">
+    <form id="input-form" method="post">
         <div class="field">
         <label class="inline" for="gene">Gene tree:  </label>
-        <input class="wide text input" type="text" name="gene" placeholder="{{ default_gene }}" />
+        <input class="wide text input" type="text" name="gene" value="{{ default_gene }}" />
         </div>
         <div class="field">
         <label class="inline" for="species">Species tree:  </label>
-        <input class="wide text input" type="text" name="species" placeholder="{{ default_species }}" />
+        <input class="wide text input" type="text" name="species" value="{{ default_species }}" />
         <div class="medium info btn">
             <a href="#"><input type="submit" value="Submit" /></a>
         </div>

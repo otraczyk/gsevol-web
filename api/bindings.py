@@ -60,3 +60,8 @@ def as_tag(source):
     May not be needed after all.
     """
     return re.sub(r'^<\?xml[^>]*>(\n)?','',  source)
+
+def draw_genes(tree):
+    return launch_command(
+        '-g %s -dgS -C outputfile="/dev/stdout"' % tree
+    )

@@ -1,11 +1,17 @@
 sendTrees = function(event){
     // TODO: validation
-    event.preventDefault();
-    $.post('api/draw/', $(event.currentTarget).serialize(), renderResults);
+    $.ajax({
+        type: "POST",
+        url: 'api/draw/',
+        data: JSON.stringify($(event.currentTarget).serializeArray()),
+        success: renderResults,
+        contentType: 'application/json'
+    });
+    return false;
 }
 
 renderResults = function(data){
-    console.log(data);
+    $('#results').html(data.svg);
 }
 
 $(function(){

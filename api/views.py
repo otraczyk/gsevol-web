@@ -10,5 +10,9 @@ JsonResponse = lambda data: HttpResponse(json.dumps(data),
                                                  content_type="application/json")
 
 def draw(request):
-    svg = Gse.draw_randbin_s()
+    input_trees = json.loads(request.body)
+    # Flattening list of dicts
+    input_trees = {d["name"]: d["value"] for d in input_trees}
+
+    svg = Gse.draw_genes(input_trees["gene"])
     return JsonResponse({'svg': svg})
