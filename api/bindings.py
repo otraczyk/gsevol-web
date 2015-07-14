@@ -8,7 +8,7 @@ from django.conf import settings
 
 
 def launch(params, timeout=300):
-    """Launch GSevol subprocess.
+    """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
     given a time limit (default 300 seconds).
@@ -40,7 +40,7 @@ def launch_command(command):
 
 def gen_randbin_f():
     """
-    Demo: generates random binary gene and species trees with leaves a-f.
+    Generate random binary gene and species trees with leaves a-f.
     """
     command = '-g &randbin(a-f) -s &randbin(a-f) -egsG'
     return launch_command(command)

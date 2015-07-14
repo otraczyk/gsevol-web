@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="form">
+        <div class="field">
+        <label class="inline" for="gene">Gene tree:  </label>
+        <input class="wide text input" type="text" id="gene" placeholder="{{ default_gene }}" />
+        </div>
+        <div class="field">
+        <label class="inline" for="species">Species tree:  </label>
+        <input class="wide text input" type="text" id="species" placeholder="{{ default_species }}" />
+        <div class="medium info btn">
+            <a href="#"><input type="submit" value="Submit" /></a>
+        </div>
+        </div>
+    </div>
+    <div id="results">
+    </div>
+{% endblock %}
