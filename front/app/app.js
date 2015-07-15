@@ -12,10 +12,12 @@ sendTrees = function(event){
 
 renderResults = function(data){
     $('#results').html(data.svg);
+    $('#alerts').empty()
 }
 
-$(document).ajaxError(function() {
-  $('#alerts').append('<li class="danger alert">Error processing input</li>');
+$(document).ajaxError(function(cos, resp) {
+    error = resp.responseJSON.error
+    $('#alerts').append('<li class="danger alert">Error processing input: ' + error + '</li>');
 });
 
 $(function(){
