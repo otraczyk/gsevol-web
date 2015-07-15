@@ -3,6 +3,7 @@
 *.tmp
 *.log
 *.svg
+*.png
 
 ###################################
 # Gumby.css gitignore
