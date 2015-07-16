@@ -54,14 +54,22 @@ def draw_randbin_s():
     )
     return svg_source
 
-def as_tag(source):
-    """Removes <?xml.  > header from svg source.
+def split_to_pictures(source):
+    """Divide svg source stream into pictures.
 
-    May not be needed after all.
+    Splits input on <?xml .*> headings.
     """
-    return re.sub(r'^<\?xml[^>]*>(\n)?','',  source)
+    return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
-def draw_genes(tree):
-    return launch_command(
-        '-g %s -dgS -C outputfile="/dev/stdout"' % tree
-    )
+def draw_trees(gene='', species=''):
+    """
+    Return svg sources for provided gene and/or species trees.
+    """
+    command = []
+    if gene:
+        command.append('-g ' + gene)
+    if species:
+        command.append('-s ' + species)
+    command.append('-dgsS -C outputfile="/dev/stdout"')
+    source = launch_command(' '.join(command))
+    return split_to_pictures(source)
