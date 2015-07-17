@@ -16,7 +16,7 @@ renderResults = function(data){
 }
 
 $(document).ajaxError(function(cos, resp) {
-    error = resp.responseJSON.error
+    error = resp.responseJSON || resp.responseText
     $('#alerts').append('<li class="danger alert">Error processing input: ' + error + '</li>');
 });
 

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import re
 import subprocess
 import time
 from exceptions import RuntimeError
 
 from django.conf import settings
 
+class GseError(Exception):
+    pass
 
-def launch(params, timeout=30):
+
+def launch(params, timeout=300):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
@@ -30,7 +32,7 @@ def launch(params, timeout=30):
             raise RuntimeError("Gsevol process timeout", params)
     out, err = gse_process.communicate()
     if err:
-        raise RuntimeError("Gsevol error", err, params, out)
+        raise GseError("Gsevol error", err, params, out)
     return out
 
 def launch_command(command):
@@ -70,10 +72,7 @@ def draw_trees(gene='', species=''):
         command.append('-g ' + gene)
     if species:
         command.append('-s ' + species)
-    command.append('-dgsS -C outputfile="/dev/stdout"')
+    command.append('-dgsmS -C outputfile="/dev/stdout"')
     source = launch_command(' '.join(command))
     # return split_to_pictures(source)  # TODO: proper splitting and handling
-    if gene and species:
-        mapping = launch_command('-g %s -s %s -dmS -C outputfile="/dev/stdout"'
-                                 % (gene, species))
-    return source + mapping
+    return source
