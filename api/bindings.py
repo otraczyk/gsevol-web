@@ -7,7 +7,7 @@ from exceptions import RuntimeError
 from django.conf import settings
 
 
-def launch(params, timeout=300):
+def launch(params, timeout=30):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
@@ -72,4 +72,8 @@ def draw_trees(gene='', species=''):
         command.append('-s ' + species)
     command.append('-dgsS -C outputfile="/dev/stdout"')
     source = launch_command(' '.join(command))
-    return split_to_pictures(source)
+    # return split_to_pictures(source)  # TODO: proper splitting and handling
+    if gene and species:
+        mapping = launch_command('-g %s -s %s -dmS -C outputfile="/dev/stdout"'
+                                 % (gene, species))
+    return source + mapping

@@ -16,8 +16,8 @@ def draw(request):
     # Flattening list of dicts
     input_trees = {d["name"]: d["value"] for d in input_trees}
     try:
-        g_svg, s_svg = Gse.draw_trees(input_trees["gene"], input_trees["species"])
-        return JsonResponse({'svg': g_svg + s_svg})
+        svg = Gse.draw_trees(input_trees["gene"], input_trees["species"])
+        return JsonResponse({'svg': svg})
     except RuntimeError as exc:
         error = re.search(r'Exception\("([^"]*)', str(exc)).group(1)
         return JsonResponse({'error': error}, status=500)
