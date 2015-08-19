@@ -11,7 +11,7 @@ sendTrees = function(event){
 }
 
 renderResults = function(data){
-    $('#results').html(data.svg);
+    React.render(<ResultTile svg={data.svg} />, document.getElementById('results'));
     $('#alerts').empty()
 }
 
