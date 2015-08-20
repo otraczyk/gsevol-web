@@ -36,13 +36,15 @@ def launch(params, timeout=300):
     return out
 
 def launch_command(command):
-    """Launches Gsevol with given command string."""
+    """
+    Launches Gsevol with given command string.
+    """
     out = launch(command.split(' '))
     return out
 
-def gen_randbin_f():
+def random_trees():
     """
-    Generate random binary gene and species trees with leaves a-f.
+    Generate random gene and species trees with leaves a-f.
     """
     command = '-g &randbin(a-f) -s &randbin(a-f) -egsG'
     return launch_command(command)
@@ -63,7 +65,10 @@ def split_to_pictures(source):
     """
     return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
-def draw_trees(gene='', species=''):
+def draw_single_tree(tree):
+    return launch_command('-g %s -dgS -C outputfile="/dev/stdout"' % tree)
+
+def draw_trees(gene, species):
     """
     Return svg sources for provided gene and/or species trees.
     """
@@ -74,5 +79,5 @@ def draw_trees(gene='', species=''):
         command.append('-s ' + species)
     command.append('-dgsmS -C outputfile="/dev/stdout"')
     source = launch_command(' '.join(command))
-    # return split_to_pictures(source)  # TODO: proper splitting and handling
+    return split_to_pictures(source)  # TODO: proper splitting and handling
     return source

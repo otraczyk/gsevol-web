@@ -10,7 +10,7 @@ def index(request):
     defaults = {}
     try:
         # Provide random trees as defaults for input form.
-        gene, species = Gse.gen_randbin_f().split('\n')[:2]
+        gene, species = Gse.random_trees().split('\n')[:2]
         defaults = {'default_gene': gene, 'default_species': species}
     except Exception as e:
         raise RuntimeError("Problem processing Gsevol output", e)

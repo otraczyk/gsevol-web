@@ -16,9 +16,19 @@ def draw(request):
     input_trees = json.loads(request.body)
     # Flattening list of dicts
     input_trees = {d["name"]: d["value"] for d in input_trees}
+    results = {}
     try:
-        svg = Gse.draw_trees(input_trees["gene"], input_trees["species"])
-        return JsonResponse({'svg': svg})
+        if input_trees["gene"] and input_trees["species"]:
+            # processing double input
+            svgs = Gse.draw_trees(input_trees["gene"], input_trees["species"])
+            results = {"gene": svgs[0], "species": svgs[1], "mapping": svgs[2]}
+            # + scenarios
+        else:
+            for tree_type in ["gene", "species"]:
+                if input_trees[tree_type]:
+                    svg = Gse.draw_single_tree(input_trees[tree_type])
+                    results[tree_type] = svg
+        return JsonResponse(results)
     except Gse.GseError as exc:
         error = re.search(r'Exception\("([^"]*)', str(exc)).group(1)
         return JsonResponse(error, status=500)
