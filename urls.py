@@ -9,4 +9,5 @@ urlpatterns = patterns('',
 )
 urlpatterns += patterns('',
     url(r'^api/draw', 'api.views.draw'),
+    url(r'^api/embedding', 'api.views.draw_embedding'),
 )

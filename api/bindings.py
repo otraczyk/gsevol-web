@@ -70,14 +70,24 @@ def draw_single_tree(tree):
 
 def draw_trees(gene, species):
     """
-    Return svg sources for provided gene and/or species trees.
+    Draw basic output for a tree pair: gene tree, species tree and their mapping.
     """
-    command = []
-    if gene:
-        command.append('-g ' + gene)
-    if species:
-        command.append('-s ' + species)
-    command.append('-dgsmS -C outputfile="/dev/stdout"')
-    source = launch_command(' '.join(command))
+    command = '-g %s -s %s -dgsmS -C outputfile="/dev/stdout"' % (gene, species)
+    source = launch_command(command)
     return split_to_pictures(source)  # TODO: proper splitting and handling
-    return source
+
+def scenarios(gene, species):
+    """
+    List all possible evolutionary scenarios for a pair of trees.
+
+    Order: optimal to worst.
+    """
+    command = '-g %s -s %s -e Ga' % (gene, species)
+    scenarios = launch_command(command).strip().split('\n')
+    scenarios.reverse()
+    return scenarios # [:-2]
+
+def draw_embedding(species, scenario):
+    command = '-t %s -s %s"(b,(a,c))" -de -C outputfile="/dev/stdout"' % (scenario, species)
+    return launch_command(command)
+

@@ -47,6 +47,7 @@ table tr td:first-child {
     border: #000000 1px solid;
     border-radius: 3px;
     background: #ffffff;  // to match picture background
+    margin-bottom: 5px;
 }
 
 .title {
@@ -55,7 +56,10 @@ table tr td:first-child {
     width: 100%;
     padding: 0 20% 0 5px;
 }
-
+svg {
+    display: block;
+    margin: auto;
+}
 
 /* label {
     float: left;
@@ -66,3 +70,7 @@ input.input, .picker {
     float: right;
     margin-left: 15px;
 } */
+
+button.slim {
+    padding: 5px;
+}
