@@ -7,6 +7,7 @@ $darkgray: #262626;
 $background: #f9f8f7;
 $beige: #d4d0d0;
 $gray: #8d8f8a;
+$lightaccent: #9FBBBB;
 
 $accent1: $turquoise;
 $background: $beige;
@@ -42,18 +43,19 @@ table tr td:first-child {
     font-weight: normal;
 }
 
-.cal {
-    height: 50%;
-    padding: 0 4px 0 4px;
-    color: $gray;
+.result-tile {
+    border: #000000 1px solid;
+    border-radius: 3px;
+    background: #ffffff;  // to match picture background
 }
 
-.chal {
-    background: $background;
+.title {
+    background: $lightaccent;
+    position: relative;
+    width: 100%;
+    padding: 0 20% 0 5px;
 }
-.past {
-    color: black;
-}
+
 
 /* label {
     float: left;

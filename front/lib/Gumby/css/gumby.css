@@ -1697,11 +1697,9 @@ body { background: #f9f8f7; }
 
 table tr td:first-child { font-weight: normal; }
 
-.cal { height: 50%; padding: 0 4px 0 4px; color: #8d8f8a; }
+.result-tile { border: #000000 1px solid; border-radius: 3px; background: #ffffff; }
 
-.chal { background: #d4d0d0; }
-
-.past { color: black; }
+.title { background: #9FBBBB; position: relative; width: 100%; padding: 0 20% 0 5px; }
 
 /* label { float: left; text-align: right; margin-right: 5px;
 }

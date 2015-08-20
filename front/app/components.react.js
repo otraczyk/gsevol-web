@@ -1,7 +1,10 @@
 var ResultTile = React.createClass({
   render: function() {
     return (
-        <TreePic svg={this.props.svg} />
+        <div className="result-tile">
+            <div className="title"> {this.props.title} </div>
+            <TreePic svg={this.props.svg} />
+        </div>
     );
   }
 });
