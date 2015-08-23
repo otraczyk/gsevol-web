@@ -49,15 +49,6 @@ def random_trees():
     command = ['-g &randbin(a-f)', '-s &randbin(a-f)', '-egsG']
     return launch_command(command)
 
-def draw_randbin_s():
-    """
-    Demo: return random tree svg.
-    """
-    svg_source = launch_command(
-        '-g &randbin(a-f) -s &randbin(a-f) -dgS -C outputfile="/dev/stdout"'
-    )
-    return svg_source
-
 def split_to_pictures(source):
     """Divide svg source stream into pictures.
 
@@ -78,8 +69,7 @@ def draw_trees(gene, species):
     return split_to_pictures(source)
 
 def scenarios(gene, species):
-    """
-    List all possible evolutionary scenarios for a pair of trees.
+    """List all possible evolutionary scenarios for a pair of trees.
 
     Order: optimal to worst.
     """
@@ -89,8 +79,9 @@ def scenarios(gene, species):
     return scenarios
 
 def optscen(gene, species):
-    """
-    Generate optimal evolutionary scenario for the tree pair.
+    """Generate optimal evolutionary scenario for the tree pair.
+
+    Separated from scenarios(), which can be slow for larger trees.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGn']
     scenario = launch_command(command).strip()

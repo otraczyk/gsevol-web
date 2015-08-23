@@ -16,9 +16,9 @@ def draw(request):
     input_trees = json.loads(request.body)
     # Flattening list of dicts
     input_trees = {d["name"]: d["value"] for d in input_trees}
-    results = {}
+    results = {'for': input_trees}
     try:
-        if input_trees["gene"] and input_trees["species"]:
+        if input_trees.get("gene") and input_trees.get("species"):
             gene, species = input_trees["gene"], input_trees["species"]
             # processing double input
             svgs = Gse.draw_trees(gene, species)
@@ -48,10 +48,10 @@ def draw(request):
 def draw_embedding(request):
     # TODO: REFACTOR! Late evening code.
     input_trees = json.loads(request.body)
-    input_trees = {d["name"]: d["value"] for d in input_trees}
-    if input_trees["scenario"] and input_trees["species"]:
+    scenario, species = input_trees.get("scenario"), input_trees.get("species")
+    if scenario and species:
         try:
-            result = Gse.draw_embedding(input_trees["species"], input_trees["scenario"])
+            result = Gse.draw_embedding(species, scenario)
             return JsonResponse(result)
         except Gse.GseError as exc:
             # error = re.search(r'Exception\("([^"]*)', str(exc)).group(1)
@@ -63,5 +63,5 @@ def draw_embedding(request):
                 error = "Server error"
                 return JsonResponse(error, status=500)
     error = "Server error"
-    return JsonResponse(error, status=500)
+    return JsonResponse(error, status=501)
 

@@ -8,11 +8,13 @@
     <form id="input-form" method="post">
         <div class="field">
         <label class="inline" for="gene">Gene tree:  </label>
-        <input class="wide text input" type="text" name="gene" value="{{ default_gene }}" />
+        <input class="wide text input" type="text" name="gene"
+            value="{{ default_gene }}" id="gene" />
         </div>
         <div class="field">
         <label class="inline" for="species">Species tree:  </label>
-        <input class="wide text input" type="text" name="species" value="{{ default_species }}" />
+        <input class="wide text input" type="text" name="species"
+            value="{{ default_species }}" id="species" />
         <div class="medium info btn">
             <a href="#"><input type="submit" value="Submit" /></a>
         </div>

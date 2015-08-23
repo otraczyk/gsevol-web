@@ -72,30 +72,47 @@ var Scenario = React.createClass({
     getInitialState: function(){
         return ({"picture": null});
     },
-    render: function(){
-        var embedding = this.showEmbedding()
-        return (
-            <div className="jesym">
-            <tr>
-                <td>{this.props.noted}</td>
+    showButton: function(){
+        if (!this.state.picture){
+            return (
                 <td> <div className="small info btn">
                     <button className="slim" onClick={this.drawEmbedding}> Draw </button>
                 </div> </td>
+                );
+        }
+    },
+    render: function(){
+        var embedding = this.showEmbedding()
+        var button = this.showButton()
+        return (
+            <div>
+            <tr>
+                <td>{this.props.noted}</td>
+                {button}
             </tr>
-            {embedding}
+            <tr><td> {embedding} </td></tr>
             </div>
         );
     },
     drawEmbedding: function(){
-        // request picture
-        // write to this.state.picture
+        var request = new XMLHttpRequest(), self = this;
+        request.open('POST', 'api/embedding/', true);
+        var params = {"scenario": this.props.noted,
+                      "species": document.getElementById("species").value};
+        request.setRequestHeader("Content-type", "application/json");
+        request.onload = function() {
+          if (request.status == 200){
+            this.setState({picture: JSON.parse(request.responseText)})
+          } else {
+            console.log(request.responseText)
+          }
+        }.bind(this);
+        request.send(JSON.stringify(params))
     },
     showEmbedding: function(){
-        if (this.props.picture){
+        if (this.state.picture){
             return (
-                <tr>
-                <div dangerouslySetInnerHTML={{__html: this.props.picture}}></div>
-                </tr>
+                <div dangerouslySetInnerHTML={{__html: this.state.picture}}></div>
             );
         }
     }
