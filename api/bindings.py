@@ -39,14 +39,14 @@ def launch_command(command):
     """
     Launches Gsevol with given command string.
     """
-    out = launch(command.split(' '))
+    out = launch(command)
     return out
 
 def random_trees():
     """
     Generate random gene and species trees with leaves a-f.
     """
-    command = '-g &randbin(a-f) -s &randbin(a-f) -egsG'
+    command = ['-g &randbin(a-f)', '-s &randbin(a-f)', '-egsG']
     return launch_command(command)
 
 def draw_randbin_s():
@@ -66,15 +66,16 @@ def split_to_pictures(source):
     return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
 def draw_single_tree(tree):
-    return launch_command('-g %s -dgS -C outputfile="/dev/stdout"' % tree)
+    return launch_command(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
 
 def draw_trees(gene, species):
     """
     Draw basic output for a tree pair: gene tree, species tree and their mapping.
     """
-    command = '-g %s -s %s -dgsmS -C outputfile="/dev/stdout"' % (gene, species)
+    command = ['-g %s' % gene, '-s %s' % species, '-dgsmS',
+               '-C outputfile="/dev/stdout"']
     source = launch_command(command)
-    return split_to_pictures(source)  # TODO: proper splitting and handling
+    return split_to_pictures(source)
 
 def scenarios(gene, species):
     """
@@ -82,12 +83,24 @@ def scenarios(gene, species):
 
     Order: optimal to worst.
     """
-    command = '-g %s -s %s -e Ga' % (gene, species)
+    command = ['-g %s' % gene, '-s %s' % species, '-eGa']
     scenarios = launch_command(command).strip().split('\n')
     scenarios.reverse()
-    return scenarios # [:-2]
+    return scenarios
+
+def optscen(gene, species):
+    """
+    Generate optimal evolutionary scenario for the tree pair.
+    """
+    command = ['-g %s' % gene, '-s %s' % species, '-eGn']
+    scenario = launch_command(command).strip()
+    return scenario
 
 def draw_embedding(species, scenario):
-    command = '-t %s -s %s"(b,(a,c))" -de -C outputfile="/dev/stdout"' % (scenario, species)
+    """
+    Return svg source for embedding of a species tree into given scenario.
+    """
+    command = ['-t %s' % scenario, '-s %s' % species, '-de',
+               '-C outputfile="/dev/stdout";scale=2.5']
     return launch_command(command)
 

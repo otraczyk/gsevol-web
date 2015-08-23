@@ -19,11 +19,15 @@ def draw(request):
     results = {}
     try:
         if input_trees["gene"] and input_trees["species"]:
+            gene, species = input_trees["gene"], input_trees["species"]
             # processing double input
-            svgs = Gse.draw_trees(input_trees["gene"], input_trees["species"])
+            svgs = Gse.draw_trees(gene, species)
             results = {"gene": svgs[0], "species": svgs[1], "mapping": svgs[2]}
-            scenarios = Gse.scenarios(input_trees["gene"], input_trees["species"])
+            scenarios = Gse.scenarios(gene, species)
             results["scenarios"] = scenarios
+            optscen = Gse.optscen(gene, species)
+            results["optscen"] = {'scen': optscen,
+                                  'pic': Gse.draw_embedding(species, optscen)}
         else:
             for tree_type in ["gene", "species"]:
                 if input_trees[tree_type]:
@@ -40,6 +44,7 @@ def draw(request):
             error = "Server error"
         return JsonResponse(error, status=500)
 
+# input parsing & error handling in a decorator?
 def draw_embedding(request):
     # TODO: REFACTOR! Late evening code.
     input_trees = json.loads(request.body)

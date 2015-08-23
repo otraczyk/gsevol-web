@@ -44,6 +44,9 @@ table tr td:first-child {
 }
 
 .result-tile {
+    font-size: 12pt;
+    text-align: center;
+    font-color: #000000;
     border: #000000 1px solid;
     border-radius: 3px;
     background: #ffffff;  // to match picture background
@@ -51,10 +54,13 @@ table tr td:first-child {
 }
 
 .title {
+    font-size: 10pt;
+    text-align: left;
     background: $lightaccent;
     position: relative;
     width: 100%;
     padding: 0 20% 0 5px;
+    margin-bottom: 5px;
 }
 svg {
     display: block;

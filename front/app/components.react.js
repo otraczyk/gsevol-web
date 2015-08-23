@@ -7,7 +7,9 @@ var Results = React.createClass({
         var tiles = [['tree', this.props.data["gene"], "Gene tree"],
                      ['tree', this.props.data["species"], "Species tree"],
                      ['tree', this.props.data["mapping"], "Mapping"],
-                     ['scenarios', this.props.data["scenarios"], "Scenarios"]];
+                     ['scenario', this.props.data.optscen, "Optimal evolutionary scenario"],
+                     ['scenarios', this.props.data["scenarios"], "All scenarios"],
+                    ];
         var tiles = tiles.map(function(tile){
             return (
                 <ResultTile kind={tile[0]} content={tile[1]} title={tile[2]} />
@@ -24,6 +26,8 @@ var ResultTile = React.createClass({
             return (<TreePic svg={this.props.content} />);
         } else if (this.props.kind == 'scenarios'){
             return (<ScenarioList content={this.props.content} />);
+        } else if (this.props.kind == 'scenario'){
+            return (<TreePic noted={this.props.content.scen} svg={this.props.content.pic} />);
         }
     },
     render: function() {
@@ -44,7 +48,10 @@ var TreePic = React.createClass({
     render: function() {
         return (
             // Simple for now, but e.g. download button should be added
+            <div>
+            {this.props.noted}
             <div dangerouslySetInnerHTML={{__html: this.props.svg}}></div>
+            </div>
         );
     }
 });
@@ -84,10 +91,10 @@ var Scenario = React.createClass({
         // write to this.state.picture
     },
     showEmbedding: function(){
-        if (this.state.picture){
+        if (this.props.picture){
             return (
                 <tr>
-                <div dangerouslySetInnerHTML={{__html: this.state.picture}}></div>
+                <div dangerouslySetInnerHTML={{__html: this.props.picture}}></div>
                 </tr>
             );
         }
