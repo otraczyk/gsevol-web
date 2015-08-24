@@ -19,9 +19,13 @@ renderResults = function(data){
 
 $(document).ajaxError(function(cos, resp) {
     error = resp.responseJSON || resp.responseText
-    $('#alerts').append('<li class="danger alert">Error processing input: ' + error + '</li>');
+    PubSub.publish('newError', error);
+    // $('#alerts').append('<li class="danger alert">Error processing input: ' + error + '</li>');
 });
 
 $(function(){
     $('#input-form').submit(sendTrees);
+    errorList = React.render(
+        <ErrorList bla={3} />, document.getElementById('alerts')
+    );
 })

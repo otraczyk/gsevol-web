@@ -1,3 +1,23 @@
+var ErrorList = React.createClass({
+    render: function(){
+        var alertList = this.state.errors.map(function(err){
+            return (
+                <li class="danger alert">Error: {err} </li>
+            );
+        });
+        return ( <div> {alertList} </div> );
+    },
+    componentDidMount: function(){
+        this.addEventListener('newError', this.addError)
+    },
+    addError: function(err){
+        this.setState({errors: this.state.errors.concat([err])});
+    },
+    getInitialState: function(){
+        return ({errors: []});
+    }
+});
+
 var Results = React.createClass({
     getInitialState: function() {
         return({"data": {}});
