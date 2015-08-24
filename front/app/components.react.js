@@ -112,7 +112,7 @@ var Scenario = React.createClass({
     showEmbedding: function(){
         if (this.state.picture){
             return (
-                <div dangerouslySetInnerHTML={{__html: this.state.picture}}></div>
+                <TreePic svg={this.state.picture} />
             );
         }
     }
