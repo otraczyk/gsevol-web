@@ -1,0 +1,7 @@
+gobject-introspection
+python-cairo
+pygtk
+pygobject
+gtk-engine-murrine
+
+# manual install for pygtk - not pip installable

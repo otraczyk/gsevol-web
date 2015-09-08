@@ -22,7 +22,8 @@ def launch(params, timeout=300):
     If the process ends successfully, returns the output from stdout.
     """
     gse_process = subprocess.Popen(
-        settings.GSEVOL_COMMAND.split(' ') + params,
+        # settings.GSEVOL_COMMAND.split(' ') + params,
+        ['python2', 'gsevol2013/src/gsevol.py'] + params,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     timer = time.time() + timeout
