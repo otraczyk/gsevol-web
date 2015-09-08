@@ -1697,11 +1697,13 @@ body { background: #f9f8f7; }
 
 table tr td:first-child { font-weight: normal; }
 
-.result-tile { font-size: 12pt; text-align: center; font-color: #000000; border: #000000 1px solid; border-radius: 3px; background: #ffffff; margin-bottom: 5px; }
+.result-tile { font-size: 12pt; text-align: center; font-color: #000000; border: #000000 1px solid; border-radius: 3px; background: #ffffff; margin: 0px 2px 4px 2px; flex-grow: 1; }
 
 .title { font-size: 10pt; text-align: left; background: #9FBBBB; position: relative; width: 100%; padding: 0 20% 0 5px; margin-bottom: 5px; }
 
 svg { display: block; margin: auto; }
+
+.row { display: flex; flex-wrap: wrap; }
 
 /* label { float: left; text-align: right; margin-right: 5px;
 }
