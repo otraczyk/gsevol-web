@@ -83,7 +83,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     'front/lib/',
     'front/app/',
-    'front/bower_components'
+    'front/bower_components/',
+    'front/dist/'
 
 )
 
