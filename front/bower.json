@@ -1,0 +1,21 @@
+{
+  "name": "Gsevol",
+  "version": "0.0.0",
+  "homepage": "https://github.com/otraczyk/gsevol-web",
+  "authors": [
+    "Olga Traczyk <o.traczyk@student.uw.edu.pl>"
+  ],
+  "main": "app.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "gumby": "~2.6.4",
+    "jquery": "~2.1.4",
+    "react": "~0.13.3"
+  }
+}
