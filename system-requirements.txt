@@ -3,5 +3,6 @@ python-cairo
 pygtk
 pygobject
 gtk-engine-murrine
+npm
 
 # manual install for pygtk - not pip installable

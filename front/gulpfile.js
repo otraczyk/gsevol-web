@@ -1,21 +1,19 @@
 'use strict';
 
-var gulp = require('gulp'),
+var gulp  = require('gulp-help')(require('gulp')),
     watch = require('gulp-watch');
 
 var react = require('gulp-react');
 
 gulp.task(
-  'watch',
-  // 'Watch for any changes in js, scss, html files',
-  ['build-react'],
-   watchReact //, 'watch-scss', 'watch-bower', 'watch-html']
+    'watch',
+    'Watch for any changes in js, scss, html files',
+    ['watch-react'],
+    function(){}
 );
 
 gulp.task('build-react', false, buildReact);
-// gulp.task('watch-scss', false, watchScss);
-// gulp.task('watch-bower', false, watchBower);
-// gulp.task('watch-html', false, watchHtml);
+gulp.task('watch-react', ['build-react'], watchReact);
 
 function buildReact(){
     return gulp.src('./app/*.jsx')
@@ -23,6 +21,6 @@ function buildReact(){
         .pipe(gulp.dest('./dist'));
 }
 
-function watchReact() {
-  return watch('./app/*.jsx', buildReact);
+function watchReact(){
+    return watch('./app/*.jsx', buildReact);
 }

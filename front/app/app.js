@@ -12,7 +12,8 @@ sendTrees = function(event){
 
 renderResults = function(data){
     reaults = React.render(
-        <Results data={data} />, document.getElementById('results')
+        React.createElement(Results, {data: data}),
+        document.getElementById('results')
     );
     $('#alerts').empty()
 }

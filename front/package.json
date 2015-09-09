@@ -9,6 +9,7 @@
     "gulp-react": "^3.0.1"
   },
   "devDependencies": {
+    "gulp-help": "^1.6.1",
     "gulp-watch": "^4.3.5"
   }
 }
