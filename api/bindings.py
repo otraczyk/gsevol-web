@@ -9,7 +9,7 @@ class GseError(Exception):
     pass
 
 
-def launch(params, timeout=300):
+def launch(params, timeout=3000, *args, **kwargs):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
@@ -23,7 +23,7 @@ def launch(params, timeout=300):
     """
     gse_process = subprocess.Popen(
         ['python2', 'gsevol2013/src/gsevol.py'] + params,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs
     )
     timer = time.time() + timeout
     while gse_process.poll() is None:
@@ -35,11 +35,11 @@ def launch(params, timeout=300):
         raise GseError("Gsevol error", err, params, out)
     return out
 
-def launch_command(command):
+def launch_command(command, *args, **kwargs):
     """
     Launches Gsevol with given command string.
     """
-    out = launch(command)
+    out = launch(command, *args, **kwargs)
     return out
 
 def random_trees():
@@ -94,4 +94,17 @@ def draw_embedding(species, scenario):
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
                '-C outputfile="/dev/stdout";scale=2.5']
     return launch_command(command)
+
+def draw_diagram(gene, species):
+    scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
+    scen_output = launch_command(scen_command)
+    import tempfile
+    sc = tempfile.TemporaryFile()
+    sc.write(scen_output)
+    sc.flush()
+    sc.seek(0)
+    diag_command = ['-dd', '-C outputfile="/dev/stdout"']
+    import ipdb; ipdb.set_trace()
+    diag_output = launch_command(diag_command, stdin=sc)
+    return diag_output
 
