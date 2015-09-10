@@ -5,6 +5,8 @@ from exceptions import RuntimeError
 
 from django.conf import settings
 
+from api.utils import wrap_in_tempfile
+
 class GseError(Exception):
     pass
 
@@ -96,15 +98,15 @@ def draw_embedding(species, scenario):
     return launch_command(command)
 
 def draw_diagram(gene, species):
+    """Draw reduction diagram for a pair of trees.
+
+    - Generate 'fat scenario', format species and the scenario as '.gse' script.
+    - Pass output to gsevol once again to draw diagram.
+    """
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
     scen_output = launch_command(scen_command)
-    import tempfile
-    sc = tempfile.TemporaryFile()
-    sc.write(scen_output)
-    sc.flush()
-    sc.seek(0)
-    diag_command = ['-dd', '-C outputfile="/dev/stdout"']
-    import ipdb; ipdb.set_trace()
-    diag_output = launch_command(diag_command, stdin=sc)
-    return diag_output
+    scen_file = wrap_in_tempfile(scen_output)
 
+    diag_command = ['-dd', '-C outputfile="/dev/stdout"']
+    diag_output = launch_command(diag_command, stdin=scen_file)
+    return diag_output
