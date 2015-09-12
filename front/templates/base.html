@@ -3,14 +3,17 @@
 <html lang="pl">
 	<head>
 	 <meta charset="utf-8">
-		<link rel="stylesheet" href="{% static 'Gumby/css/gumby.css' %}" />
-		<script src="{% static 'jquery/dist/jquery.js' %}"></script>
-	    <script src="{% static 'react/react.js' %}"></script>
-		<title>Gsevol - phylogenetic analysis tool</title>
-		{% block head %}
-		{% endblock %}
-	</head>
+     <link rel="stylesheet" href="{% static 'Gumby/css/gumby.css' %}" />
+	 <!-- bower:css -->
+	 <!-- endbower -->
+	 <title>Gsevol - phylogenetic analysis tool</title>
+	 </head>
 	<body>
+	<!-- bower:js -->
+	<script src="{% static 'jquery/dist/jquery.js' %}"></script>
+	<script src="{% static 'react/react.js' %}"></script>
+	<script src="{% static 'react-router/build/umd/ReactRouter.js' %}"></script>
+	<!-- endbower -->
 	    <div class="navbar" id="topbar">
         <div class="row">
             <h1 class="six columns logo">Gsevol</h1>
