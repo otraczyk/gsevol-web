@@ -11,7 +11,7 @@ class GseError(Exception):
     pass
 
 
-def launch(params, timeout=3000, *args, **kwargs):
+def launch(params, timeout=300, *args, **kwargs):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
@@ -37,19 +37,12 @@ def launch(params, timeout=3000, *args, **kwargs):
         raise GseError("Gsevol error", err, params, out)
     return out
 
-def launch_command(command, *args, **kwargs):
-    """
-    Launches Gsevol with given command string.
-    """
-    out = launch(command, *args, **kwargs)
-    return out
-
 def random_trees():
     """
     Generate random gene and species trees with leaves a-f.
     """
     command = ['-g &randbin(a-f)', '-s &randbin(a-f)', '-egsG']
-    return launch_command(command)
+    return launch(command)
 
 def split_to_pictures(source):
     """Divide svg source stream into pictures.
@@ -59,7 +52,7 @@ def split_to_pictures(source):
     return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
 def draw_single_tree(tree):
-    return launch_command(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
+    return launch(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
 
 def draw_trees(gene, species):
     """
@@ -67,7 +60,7 @@ def draw_trees(gene, species):
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dgsmS',
                '-C outputfile="/dev/stdout"']
-    source = launch_command(command)
+    source = launch(command)
     return split_to_pictures(source)
 
 def scenarios(gene, species):
@@ -76,7 +69,7 @@ def scenarios(gene, species):
     Order: optimal to worst.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGa']
-    scenarios = launch_command(command).strip().split('\n')
+    scenarios = launch(command).strip().split('\n')
     scenarios.reverse()
     return scenarios
 
@@ -86,7 +79,7 @@ def optscen(gene, species):
     Separated from scenarios(), which can be slow for larger trees.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGn']
-    scenario = launch_command(command).strip()
+    scenario = launch(command).strip()
     return scenario
 
 def draw_embedding(species, scenario):
@@ -95,7 +88,7 @@ def draw_embedding(species, scenario):
     """
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
                '-C outputfile="/dev/stdout";scale=2.5']
-    return launch_command(command)
+    return launch(command)
 
 def draw_diagram(gene, species):
     """Draw reduction diagram for a pair of trees.
@@ -104,9 +97,10 @@ def draw_diagram(gene, species):
     - Pass output to gsevol once again to draw diagram.
     """
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
-    scen_output = launch_command(scen_command)
+    scen_output = launch(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
 
     diag_command = ['-dd', '-C outputfile="/dev/stdout"']
-    diag_output = launch_command(diag_command, stdin=scen_file)
+    diag_output = launch(diag_command, stdin=scen_file)
+    # XXX input stil not read
     return diag_output
