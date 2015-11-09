@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import subprocess
 import time
+import tempfile
 from exceptions import RuntimeError
 
 from django.conf import settings
@@ -11,7 +12,7 @@ class GseError(Exception):
     pass
 
 
-def launch(params, timeout=300, *args, **kwargs):
+def launch(params, timeout=300, stdin=None, *args, **kwargs):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
@@ -23,10 +24,19 @@ def launch(params, timeout=300, *args, **kwargs):
 
     If the process ends successfully, returns the output from stdout.
     """
+    if stdin:
+        # HACK: There's problem (deadlocks?) with receiving stdout when sending
+        # something via stdin. On the other hand, I couldn't get multiple
+        # pictures wtitten to one tempfile. Enough time wasted here.
+        output = tempfile.NamedTemporaryFile()
+    else:
+        output = subprocess.PIPE
+
     gse_process = subprocess.Popen(
         ['python2', 'gsevol2013/src/gsevol.py'] + params,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs
+        stdout=output, stderr=subprocess.PIPE, bufsize=1, stdin=stdin
     )
+
     timer = time.time() + timeout
     while gse_process.poll() is None:
         if time.time() > timer:
@@ -35,6 +45,8 @@ def launch(params, timeout=300, *args, **kwargs):
     out, err = gse_process.communicate()
     if err:
         raise GseError("Gsevol error", err, params, out)
+    if hasattr(output, 'read'):
+        return output.read()
     return out
 
 def random_trees():
@@ -99,8 +111,6 @@ def draw_diagram(gene, species):
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
     scen_output = launch(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
-
     diag_command = ['-dd', '-C outputfile="/dev/stdout"']
     diag_output = launch(diag_command, stdin=scen_file)
-    # XXX input stil not read
     return diag_output
