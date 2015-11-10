@@ -1,0 +1,73 @@
+.logo  {
+    font: bold 45px 'Anita';
+    color: #0d0403;
+}
+.logo a  {
+    color: #0d0403;
+}
+#main  {
+    margin-top: 0px;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 10px;
+    width: 100%;
+
+}
+#topbar  {
+    background: #575757;
+    color: #ffffff;
+}
+.result-tile  {
+    font-size: 12pt;
+    text-align: center;
+    font-color: #000000;
+    border: #000000 1px solid;
+    border-radius: 3px;
+    background: #ffffff;
+    margin: 0px 2px 4px 2px;
+    flex-grow: 1;
+}
+.title  {
+    font-size: 10pt;
+    text-align: left;
+    background: #BDBDBD;
+    position: relative;
+    width: auto;
+    padding: 0 20% 0 5px;
+    margin-bottom: 5px;
+}
+svg  {
+    display: block;
+    margin: auto;
+}
+.row  {
+    display: flex;
+    flex-wrap: wrap;
+}
+button.slim  {
+    padding: 5px;
+}
+#input-form input  {
+    width: 70%;
+}
+#results svg {
+    /* Changed by pure.css, needed to show tags in pictures. */
+    overflow: visible;
+}
+.alert  {
+    padding:  0 10px;
+    font-weight:  600;
+    list-style-type:  none;
+    word-wrap:  break-word;
+    margin-bottom:  8px;
+    font-size:  14px;
+    font-size:  0.875rem;
+    -moz-border-radius:  4px;
+    -webkit-border-radius:  4px;
+    border-radius:  4px;
+}
+.alert.danger  {
+    background:  #df8989;
+    border:  1px solid #ca3838;
+    color:  #7b2121;
+}

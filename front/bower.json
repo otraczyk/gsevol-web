@@ -14,8 +14,8 @@
     "tests"
   ],
   "dependencies": {
-    "gumby": "~2.6.4",
     "jquery": "~2.1.4",
+    "pure": "~0.6.0",
     "react": "~0.13.3",
     "react-router": "~0.13.3"
   }

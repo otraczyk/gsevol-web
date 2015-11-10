@@ -3,8 +3,9 @@
 <html lang="pl">
 	<head>
 	 <meta charset="utf-8">
-     <link rel="stylesheet" href="{% static 'Gumby/css/gumby.css' %}" />
+	 <link rel="stylesheet" href="{% static 'style.css' %}">
 	 <!-- bower:css -->
+	 <link rel="stylesheet" href="{% static 'pure/pure.css' %}" />
 	 <!-- endbower -->
 	 <title>Gsevol - phylogenetic analysis tool</title>
 	 </head>
@@ -18,8 +19,8 @@
 	{% endblock %}
 	    <div class="navbar" id="topbar">
         <div class="row">
-            <h1 class="six columns logo">Gsevol</h1>
-            <ul class="six columns">
+            <h1>Gsevol</h1>
+            <ul>
 				{% block header %}
 				{{ header }}
 				{% endblock %}
@@ -27,11 +28,11 @@
         </div>
 	    </div>
 	    <div class="row">
-			<div id="alerts" class="centered ten columns">
+			<div id="alerts">
 			    </div>
 		</div>
 		<div class="row">
-			<div class="centered twelve columns" id="main">
+			<div id="main">
 			{% autoescape off %}
 				{% block content %}
 				{{ content }}

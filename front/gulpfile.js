@@ -42,7 +42,6 @@ function injectDeps(){
         .pipe(wiredep(
         {
             directory: 'bower_components/',
-            exclude: ['bower_components/gumby/*'],
             ignorePath: '../bower_components/',
             fileTypes: {
                 html: {
