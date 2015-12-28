@@ -27,7 +27,7 @@ def launch(params, timeout=300, stdin=None, *args, **kwargs):
     if stdin:
         # HACK: There's problem (deadlocks?) with receiving stdout when sending
         # something via stdin. On the other hand, I couldn't get multiple
-        # pictures wtitten to one tempfile. Enough time wasted here.
+        # pictures written to one tempfile. Enough time wasted here.
         output = tempfile.NamedTemporaryFile()
     else:
         output = subprocess.PIPE
