@@ -8,6 +8,7 @@
  */
 
 @import '../../../node_modules/normalize.css/normalize.css';
+@import '../../../node_modules/purecss/build/pure-min.css';
 
 /*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */
 
@@ -41,6 +42,12 @@ html {
 ::selection {
   background: #b3d4fc;
   text-shadow: none;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 40px 0 40px;
+  max-width: $max-content-width;
 }
 
 /*

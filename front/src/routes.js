@@ -11,7 +11,7 @@ import React from 'react';
 import Router from 'react-routing/src/Router';
 import fetch from './core/fetch';
 import App from './components/App';
-import ContentPage from './components/ContentPage';
+import TreeForm from './components/Main/TreeForm';
 import NotFoundPage from './components/Utils/NotFoundPage';
 
 const router = new Router(on => {
@@ -26,7 +26,7 @@ const router = new Router(on => {
   on('*', async (state) => {
     const response = await fetch(`/api/content?path=${state.path}`);
     const content = await response.json();
-    return content && <ContentPage {...content} />;
+    return content && <TreeForm {...content} />;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?

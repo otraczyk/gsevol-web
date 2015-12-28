@@ -9,3 +9,4 @@
 
 export const port = process.env.PORT || 5000;
 export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
+export const backendUrl = 'http://127.0.0.1:8000/api/'

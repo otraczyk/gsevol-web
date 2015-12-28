@@ -1,0 +1,22 @@
+@import '../../../../node_modules/purecss/build/pure-min.css';
+
+/* XXX: Pure classes are not included nor extended properly, even without scoping.
+This does not work. */
+
+.button {
+    padding: 5px;
+    color: red;
+    @extend .pure-button;
+    @include :global(.pure-button-primary);
+}
+
+form {
+    @include .pure-form;
+    @include .pure-form-aligned;
+}
+
+input {
+    @include .pure-input;
+    width: 70%;
+}
+
