@@ -1,3 +1,5 @@
+@import "../bower_components/purecss-sass/vendor/assets/stylesheets/purecss";
+
 .logo  {
     font: bold 45px 'Anita';
     color: #0d0403;
@@ -14,11 +16,13 @@
 
 }
 #topbar  {
-    background: #575757;
+    padding-left: 100px;
+    padding-right: 100px;
+    background: #333;
     color: #ffffff;
 }
 .result-tile  {
-    font-size: 12pt;
+    font-size: 10pt;
     text-align: center;
     font-color: #000000;
     border: #000000 1px solid;
@@ -33,7 +37,7 @@
     background: #BDBDBD;
     position: relative;
     width: auto;
-    padding: 0 20% 0 5px;
+    padding: 8px 12px 8px 12px;
     margin-bottom: 5px;
 }
 svg  {
@@ -47,7 +51,12 @@ svg  {
 button.slim  {
     padding: 5px;
 }
+#input-form {
+    @extend .pure-form;
+    @extend .pure-form-aligned;
+}
 #input-form input  {
+    @extend .pure-input;
     width: 70%;
 }
 #results svg {
@@ -70,4 +79,7 @@ button.slim  {
     background:  #df8989;
     border:  1px solid #ca3838;
     color:  #7b2121;
+}
+button {
+    @extend .pure-button;
 }

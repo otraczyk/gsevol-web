@@ -6,18 +6,17 @@
     <script src="{% static 'main.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <form id="input-form" method="post" class="pure-form pure-form-aligned">
+    <form id="input-form" method="post">
         <div class="pure-control-group">
             <label for="gene">Gene tree</label>
-            <input class="pure-input" type="text" name="gene"
+            <input type="text" name="gene"
                 value="{{ default_gene }}" id="gene" />
         </div>
         <div class="pure-control-group">
         <label for="species">Species tree</label>
-        <input class="pure-input" type="text" name="species"
+        <input type="text" name="species"
             value="{{ default_species }}" id="species" />
-            <button type="submit" value="Submit"
-                class="pure-button pure-button-primary">Submit</button>
+            <button type="submit" value="Submit">Submit</button>
         </div>
     </form>
     <div id="results">

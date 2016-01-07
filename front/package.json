@@ -6,7 +6,10 @@
     "bower": "^1.5.2",
     "gulp": "^3.9.0",
     "gulp-dest": "^0.2.2",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-plumber": "^1.0.1",
     "gulp-react": "^3.0.1",
+    "gulp-sass": "^2.1.1",
     "wiredep": "^2.2.2"
   },
   "devDependencies": {
