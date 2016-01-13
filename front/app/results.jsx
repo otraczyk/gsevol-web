@@ -10,7 +10,7 @@ var Results = React.createClass({
                      ['tree', this.props.data["species"], "Species tree"],
                      ['tree', this.props.data["mapping"], "Mapping"],
                      ['scenario', this.props.data.optscen, "Optimal evolutionary scenario"],
-                     ['button', {text: "Draw diagram", resType: "diagram"}, 'Diagram'],
+                     ['button', {text: "Open diagram", resType: "diagram"}, 'Diagram'],
                      ['scenarios', this.props.data["scenarios"], "All scenarios"]
                     ];
         var tiles = tiles.map(function(tile){
@@ -127,43 +127,12 @@ var Scenario = React.createClass({
 });
 
 var ButtonTile = React.createClass({
-    getDiagram: function(){
-        var request = new XMLHttpRequest(), self = this;
-        request.open('POST', 'api/diagram/', true);
-        var params = {"gene": document.getElementById("gene").value,
-                      "species": document.getElementById("species").value};
-        request.setRequestHeader("Content-type", "application/json");
-        request.onload = function() {
-          if (request.status == 200){
-            this.setState({results: JSON.parse(request.responseText)});
-          } else {
-            console.log(request.responseText)
-          }
-        }.bind(this)
-        request.send(JSON.stringify(params))
-        // this.setState({results: "<h5>Loading...</h5>"})
-    },
-    getResults: function(){
-        if (this.props.resType == 'diagram'){
-            return this.getDiagram()
-        }
-    },
-    getInitialState: function(){
-        return ({"results": null});
-    },
     render: function(){
-        if (!this.state.results){
-            return (
-                <div className="info btn">
-                <button className="slim" onClick={this.getResults}>
-                    {this.props.text}
-                </button>
-                </div>
-                );
-        } else {
-            return (
-                <div dangerouslySetInnerHTML={{__html: this.state.results}}></div>
+        var url = location.origin + location.pathname + 'diagram/' + location.search;
+        return (
+            <div className="info btn"> <a href={url} target="blank">
+                <button className="slim"> {this.props.text} </button>
+            </a> </div>
             );
-        }
     }
 })

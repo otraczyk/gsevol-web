@@ -14,7 +14,7 @@ var App = React.createClass({
                 this.setState(_.merge({}, this.state, {'error': request.responseText}));
               }
             }.bind(this)
-            request.send(JSON.stringify(params))
+            request.send(JSON.stringify(params));
         }
     },
     render: function() {
@@ -23,7 +23,7 @@ var App = React.createClass({
         } else if (this.state.error) {
             return <Error message={this.state.error} />;
         } else {
-            return (<div></div>)
+            return <div></div>;
         }
     }
 });
@@ -34,6 +34,6 @@ var Error = React.createClass({
             <li className="danger alert">
                 Error processing input: {this.props.message}
             </li>
-        )
+        );
     }
 })
