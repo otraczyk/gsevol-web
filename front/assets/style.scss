@@ -4,9 +4,6 @@
     font: bold 45px 'Anita';
     color: #0d0403;
 }
-.logo a  {
-    color: #0d0403;
-}
 #main  {
     margin-top: 0px;
     margin-left: 5%;
@@ -21,6 +18,11 @@
     background: #333;
     color: #ffffff;
 }
+#topbar a {
+    color: #dddddd;
+    text-decoration: none;
+}
+
 .result-tile  {
     font-size: 10pt;
     text-align: center;

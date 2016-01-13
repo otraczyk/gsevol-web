@@ -1,9 +1,9 @@
-sendTrees = function(event){
+sendTrees = function(){
     // TODO: validation
     $.ajax({
         type: "POST",
-        url: 'api/draw/',
-        data: JSON.stringify($(event.currentTarget).serializeArray()),
+        url: '/api/draw/',
+        data: JSON.stringify(getUrlParams()),
         success: renderResults,
         contentType: 'application/json'
     });
@@ -24,5 +24,5 @@ $(document).ajaxError(function(cos, resp) {
 });
 
 $(function(){
-    $('#input-form').submit(sendTrees);
+    sendTrees();
 })

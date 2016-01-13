@@ -19,8 +19,6 @@ def draw(request):
     All pictures are returned as svg source.
     """
     input_trees = json.loads(request.body)
-    # Flattening list of dicts
-    input_trees = {d["name"]: d["value"] for d in input_trees}
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
     if gene and species:

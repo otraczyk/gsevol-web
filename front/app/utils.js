@@ -1,0 +1,8 @@
+function getUrlParams() {
+    var queryDict = {}
+    location.search.substr(1).split("&")
+        .forEach(function(item) {
+            queryDict[item.split("=")[0]] = decodeURIComponent(item.split("=")[1])
+        });
+    return queryDict;
+}
