@@ -18,7 +18,7 @@ var Results = React.createClass({
                 <ResultTile kind={tile[0]} content={tile[1]} title={tile[2]} />
             );
         });
-        return ( <div className="row">{tiles} </div> )
+        return <div className="row">{tiles} </div>;
     }
 });
 
@@ -26,11 +26,11 @@ var ResultTile = React.createClass({
     renderChild: function(){
         // Better solution?
         if (this.props.kind == 'tree'){
-            return (<TreePic svg={this.props.content} />);
+            return <TreePic svg={this.props.content} />;
         } else if (this.props.kind == 'scenarios'){
-            return (<ScenarioList content={this.props.content} />);
+            return <ScenarioList content={this.props.content} />;
         } else if (this.props.kind == 'scenario'){
-            return (<TreePic noted={this.props.content.scen} svg={this.props.content.pic} />);
+            return <TreePic noted={this.props.content.scen} svg={this.props.content.pic} />;
         } else if (this.props.kind == 'button'){
             return (
                 <ButtonTile text={this.props.content.text}
@@ -66,7 +66,7 @@ var TreePic = React.createClass({
 
 var ScenarioList = React.createClass({
     renderScenario: function(scenario){
-        return (<Scenario noted={scenario} />);
+        return <Scenario noted={scenario} />;
     },
     render: function() {
         var scenRows = this.props.content.map(this.renderScenario);
@@ -95,9 +95,6 @@ var Scenario = React.createClass({
     render: function(){
         var embedding = this.showEmbedding()
         var button = this.showButton()
-            // <div>
-            // <tr><td> {embedding} </td></tr>
-            // </div>
         return (
             <tr>
                 <td>{this.props.noted}

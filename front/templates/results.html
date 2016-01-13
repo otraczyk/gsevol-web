@@ -3,7 +3,14 @@
 
 {% block scripts %}
 {{ block.super }}
-    <script src="{% static 'app.js' %}"></script>
     <script src="{% static 'results.js' %}"></script>
     <script src="{% static 'main.js' %}"></script>
+    <script>
+        $(function(){
+            app = React.render(
+                React.createElement(App, {}),
+                document.getElementById('results')
+            );
+        })
+    </script>
 {% endblock %}
