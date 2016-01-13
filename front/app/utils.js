@@ -6,3 +6,10 @@ function getUrlParams() {
         });
     return queryDict;
 }
+
+function jsonPostRequest(url) {
+    var request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.setRequestHeader("Content-type", "application/json");
+    return request;
+}

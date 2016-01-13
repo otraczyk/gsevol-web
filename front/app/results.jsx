@@ -1,7 +1,9 @@
 var Results = React.createClass({
     getInitialState: function() {
-        return({"data": {}});
-    },
+        return {
+          data: {}
+        };
+      },
     render: function() {
         // TODO: convert to list of objects
         var tiles = [['tree', this.props.data["gene"], "Gene tree"],
@@ -82,36 +84,38 @@ var Scenario = React.createClass({
     showButton: function(){
         if (!this.state.picture){
             return (
-                <td> <div className="small info btn">
+                <td>
+                 <div className="small info btn">
                     <button className="slim" onClick={this.drawEmbedding}> Draw </button>
-                </div> </td>
+                </div>
+                </td>
                 );
         }
     },
     render: function(){
         var embedding = this.showEmbedding()
         var button = this.showButton()
+            // <div>
+            // <tr><td> {embedding} </td></tr>
+            // </div>
         return (
-            <div>
             <tr>
-                <td>{this.props.noted}</td>
+                <td>{this.props.noted}
+                    {embedding}
+                </td>
                 {button}
             </tr>
-            <tr><td> {embedding} </td></tr>
-            </div>
         );
     },
     drawEmbedding: function(){
-        var request = new XMLHttpRequest(), self = this;
-        request.open('POST', 'api/embedding/', true);
+        var request = jsonPostRequest('/api/embedding/')
         var params = {"scenario": this.props.noted,
                       "species": document.getElementById("species").value};
-        request.setRequestHeader("Content-type", "application/json");
         request.onload = function() {
           if (request.status == 200){
-            this.setState({picture: JSON.parse(request.responseText)})
+            this.setState({picture: JSON.parse(request.responseText)});
           } else {
-            console.log(request.responseText)
+            console.log(request.responseText);
           }
         }.bind(this);
         request.send(JSON.stringify(params))

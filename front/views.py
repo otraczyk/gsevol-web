@@ -17,4 +17,8 @@ def index(request):
 def results(request):
     """Render results page
     """
-    return render_to_response("results.html")
+    form_defaults = {
+        "default_gene": request.GET.get("gene"),
+        "default_species": request.GET.get("species")
+    }
+    return render_to_response("results.html", form_defaults)
