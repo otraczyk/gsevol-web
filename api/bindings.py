@@ -112,5 +112,5 @@ def draw_diagram(gene, species):
     scen_output = launch(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
     diag_command = ['-dd', '-C outputfile="/dev/stdout"']
-    diag_output = launch(diag_command, stdin=scen_file)
+    diag_output = launch(diag_command, stdin=scen_file, timeout=1200)
     return diag_output

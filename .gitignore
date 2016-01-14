@@ -4,6 +4,9 @@
 *.log
 *.svg
 *.png
+*.o
+
+*/fasturec
 
 # Frontend
 front/node_modules/*
