@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*
 import json
 
-from api import bindings as Gse
 from api.view_utils import JsonResponse, pass_errors_to_response
+from bindings import gsevol as Gse
 
 
 @pass_errors_to_response

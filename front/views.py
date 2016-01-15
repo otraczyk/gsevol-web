@@ -1,17 +1,18 @@
 from django.shortcuts import render_to_response, redirect
 
-from api import bindings as Gse
+from bindings import gsevol as Gse
 
 
 def index(request):
     defaults = {}
     try:
         # Provide random trees as defaults for input form.
-        gene, species = Gse.random_trees().split("\n")[:2]
-        defaults = {"default_gene": gene.strip(), "default_species": species.strip()}
+        gene, species = Gse.random_trees()
+        defaults = {"default_gene": gene, "default_species": species}
     except Exception as e:
         raise RuntimeError("Problem processing Gsevol output", e)
     return render_to_response("index.html", defaults)
+
 
 def results(request):
     form_defaults = {
@@ -19,6 +20,7 @@ def results(request):
         "default_species": request.GET.get("species")
     }
     return render_to_response("results.html", form_defaults)
+
 
 def diagram(request):
     gene, species = request.GET.get("gene"), request.GET.get("species")

@@ -4,7 +4,7 @@ import json
 from django.http import HttpResponse
 from django.conf import settings
 
-from api.bindings import GseError
+from bindings.base import GseError
 
 JsonResponse = lambda data, status=200: HttpResponse(
     json.dumps(data),
