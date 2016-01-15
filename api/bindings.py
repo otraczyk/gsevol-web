@@ -4,20 +4,19 @@ import time
 import tempfile
 from exceptions import RuntimeError
 
-from django.conf import settings
-
 from api.utils import wrap_in_tempfile
 
 class GseError(Exception):
     pass
 
 
-def launch(params, timeout=300, stdin=None, *args, **kwargs):
+def launch(command, params, timeout=300, stdin=None, *args, **kwargs):
     """Launch Gsevol subprocess.
 
     Basic implementation: gsevol is launched in a subprocess,
     given a time limit (default 300 seconds).
 
+    :param command: program name as a list of strings to pass to the command line
     :param params: a list of parameters which will be passed by the
         command line. Includes input data, flags and special '&'-commands
     :param timeout: time limit for the process in seconds
@@ -33,7 +32,7 @@ def launch(params, timeout=300, stdin=None, *args, **kwargs):
         output = subprocess.PIPE
 
     gse_process = subprocess.Popen(
-        ['python2', 'gsevol2013/src/gsevol.py'] + params,
+        command + params,
         stdout=output, stderr=subprocess.PIPE, bufsize=1, stdin=stdin
     )
 
@@ -49,12 +48,16 @@ def launch(params, timeout=300, stdin=None, *args, **kwargs):
         return output.read()
     return out
 
+def launch_gse(params, timeout=300, stdin=None, *args, **kwargs):
+    command = ['python2', 'gsevol2013/src/gsevol.py']
+    return launch(command, params, timeout, stdin, *args, **kwargs)
+
 def random_trees():
     """
     Generate random gene and species trees with leaves a-f.
     """
     command = ['-g &randbin(a-f)', '-s &randbin(a-f)', '-egsG']
-    return launch(command)
+    return launch_gse(command)
 
 def split_to_pictures(source):
     """Divide svg source stream into pictures.
@@ -64,7 +67,7 @@ def split_to_pictures(source):
     return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
 def draw_single_tree(tree):
-    return launch(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
+    return launch_gse(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
 
 def draw_trees(gene, species):
     """
@@ -72,7 +75,7 @@ def draw_trees(gene, species):
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dgsmS',
                '-C outputfile="/dev/stdout"']
-    source = launch(command)
+    source = launch_gse(command)
     return split_to_pictures(source)
 
 def scenarios(gene, species):
@@ -81,7 +84,7 @@ def scenarios(gene, species):
     Order: optimal to worst.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGa']
-    scenarios = launch(command).strip().split('\n')
+    scenarios = launch_gse(command).strip().split('\n')
     scenarios.reverse()
     return scenarios
 
@@ -91,7 +94,7 @@ def optscen(gene, species):
     Separated from scenarios(), which can be slow for larger trees.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGn']
-    scenario = launch(command).strip()
+    scenario = launch_gse(command).strip()
     return scenario
 
 def draw_embedding(species, scenario):
@@ -100,7 +103,7 @@ def draw_embedding(species, scenario):
     """
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
                '-C outputfile="/dev/stdout";scale=2.5']
-    return launch(command)
+    return launch_gse(command)
 
 def draw_diagram(gene, species):
     """Draw reduction diagram for a pair of trees.
@@ -109,8 +112,8 @@ def draw_diagram(gene, species):
     - Pass output to gsevol once again to draw diagram.
     """
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
-    scen_output = launch(scen_command)
+    scen_output = launch_gse(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
     diag_command = ['-dd', '-C outputfile="/dev/stdout"']
-    diag_output = launch(diag_command, stdin=scen_file, timeout=1200)
+    diag_output = launch_gse(diag_command, stdin=scen_file, timeout=1200)
     return diag_output

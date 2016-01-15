@@ -4,8 +4,8 @@
 *.log
 *.svg
 *.png
-*.o
 
+*.o
 */fasturec
 
 # Frontend
