@@ -20,7 +20,7 @@ def draw_unrooted(gene, species):
     # Fasturec and gsevol outputs interfere and damage the picture if it's
     # printed to stdout.
     tmp = tempfile.NamedTemporaryFile()
-    gse_command = ['-dSz', '-C arrowlength=0.4;outputfile="%s"' % tmp.name]
+    gse_command = ['-dSz', '-C arrowlength=0.4;scale=2;outputfile="%s"' % tmp.name]
     Gse.launch(gse_command, stdin=fu_out_file)
     gse_output = tmp.read()
     return gse_output

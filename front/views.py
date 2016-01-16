@@ -8,18 +8,23 @@ def index(request):
     try:
         # Provide random trees as defaults for input form.
         gene, species = Gse.random_trees()
-        defaults = {"default_gene": gene, "default_species": species}
+        defaults = {
+            "default_gene": gene,
+            "default_species": species,
+            "form_url": "/results/"
+        }
     except Exception as e:
         raise RuntimeError("Problem processing Gsevol output", e)
     return render_to_response("index.html", defaults)
 
 
-def results(request):
-    form_defaults = {
+def results(request, component="App"):
+    data = {
         "default_gene": request.GET.get("gene"),
-        "default_species": request.GET.get("species")
+        "default_species": request.GET.get("species"),
+        "component": component
     }
-    return render_to_response("results.html", form_defaults)
+    return render_to_response("results.html", data)
 
 
 def diagram(request):
@@ -29,3 +34,22 @@ def diagram(request):
     else:
         return redirect('front.views.index')
     return render_to_response("diagram.html", {"picture": result})
+
+
+def unrooted_index(request):
+    defaults = {}
+    try:
+        # Provide random trees as defaults for input form.
+        gene, species = Gse.random_trees()
+        defaults = {
+            "default_gene": gene,
+            "default_species": species,
+            "form_url": "/unrooted/results/"
+        }
+    except Exception as e:
+        raise RuntimeError("Problem processing Gsevol output", e)
+    return render_to_response("index.html", defaults)
+
+
+def unrooted_results(request):
+    return results(request, "UnrootedApp")

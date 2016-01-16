@@ -3,6 +3,7 @@ import json
 
 from api.view_utils import JsonResponse, pass_errors_to_response
 from bindings import gsevol as Gse
+from bindings import urec as Urec
 
 
 @pass_errors_to_response
@@ -18,6 +19,7 @@ def draw(request):
 
     All pictures are returned as svg source.
     """
+    results = {}
     input_trees = json.loads(request.body)
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
@@ -59,3 +61,13 @@ def draw_diagram(request):
         msg = "'gene' and 'species' are required"
         return JsonResponse(msg, status=400)
 
+@pass_errors_to_response
+def draw_unrooted(request):
+    input_trees = json.loads(request.body)
+    gene, species = input_trees["gene"], input_trees["species"]
+    if gene and species:
+        result = Urec.draw_unrooted(gene, species)
+        return JsonResponse({"unrooted": result})
+    else:
+        msg = "'gene' and 'species' are required"
+        return JsonResponse(msg, status=400)

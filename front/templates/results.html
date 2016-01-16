@@ -4,11 +4,12 @@
 {% block scripts %}
 {{ block.super }}
     <script src="{% static 'results.js' %}"></script>
+    <script src="{% static 'unrooted.js' %}"></script>
     <script src="{% static 'main.js' %}"></script>
     <script>
         $(function(){
-            app = React.render(
-                React.createElement(App, {}),
+            var app = React.render(
+                React.createElement({{ component }}, {}),
                 document.getElementById('results')
             );
         })
