@@ -1,30 +1,11 @@
 var UnrootedApp = React.createClass({
-    getInitialState: function() {
-        return {'params': getUrlParams()};
+    mixins: [App],
+    apiUrl: '/api/unrooted/',
+    renderResults: function() {
+       return <UnrootedResults data={this.state.data} />;
     },
-    componentWillMount: function() {
-        if (this.state.params){
-            var request = jsonPostRequest('/api/unrooted/');
-            var params = this.state.params;
-            request.onload = function() {
-              if (request.status == 200) {
-                var response = JSON.parse(request.responseText);
-                this.setState(_.merge({}, this.state, {'data': response}));
-              } else {
-                this.setState(_.merge({}, this.state, {'error': request.responseText}));
-              }
-            }.bind(this)
-            request.send(JSON.stringify(params));
-        }
-    },
-    render: function() {
-        if (this.state.data){
-            return <UnrootedResults data={this.state.data} />;
-        } else if (this.state.error) {
-            return <Error message={this.state.error} />;
-        } else {
-            return <div></div>;
-        }
+    render: function(){
+      return this.baseRender();
     }
 });
 
@@ -35,7 +16,6 @@ var UnrootedResults = React.createClass({
         };
       },
     render: function() {
-        // TODO: convert to list of objects
         var tiles = [['tree', this.props.data["unrooted"], "Unrooted gene tree"],
                     ];
         var tiles = tiles.map(function(tile){
