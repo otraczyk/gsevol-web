@@ -3,32 +3,52 @@ from django.shortcuts import render_to_response, redirect
 from bindings import gsevol as Gse
 
 
-def index(request):
-    defaults = {}
-    try:
-        # Provide random trees as defaults for input form.
-        gene, species = Gse.random_trees()
-        defaults = {
-            "default_gene": gene,
-            "default_species": species,
-            "form_url": "/results/"
-        }
-    except Exception as e:
-        raise RuntimeError("Problem processing Gsevol output", e)
-    return render_to_response("index.html", defaults)
+def request_params(request):
+    return request.GET.get("gene"), request.GET.get("species")
+
+def fill_gene_and_species(request):
+    """Retrieve values of 'gene' and 'species' params from request.
+    If neither is given, generate random example trees in their place.
+    """
+    gene, species = request_params(request)
+    if not gene and not species:
+        try:
+            gene, species = Gse.random_trees()
+        except Exception as e:
+            raise RuntimeError("Problem processing Gsevol output", e)
+    return gene, species
 
 
-def results(request, component="App"):
+def form_data(request, unrooted=False):
+    gene, species = fill_gene_and_species(request)
     data = {
-        "default_gene": request.GET.get("gene"),
-        "default_species": request.GET.get("species"),
-        "component": component
+        "default_gene": gene or '',
+        "default_species": species or '',
+        "form_url": "/rooted/",
+        "result_component": "App",
+        "show_results": False
     }
-    return render_to_response("results.html", data)
+    if unrooted:
+        data.update({
+            "form_url": "/unrooted/",
+            "result_component": "UnrootedApp"
+        })
+    return data
+
+
+def index(request, unrooted=False):
+    data = form_data(request, unrooted)
+    if any(request_params(request)):
+        data["show_results"] = True
+    return render_to_response("index.html", data)
+
+
+def unrooted_index(request):
+    return index(request, unrooted=True)
 
 
 def diagram(request):
-    gene, species = request.GET.get("gene"), request.GET.get("species")
+    gene, species = request_params(request)
     if gene and species:
         result = Gse.draw_diagram(gene, species)
     else:
@@ -36,20 +56,3 @@ def diagram(request):
     return render_to_response("diagram.html", {"picture": result})
 
 
-def unrooted_index(request):
-    defaults = {}
-    try:
-        # Provide random trees as defaults for input form.
-        gene, species = Gse.random_trees()
-        defaults = {
-            "default_gene": gene,
-            "default_species": species,
-            "form_url": "/unrooted/results/"
-        }
-    except Exception as e:
-        raise RuntimeError("Problem processing Gsevol output", e)
-    return render_to_response("index.html", defaults)
-
-
-def unrooted_results(request):
-    return results(request, "UnrootedApp")

@@ -13,19 +13,14 @@
 	<script src="{% static 'jquery/dist/jquery.js' %}"></script>
 	<script src="{% static 'lodash/lodash.js' %}"></script>
 	<script src="{% static 'react/react.js' %}"></script>
-	<script src="{% static 'react-router/build/umd/ReactRouter.js' %}"></script>
 	<!-- endbower -->
 	<script src="{% static 'utils.js' %}"></script>
 	{% block scripts %}
 	{% endblock %}
 	    <div class="navbar" id="topbar">
         <div class="row">
-            <h1><a href="/">Gsevol</a></h1>
-            <ul>
-				{% block header %}
-				{{ header }}
-				{% endblock %}
-            </ul>
+            <h1 class="logo"><a href="/">Gsevol</a></h1>
+            	<div id="nav"></div>
         </div>
 	    </div>
 	    <div class="row">

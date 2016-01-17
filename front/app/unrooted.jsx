@@ -1,6 +1,5 @@
 var UnrootedApp = React.createClass({
     getInitialState: function() {
-        console.log(getUrlParams());
         return {'params': getUrlParams()};
     },
     componentWillMount: function() {
@@ -8,7 +7,6 @@ var UnrootedApp = React.createClass({
             var request = jsonPostRequest('/api/unrooted/');
             var params = this.state.params;
             request.onload = function() {
-                console.log(request.responseText);
               if (request.status == 200) {
                 var response = JSON.parse(request.responseText);
                 this.setState(_.merge({}, this.state, {'data': response}));

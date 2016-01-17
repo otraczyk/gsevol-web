@@ -2,9 +2,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^$', 'front.views.index'),
-    url(r'^results/diagram', 'front.views.diagram'),
-    url(r'^results', 'front.views.results'),
-    url(r'^unrooted/results', 'front.views.unrooted_results'),
+    url(r'^rooted/diagram', 'front.views.diagram'),
+    url(r'^rooted', 'front.views.index'),
     url(r'^unrooted', 'front.views.unrooted_index'),
 
 )

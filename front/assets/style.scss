@@ -1,9 +1,5 @@
 @import "../bower_components/purecss-sass/vendor/assets/stylesheets/purecss";
-
-.logo  {
-    font: bold 45px 'Anita';
-    color: #0d0403;
-}
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 #main  {
     margin-top: 0px;
     margin-left: 5%;
@@ -13,16 +9,46 @@
 
 }
 #topbar  {
+    font-family: Montserrat, sans-serif;
+    background: #333333;
     padding-left: 100px;
     padding-right: 100px;
     background: #333;
     color: #ffffff;
+    height: 70px;
+    margin-bottom: 30px;
 }
 #topbar a {
     color: #dddddd;
     text-decoration: none;
 }
+.logo  {
+    font: bold 30px;
+    color: #0d0403;
+    margin-right: 50px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 
+}
+#nav ul {
+    list-style: outside none none;
+}
+#nav > ul > li {
+    float: left;
+    padding: 15px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #dddddd;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+#nav > ul > li.current {
+    background: #151515;
+}
+#results {
+    margin-top: 20px;
+}
 .result-tile  {
     font-size: 10pt;
     text-align: center;

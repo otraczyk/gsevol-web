@@ -24,8 +24,3 @@ def draw_unrooted(gene, species):
     Gse.launch(gse_command, stdin=fu_out_file)
     gse_output = tmp.read()
     return gse_output
-
-
-def test():
-    gene, species = Gse.random_trees()
-    return draw_unrooted(gene, species)

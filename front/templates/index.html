@@ -1,6 +1,31 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
+{% block scripts %}
+{{ block.super }}
+    <script src="{% static 'results.js' %}"></script>
+    <script src="{% static 'unrooted.js' %}"></script>
+    <script src="{% static 'main.js' %}"></script>
+    <script>
+        $(function(){
+            var app = React.render(
+                React.createElement(Nav, {}),
+                document.getElementById('nav')
+            );
+        })
+    </script>
+    {% if show_results %}
+    <script>
+    $(function(){
+        var app = React.render(
+            React.createElement({{ result_component }}, {}),
+            document.getElementById('results')
+        );
+    })
+    </script>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <form id="input-form" method="get" action="{{ form_url }}">
         <div class="pure-control-group">

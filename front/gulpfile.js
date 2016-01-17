@@ -72,7 +72,7 @@ function watchScss() {
 }
 
 function compileStyles() {
-    var sassStream = gulp.src('assets/style.scss')
+    var sassStream = gulp.src('assets/*.scss')
         .pipe(plugins.plumber())
             .pipe(plugins.sass())
         .pipe(gulp.dest('dist/'));

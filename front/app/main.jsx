@@ -37,3 +37,30 @@ var Error = React.createClass({
         );
     }
 })
+
+var Nav = React.createClass({
+    getInitialState: function() {
+        return getUrlParams();
+    },
+    getLink: function(currentCondition, pattern) {
+        var ret = {link: '', isCurrent: ''};
+        if (currentCondition) {
+            ret. link = "#";
+            ret.isCurrent = "current";
+        } else {
+            ret.link = pattern + location.search;
+        }
+        return ret;
+    },
+    render: function() {
+        var onRootedUrl = location.pathname.search('/unrooted/') < 0;
+        var rooted = this.getLink(onRootedUrl, '/rooted/');
+        var unrooted = this.getLink(!onRootedUrl, '/unrooted/');
+        return (
+            <ul>
+                <li className={rooted.isCurrent}> <a href={rooted.link}> Rooted Tree </a></li>
+                <li className={unrooted.isCurrent}> <a href={unrooted.link}> Unrooted Tree </a></li>
+            </ul>
+        );
+    }
+})
