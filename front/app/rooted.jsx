@@ -1,12 +1,12 @@
 var App = React.createClass({
-    mixins: [App],
-    apiUrl: '/api/draw/',
-    renderResults: function() {
-       return <Results data={this.state.data} />;
-    },
-    render: function(){
-      return this.baseRender();
-    }
+  mixins: [App],
+  apiUrl: '/api/draw/',
+  renderResults: function() {
+    return <Results data={this.state.data} />;
+  },
+  render: function(){
+    return this.baseRender();
+  }
 });
 
 var Results = React.createClass({
@@ -17,12 +17,13 @@ var Results = React.createClass({
   },
   render: function() {
     // TODO: convert to list of objects
-    var tiles = [['tree', this.props.data["gene"], "Gene tree"],
-           ['tree', this.props.data["species"], "Species tree"],
-           ['tree', this.props.data["mapping"], "Mapping"],
-           ['scenario', this.props.data.optscen, "Optimal evolutionary scenario"],
-           ['scenarios', this.props.data["scenarios"], "All scenarios"]
-          ];
+    var tiles = [
+      ['tree', this.props.data["gene"], "Gene tree"],
+      ['tree', this.props.data["species"], "Species tree"],
+      ['tree', this.props.data["mapping"], "Mapping"],
+      ['scenario', this.props.data.optscen, "Optimal evolutionary scenario"],
+      ['scenarios', this.props.data["scenarios"], "All scenarios"]
+    ];
     if (this.props.data["gene"] && this.props.data["species"]) {
       tiles.push(['button', {text: "Open diagram", resType: "diagram"}, 'Diagram']);
     }
