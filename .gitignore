@@ -7,6 +7,9 @@
 
 *.o
 */fasturec
+urec/urec
+urec/tt
+urec/treeman
 
 # Frontend
 front/node_modules/*
