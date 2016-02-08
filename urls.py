@@ -12,6 +12,7 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^api/draw/', api_views.draw),
+    url(r'^api/draw_single/', api_views.draw_single),
     url(r'^api/embedding/', api_views.draw_embedding),
     url(r'^api/diagram/', api_views.draw_diagram),
     url(r'^api/unrooted/', api_views.draw_unrooted),

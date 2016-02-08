@@ -17,6 +17,7 @@ var UnrootedResults = React.createClass({
   },
   render: function() {
     var tiles = [['tree', this.props.data["unrooted"], "Unrooted gene tree"],
+                 ['rootings', this.props.data["rootings"], "Optimal rootings"]
           ];
     var tiles = tiles.map(function(tile){
       return (

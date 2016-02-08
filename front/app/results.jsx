@@ -5,6 +5,8 @@ var ResultTile = React.createClass({
       return <TreePic svg={this.props.content} />;
     } else if (this.props.kind == 'scenarios'){
       return <ScenarioList content={this.props.content} />;
+    } else if (this.props.kind == 'rootings'){
+      return <RootingList content={this.props.content} />;
     } else if (this.props.kind == 'scenario'){
       return <TreePic noted={this.props.content.scen} svg={this.props.content.pic} />;
     } else if (this.props.kind == 'button'){
@@ -49,4 +51,4 @@ var ButtonTile = React.createClass({
       </a> </div>
       );
   }
-})
+});

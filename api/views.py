@@ -40,6 +40,12 @@ def draw(request):
     return JsonResponse(results)
 
 @pass_errors_to_response
+def draw_single(request):
+    tree = json.loads(request.body)
+    picture = Gse.draw_single_tree(tree)
+    return JsonResponse(picture)
+
+@pass_errors_to_response
 def draw_embedding(request):
     input_trees = json.loads(request.body)
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
@@ -66,8 +72,9 @@ def draw_unrooted(request):
     input_trees = json.loads(request.body)
     gene, species = input_trees["gene"], input_trees["species"]
     if gene and species:
-        result = Urec.draw_unrooted(gene, species)
-        return JsonResponse({"unrooted": result})
+        picture = Urec.draw_unrooted(gene, species)
+        rootings = Urec.optimal_rootings(gene, species)
+        return JsonResponse({"unrooted": picture, "rootings": rootings})
     else:
         msg = "'gene' and 'species' are required"
         return JsonResponse(msg, status=400)
