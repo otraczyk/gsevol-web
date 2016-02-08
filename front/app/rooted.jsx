@@ -20,8 +20,8 @@ var Results = React.createClass({
     var tiles = [
       ['tree', this.props.data["gene"], "Gene tree"],
       ['tree', this.props.data["species"], "Species tree"],
-      ['tree', this.props.data["mapping"], "Mapping"],
-      ['scenario', this.props.data.optscen, "Optimal evolutionary scenario"],
+      ['tree', this.props.data["mapping"], "LCA Mapping"],
+      ['scenario', this.props.data.optscen, "Optimal evolutionary scenario in duplication-loss model"],
       ['scenarios', this.props.data["scenarios"], "All scenarios"]
     ];
     if (this.props.data["gene"] && this.props.data["species"]) {

@@ -1,5 +1,5 @@
 """
-Django settings for gseweb project.
+Django settings for gsevol project.
 
 """
 
