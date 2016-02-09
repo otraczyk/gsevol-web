@@ -3,6 +3,7 @@
 Using `fasturec` and `gsevol`.
 """
 import tempfile
+from collections import defaultdict
 
 from bindings.base import launch
 from bindings import gsevol as Gse
@@ -15,8 +16,9 @@ def launch_fasturec(params, timeout=300, stdin=None, *args, **kwargs):
 def launch_urec(params, timeout=300, stdin=None, *args, **kwargs):
     return launch(['urec/urec'], params, timeout, stdin, *args, **kwargs)
 
-def draw_unrooted(gene, species):
-    fu_command = ['-g %s' % gene, '-s %s' % species, '-bXDL']
+def draw_unrooted(gene, species, cost):
+    assert cost in ("DL", "D", "L", "DC", "RF"), "Wrong cost function: %s" % cost
+    fu_command = ['-g %s' % gene, '-s %s' % species, '-bX%s' % cost]
     fu_output = launch_fasturec(fu_command)
     fu_out_file = wrap_in_tempfile(fu_output)
     # Fasturec and gsevol outputs interfere and damage the picture if it's
@@ -27,11 +29,14 @@ def draw_unrooted(gene, species):
     gse_output = tmp.read()
     return gse_output
 
-def optimal_rootings(gene, species, cost_func=None):
+def optimal_rootings(gene, species, cost):
     """Generate a list of representations of optimal rootings of a gene tree
-    for given cost function (default=DL).
+    for given cost function (default=...?).
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-b', '-a8']
+    cost_to_opt = defaultdict(lambda: "a5", {
+        "DL": "a8",
+    })
+    command = ['-g %s' % gene, '-s %s' % species, '-b', '-%s' % cost_to_opt[cost]]
     output = launch_urec(command)
     rootings = [r.strip() for r in output.strip().split('\n')]
     return rootings

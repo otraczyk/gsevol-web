@@ -60,7 +60,7 @@ var ScenarioList = React.createClass({
   pictureRequest: function(item){
     var params = {"scenario": item,
                   "species": document.getElementById("species").value};
-    return JsonRequestPromise('/api/embedding/', params, 'POST');
+    return jsonRequestPromise('/api/embedding/', params, 'POST');
   },
   render: function() {
     return this.baseRender();
@@ -70,7 +70,7 @@ var ScenarioList = React.createClass({
 var RootingList = React.createClass({
   mixins: [List],
   pictureRequest: function(item){
-    return JsonRequestPromise('/api/draw_single/', item, 'POST');
+    return jsonRequestPromise('/api/draw_single/', item, 'POST');
   },
   render: function() {
     return this.baseRender();

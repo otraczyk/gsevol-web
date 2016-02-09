@@ -83,10 +83,11 @@ button.slim  {
     @extend .pure-form;
     @extend .pure-form-aligned;
 }
-#input-form input  {
+#input-form input[type="text"]  {
     @extend .pure-input;
     width: 70%;
 }
+
 #results svg {
     /* Changed by pure.css, needed to show tags in pictures. */
     overflow: visible;

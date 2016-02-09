@@ -14,7 +14,7 @@ function jsonPostRequest(url) {
     return request;
 }
 
-function JsonRequestPromise(url, params, method) {
+function jsonRequestPromise(url, params, method) {
     return new Promise(function(resolve, reject) {
         var request = new XMLHttpRequest();
         request.open(method, url, true);

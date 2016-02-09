@@ -26,12 +26,14 @@ def form_data(request, unrooted=False):
         "default_species": species or '',
         "form_url": "/rooted/",
         "result_component": "App",
-        "show_results": False
+        "show_results": False,
+        "form_template": "rooted_form.html"
     }
     if unrooted:
         data.update({
             "form_url": "/unrooted/",
-            "result_component": "UnrootedApp"
+            "result_component": "UnrootedApp",
+            "form_template": "unrooted_form.html"
         })
     return data
 

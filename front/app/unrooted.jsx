@@ -4,6 +4,11 @@ var UnrootedApp = React.createClass({
   renderResults: function() {
     return <UnrootedResults data={this.state.data} />;
   },
+  componentDidMount: function() {
+    if (this.state.params.cost) {
+      document.getElementById(this.state.params.cost).checked = true;
+    }
+  },
   render: function(){
     return this.baseRender();
   }
@@ -17,6 +22,7 @@ var UnrootedResults = React.createClass({
   },
   render: function() {
     var tiles = [['tree', this.props.data["unrooted"], "Unrooted gene tree"],
+                 ['tree', this.props.data["species"], "Species tree"],
                  ['rootings', this.props.data["rootings"], "Optimal rootings"]
           ];
     var tiles = tiles.map(function(tile){

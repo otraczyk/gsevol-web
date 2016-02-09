@@ -1,0 +1,39 @@
+    <form id="input-form" method="get" action="{{ form_url }}">
+        <div class="pure-control-group">
+            <label for="gene">Gene tree</label>
+            <input type="text" name="gene"
+                value="{{ default_gene }}" id="gene" />
+        </div>
+        <div class="pure-control-group">
+        <label for="species">Species tree</label>
+        <input type="text" name="species"
+            value="{{ default_species }}" id="species" />
+        </div>
+        <div class="pure-control-group">
+        Cost function
+        <label for="DL" class="pure-radio">
+        <input id="DL" type="radio" name="cost" value="DL" checked>
+            DL
+        </label>
+
+        <label for="D" class="pure-radio">
+            <input id="D" type="radio" name="cost" value="D">
+            D
+        </label>
+        <label for="L" class="pure-radio">
+            <input id="L" type="radio" name="cost" value="L">
+            L
+        </label>
+        <label for="DC" class="pure-radio">
+            <input id="DC" type="radio" name="cost" value="DC">
+            DC
+        </label>
+        <label for="RF" class="pure-radio">
+            <input id="RF" type="radio" name="cost" value="RF">
+            RF
+        </label>
+        </div>
+        <div class="pure-controls">
+        <button type="submit" value="Submit">Submit</button>
+        </div>
+    </form>
