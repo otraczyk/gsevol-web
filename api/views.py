@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*
 import json
 
-from api.view_utils import JsonResponse, pass_errors_to_response
+from ws4redis.redis_store import RedisMessage
+from ws4redis.publisher import RedisPublisher
+
+from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
 from bindings import gsevol as Gse
 from bindings import urec as Urec
 
@@ -19,6 +22,9 @@ def draw(request):
 
     All pictures are returned as svg source.
     """
+    facility = websocket_channel(request)
+    welcome = RedisMessage('Hello everybody')  # create a welcome message to be sent to everybody
+    RedisPublisher(facility=facility, broadcast=True).publish_message(welcome)
     results = {}
     input_trees = json.loads(request.body)
     gene, species = input_trees.get("gene"), input_trees.get("species")
@@ -47,6 +53,9 @@ def draw_single(request):
 
 @pass_errors_to_response
 def draw_embedding(request):
+    facility = websocket_channel(request)
+    welcome = RedisMessage('Hello everybody')  # create a welcome message to be sent to everybody
+    RedisPublisher(facility=facility, broadcast=True).publish_message(welcome)
     input_trees = json.loads(request.body)
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:

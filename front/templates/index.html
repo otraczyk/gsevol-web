@@ -25,12 +25,32 @@
         );
     })
     </script>
+    <script>
+    var ws = new WebSocket(
+        'ws://' + location.host + '/ws/' + location.search.slice(1)
+        + '?subscribe-broadcast&publish-broadcast&echo');
+    ws.onopen = function() {
+        console.log("websocket connected");
+    };
+    ws.onmessage = function(e) {
+        console.log("Received: " + e.data);
+    };
+    ws.onerror = function(e) {
+        console.error(e);
+    };
+    ws.onclose = function(e) {
+        console.log("connection closed");
+    }
+    function send_message(msg) {
+        ws.send(msg);
+    }
+    </script>
     {% endif %}
 {% endblock %}
 
 {% block content %}
     {% include form_template %}
-    <div id="results">
+    <d1iv id="results">
     </div>
 {% endblock %}
 
