@@ -1,20 +1,36 @@
 var App = {
   getInitialState: function() {
-    return {'params': getUrlParams()};
+    return {'params': getUrlParams(), 'socket': this.openSocket()};
+  },
+  openSocket: function(){
+    socket = new WebSocket(
+      'ws://' + location.host + '/ws/' + location.search.slice(1)
+      + '?subscribe-broadcast&publish-broadcast&echo'
+    );
+    socket.onopen = function() {
+        console.log("websocket connected");
+    };
+    socket.onerror = function(e) {
+        console.error(e);
+    };
+    socket.onclose = function(e) {
+        console.log("connection closed");
+    }
+    socket.onmessage = function(message) {
+      console.log("Received: " + message.data);
+      this.setState(_.merge({}, this.state, {'data': JSON.parse(message.data)}));
+    }.bind(this);
+    return socket;
   },
   componentWillMount: function() {
     if (this.state.params){
-      var request = jsonPostRequest(this.apiUrl);
-      var params = this.state.params;
-      request.onload = function() {
-        if (request.status == 200) {
-          var response = JSON.parse(request.responseText);
-          this.setState(_.merge({}, this.state, {'data': response}));
-        } else {
-          this.setState(_.merge({}, this.state, {'error': request.responseText}));
-        }
-      }.bind(this)
-      request.send(JSON.stringify(params));
+      jsonRequestPromise(this.apiUrl, this.state.params, 'POST')
+        .then(function(response) {
+            this.setState(_.merge({}, this.state, {'data': response}));
+          }.bind(this))
+        .catch(function(response) {
+            this.setState(_.merge({}, this.state, {'error': request.responseText}));
+          }.bind(this));
     }
   },
   baseRender: function() {

@@ -13,7 +13,7 @@ def random_trees():
     """
     Generate random gene and species trees with leaves a-f.
     """
-    command = ['-g &randbin(a-f)', '-s &randbin(a-f)', '-egsG']
+    command = ['-g &randbin(a-h)', '-s &randbin(a-h)', '-egsG']
     trees = launch(command)
     gene, species = trees.split("\n")[:2]
     return gene.strip(), species.strip()
