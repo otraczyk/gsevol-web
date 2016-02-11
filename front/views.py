@@ -50,13 +50,16 @@ def unrooted_index(request):
 
 def scenario_index(request):
     scenario = request.GET.get("scenario", '')
-    species = request.GET.get("species", '')
+    show_results = bool(scenario)
+    gene, species = request_params(request)
+    if not scenario and gene and species:
+        scenario = Gse.optscen(gene, species)
     template_data = {
         "default_scenario": scenario,
         "default_species": species,
         "form_url": "/scenario/",
         "result_component": "ScenarioApp",
-        "show_results": bool(scenario),
+        "show_results": show_results,
         "form_template": "scenario_form.html",
     }
     return render_to_response("index.html", template_data)

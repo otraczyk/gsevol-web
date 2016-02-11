@@ -87,8 +87,9 @@ def draw_unrooted(request):
 
 @pass_errors_to_response
 def scenario(request):
+
     input_trees = json.loads(request.body)
-    scenario, species = input_trees["scenario"], input_trees["species"]
+    scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:
         results = {}
         results["scenario"] = {'scen': scenario,
