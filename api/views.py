@@ -70,7 +70,7 @@ def draw_diagram(request):
 @pass_errors_to_response
 def draw_unrooted(request):
     req_params = json.loads(request.body)
-    gene, species = req_params["gene"], req_params["species"]
+    gene, species = req_params.get("gene"), req_params.get("species")
     cost = req_params.get("cost") or "DL"
     if gene and species:
         picture = Urec.draw_unrooted(gene, species, cost)
@@ -83,4 +83,18 @@ def draw_unrooted(request):
         })
     else:
         msg = "'gene' and 'species' are required"
+        return JsonResponse(msg, status=400)
+
+@pass_errors_to_response
+def scenario(request):
+    input_trees = json.loads(request.body)
+    scenario, species = input_trees["scenario"], input_trees["species"]
+    if scenario and species:
+        results = {}
+        results["scenario"] = {'scen': scenario,
+                               'pic': Gse.draw_embedding(species, scenario)}
+        results["species"] = Gse.draw_single_tree(species)
+        return JsonResponse(results)
+    else:
+        msg = "'scenario' and 'species' are required"
         return JsonResponse(msg, status=400)

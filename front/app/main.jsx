@@ -39,26 +39,28 @@ var Error = React.createClass({
 });
 
 var Nav = React.createClass({
-  getLink: function(isTargetCurrent, targetPattern) {
+  getLink: function(targetPattern) {
     var ret = {link: '', isCurrent: ''};
-    if (isTargetCurrent) {
+    if (location.pathname.search(targetPattern) >= 0) {
       ret. link = "#";
       ret.isCurrent = "current";
     } else {
-      ret.link = targetPattern + location.search;
+      ret.link = targetPattern + '/' + location.search;
     }
     return ret;
   },
   render: function() {
-    var onRootedUrl = location.pathname.search('/unrooted/') < 0;
-    var rooted = this.getLink(onRootedUrl, '/rooted/');
-    var unrooted = this.getLink(!onRootedUrl, '/unrooted/');
+    var rooted = this.getLink('/rooted');
+    var unrooted = this.getLink('/unrooted');
+    var scenario = this.getLink('/scenario');
     return (
       <ul>
         <li className={rooted.isCurrent}>
           <a href={rooted.link}> Rooted Tree </a></li>
         <li className={unrooted.isCurrent}>
           <a href={unrooted.link}> Unrooted Tree </a></li>
+        <li className={scenario.isCurrent}>
+          <a href={scenario.link}> Scenario </a></li>
       </ul>
     );
   }

@@ -25,7 +25,7 @@ def form_data(request, unrooted=False):
         "default_gene": gene or '',
         "default_species": species or '',
         "form_url": "/rooted/",
-        "result_component": "App",
+        "result_component": "RootedApp",
         "show_results": False,
         "form_template": "rooted_form.html"
     }
@@ -48,6 +48,18 @@ def index(request, unrooted=False):
 def unrooted_index(request):
     return index(request, unrooted=True)
 
+def scenario_index(request):
+    scenario = request.GET.get("scenario", '')
+    species = request.GET.get("species", '')
+    template_data = {
+        "default_scenario": scenario,
+        "default_species": species,
+        "form_url": "/scenario/",
+        "result_component": "ScenarioApp",
+        "show_results": bool(scenario),
+        "form_template": "scenario_form.html",
+    }
+    return render_to_response("index.html", template_data)
 
 def diagram(request):
     gene, species = request_params(request)

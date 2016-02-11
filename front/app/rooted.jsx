@@ -1,4 +1,4 @@
-var App = React.createClass({
+var RootedApp = React.createClass({
   mixins: [App],
   apiUrl: '/api/draw/',
   renderResults: function() {

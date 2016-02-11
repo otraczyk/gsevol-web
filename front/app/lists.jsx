@@ -14,14 +14,16 @@ var ListItem = React.createClass({
     }
   },
   render: function(){
-    var picture = this.showPicture()
-    var button = this.showButton()
+    var picture = this.showPicture();
+    var button = this.showButton();
+    var additional = this.props.showAdditional(this.props.noted);
     return (
       <tr>
         <td>{this.props.noted}
           {picture}
         </td>
         {button}
+        {additional}
       </tr>
     );
   },
@@ -43,7 +45,8 @@ var ListItem = React.createClass({
 
 var List = {
   renderItem: function(item){
-    return <ListItem noted={item} pictureRequest={this.pictureRequest} />;
+    return ( <ListItem noted={item} pictureRequest={this.pictureRequest}
+            showAdditional={this.showAdditional} />);
   },
   baseRender: function() {
     var scenRows = this.props.content.map(this.renderItem);
@@ -62,6 +65,19 @@ var ScenarioList = React.createClass({
                   "species": document.getElementById("species").value};
     return jsonRequestPromise('/api/embedding/', params, 'POST');
   },
+  showAdditional: function(item) {
+    var scenarioLink = '/scenario/?scenario=' + item
+        + "&species=" + document.getElementById("species").value;
+    return (
+      <td>
+       <div className="small info btn">
+         <a href={scenarioLink}>
+          <button className="slim"> Edit scenario </button>
+         </a>
+      </div>
+      </td>
+    )
+  },
   render: function() {
     return this.baseRender();
   }
@@ -71,6 +87,19 @@ var RootingList = React.createClass({
   mixins: [List],
   pictureRequest: function(item){
     return jsonRequestPromise('/api/draw_single/', item, 'POST');
+  },
+  showAdditional: function(item) {
+    var rootingLink = '/rooted/?gene=' + item
+        + "&species=" + document.getElementById("species").value;
+    return (
+      <td>
+       <div className="small info btn">
+         <a href={rootingLink}>
+          <button className="slim"> Edit rooting </button>
+         </a>
+      </div>
+      </td>
+    )
   },
   render: function() {
     return this.baseRender();
