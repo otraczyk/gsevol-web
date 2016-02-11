@@ -33,9 +33,18 @@ def draw_single_tree(tree):
 
 def draw_trees(gene, species):
     """
-    Draw basic output for a tree pair: gene tree, species tree and their mapping.
+    Draw basic output for a tree pair: gene tree and species tree.
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-dgsmS',
+    command = ['-g %s' % gene, '-s %s' % species, '-dgsS',
+               '-C outputfile="/dev/stdout"']
+    source = launch(command)
+    return split_to_pictures(source)
+
+def draw_mapping(gene, species):
+    """
+    Draw LCA mapping for a tree pair.
+    """
+    command = ['-g %s' % gene, '-s %s' % species, '-dmS',
                '-C outputfile="/dev/stdout"']
     source = launch(command)
     return split_to_pictures(source)
@@ -47,7 +56,7 @@ def scenarios(gene, species):
     Order: optimal to worst.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-eGa']
-    scenarios = launch(command).strip().split('\n')
+    scenarios = launch(command, timeout=100).strip().split('\n')
     scenarios.reverse()
     return scenarios
 

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*
 import json
 
-from api.view_utils import JsonResponse, pass_errors_to_response
+from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
 from bindings import gsevol as Gse
 from bindings import urec as Urec
-from bindings.tasks import launch_async
 
-import api.operations as O
+import bindings.tasks as O
 
 
 @pass_errors_to_response
@@ -27,11 +26,11 @@ def draw(request):
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
     if gene and species:
-        launch_async(O.draw_gene_species_mapping, (gene, species), request)
-
-        launch_async(O.all_scenarios, (gene, species), request)
-
-        launch_async(O.opt_scen, (gene, species), request)
+        ws = websocket_channel(request)
+        O.draw_gene_species.delay(ws, gene, species)
+        O.draw_mapping.delay(ws, gene, species)
+        O.opt_scen.delay(ws, gene, species)
+        O.all_scenarios.delay(ws, gene, species)
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):

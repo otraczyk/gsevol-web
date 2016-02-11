@@ -42,9 +42,8 @@ def websocket_channel(request):
     channel = urllib.unquote(channel).decode('utf8')
     return channel
 
-def broadcast_message(text, request):
-    """Send broadcast message to a websocket corresponding to refering request.
+def broadcast_message(text, channel):
+    """Send broadcast message to a websocket.
     """
-    facility = websocket_channel(request)
     msg = RedisMessage(json.dumps(text))
-    RedisPublisher(facility=facility, broadcast=True).publish_message(msg)
+    RedisPublisher(facility=channel, broadcast=True).publish_message(msg)
