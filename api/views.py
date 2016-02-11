@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*
 import json
 
-from ws4redis.redis_store import RedisMessage
-from ws4redis.publisher import RedisPublisher
-
-from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
+from api.view_utils import JsonResponse, pass_errors_to_response
 from bindings import gsevol as Gse
 from bindings import urec as Urec
+from bindings.tasks import launch_async
+
+import api.operations as O
 
 
 @pass_errors_to_response
@@ -22,28 +22,23 @@ def draw(request):
 
     All pictures are returned as svg source.
     """
-    facility = websocket_channel(request)
-    welcome = RedisMessage('Hello everybody')  # create a welcome message to be sent to everybody
-    RedisPublisher(facility=facility, broadcast=True).publish_message(welcome)
     results = {}
     input_trees = json.loads(request.body)
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
     if gene and species:
-        gtree, stree, mapping = Gse.draw_trees(gene, species)
-        results = {"gene": gtree, "species": stree, "mapping": mapping}
+        launch_async(O.draw_gene_species_mapping, (gene, species), request)
 
-        results["scenarios"] = Gse.scenarios(gene, species)
+        launch_async(O.all_scenarios, (gene, species), request)
 
-        optimal = Gse.optscen(gene, species)
-        results["optscen"] = {'scen': optimal,
-                              'pic': Gse.draw_embedding(species, optimal)}
+        launch_async(O.opt_scen, (gene, species), request)
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
                 svg = Gse.draw_single_tree(input_trees[tree_type])
                 results[tree_type] = svg
     return JsonResponse(results)
+
 
 @pass_errors_to_response
 def draw_single(request):
@@ -53,9 +48,6 @@ def draw_single(request):
 
 @pass_errors_to_response
 def draw_embedding(request):
-    facility = websocket_channel(request)
-    welcome = RedisMessage('Hello everybody')  # create a welcome message to be sent to everybody
-    RedisPublisher(facility=facility, broadcast=True).publish_message(welcome)
     input_trees = json.loads(request.body)
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:

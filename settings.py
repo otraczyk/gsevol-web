@@ -41,8 +41,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'ws4redis',
     'api',
-    'front'
-
+    'front',
+    'bindings',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -94,3 +94,21 @@ STATICFILES_DIRS = (
     'front/bower_components/',
     'front/dist/'
 )
+
+# Celery settings
+
+if 'DJANGO_SETTINGS_MODULE' not in os.environ:
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+from celery import Celery
+app = Celery('gsevol')
+
+app.conf.update(
+    BROKER_URL = 'redis://localhost/',
+    CELERY_RESULT_BACKEND = "redis://localhost/",
+    CELERY_ACCEPT_CONTENT = ['json', 'msgpack'],
+    CELERY_TASK_SERIALIZER = 'json',
+    CELERY_RESULT_SERIALIZER = 'json'
+)
+
+app.autodiscover_tasks(lambda: INSTALLED_APPS)

@@ -2,6 +2,10 @@
 import re
 import json
 import urllib
+
+from ws4redis.redis_store import RedisMessage
+from ws4redis.publisher import RedisPublisher
+
 from django.http import HttpResponse
 from django.conf import settings
 
@@ -37,3 +41,10 @@ def websocket_channel(request):
     channel = request.META["HTTP_REFERER"].split('?')[1]
     channel = urllib.unquote(channel).decode('utf8')
     return channel
+
+def broadcast_message(text, request):
+    """Send broadcast message to a websocket corresponding to refering request.
+    """
+    facility = websocket_channel(request)
+    msg = RedisMessage(json.dumps(text))
+    RedisPublisher(facility=facility, broadcast=True).publish_message(msg)
