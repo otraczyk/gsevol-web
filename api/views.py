@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*
 import json
 
-from api.view_utils import JsonResponse, pass_errors_to_response
+from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
 from bindings import gsevol as Gse
 from bindings import urec as Urec
+
+import bindings.tasks as O
 
 
 @pass_errors_to_response
@@ -24,20 +26,18 @@ def draw(request):
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
     if gene and species:
-        gtree, stree, mapping = Gse.draw_trees(gene, species)
-        results = {"gene": gtree, "species": stree, "mapping": mapping}
-
-        results["scenarios"] = Gse.scenarios(gene, species)
-
-        optimal = Gse.optscen(gene, species)
-        results["optscen"] = {'scen': optimal,
-                              'pic': Gse.draw_embedding(species, optimal)}
+        ws = websocket_channel(request)
+        O.draw_gene_species.delay(ws, gene, species)
+        O.draw_mapping.delay(ws, gene, species)
+        O.opt_scen.delay(ws, gene, species)
+        O.all_scenarios.delay(ws, gene, species)
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
                 svg = Gse.draw_single_tree(input_trees[tree_type])
                 results[tree_type] = svg
     return JsonResponse(results)
+
 
 @pass_errors_to_response
 def draw_single(request):

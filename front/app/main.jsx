@@ -2,26 +2,56 @@ var App = {
   getInitialState: function() {
     return {'params': getUrlParams()};
   },
-  componentWillMount: function() {
-    if (this.state.params){
-      var request = jsonPostRequest(this.apiUrl);
-      var params = this.state.params;
-      request.onload = function() {
-        if (request.status == 200) {
-          var response = JSON.parse(request.responseText);
-          this.setState(_.merge({}, this.state, {'data': response}));
-        } else {
-          this.setState(_.merge({}, this.state, {'error': request.responseText}));
+  openSocket: function(){
+    // We neet the socket open before any results can come, or they'll be lost.
+    return new Promise(function(resolve, reject) {
+      socket = new WebSocket(
+        'ws://' + location.host + '/ws/' + location.search.slice(1)
+        + '?subscribe-broadcast&publish-broadcast&echo'
+      );
+      socket.onopen = function() {
+          console.log("websocket connected");
+      };
+      socket.onerror = function(e) {
+          console.error(e);
+      };
+      socket.onclose = function(e) {
+          console.log("connection closed");
+      }
+      socket.onmessage = function(message) {
+        data = JSON.parse(message.data)
+        console.log("Received: " + Object.keys(data));
+        if ("error" in data){
+          this.setState(_.merge({}, this.state, data));
         }
-      }.bind(this)
-      request.send(JSON.stringify(params));
-    }
+        this.setState(_.merge({}, this.state, {'data': data}));
+      }.bind(this);
+      this.socket = socket;
+      resolve();
+    }.bind(this));
+  },
+  componentWillMount: function() {
+    this.openSocket().then(function(){
+      if (this.state.params){
+        jsonRequestPromise(this.apiUrl, this.state.params, 'POST')
+          .then(function(response) {
+              this.setState(_.merge({}, this.state, {'data': response}));
+            }.bind(this))
+          .catch(function(response) {
+              this.setState(_.merge({}, this.state, {'error': request.responseText}));
+            }.bind(this));
+      }
+    }.bind(this));
   },
   baseRender: function() {
-    if (this.state.data){
-      return this.renderResults();
-    } else if (this.state.error) {
+    if (this.state.data && this.state.error){
+      return <div> <Error message={this.state.error} /> {this.renderResults()} </div>
+    }
+    else if (this.state.error) {
       return <Error message={this.state.error} />;
+    }
+    else if (this.state.data){
+      return this.renderResults();
     } else {
       return <div></div>;
     }

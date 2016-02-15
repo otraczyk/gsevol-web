@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*
 import re
 import json
+import urllib
+
+from ws4redis.redis_store import RedisMessage
+from ws4redis.publisher import RedisPublisher
+
 from django.http import HttpResponse
 from django.conf import settings
 
@@ -27,3 +32,18 @@ def pass_errors_to_response(view_func):
             return JsonResponse(error, status=500)
 
     return wrapper
+
+def websocket_channel(request):
+    """Get redis channel id for websocket corresponding to given request.
+
+    Currently it's simply query string from refering view.
+    """
+    channel = request.META["HTTP_REFERER"].split('?')[1]
+    channel = urllib.unquote(channel).decode('utf8')
+    return channel
+
+def broadcast_message(text, channel):
+    """Send broadcast message to a websocket.
+    """
+    msg = RedisMessage(json.dumps(text))
+    RedisPublisher(facility=channel, broadcast=True).publish_message(msg)
