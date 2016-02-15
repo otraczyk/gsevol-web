@@ -7,6 +7,7 @@ from bindings import urec as Urec
 
 from bindings import tasks
 
+
 @pass_errors_to_response
 def draw(request):
     """Provide basic data for one or two rooted trees.
@@ -26,10 +27,14 @@ def draw(request):
 
     if gene and species:
         ws = websocket_channel(request)
-        tasks.draw_gene_species.delay(ws, gene, species)
-        tasks.draw_mapping.delay(ws, gene, species)
-        tasks.opt_scen.delay(ws, gene, species)
-        tasks.all_scenarios.delay(ws, gene, species)
+        delegables = [
+            tasks.DrawGeneSpecies(),
+            tasks.DrawMapping(),
+            tasks.OptScen(),
+            tasks.AllScenarios()
+        ]
+        for task in delegables:
+            results.update(task.deploy(ws, [gene, species]))
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
@@ -90,7 +95,7 @@ def scenario(request):
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:
         results = {}
-        results.update(tasks.scenario(scenario, species))
+        results.update(tasks.Scenario().core(scenario, species))
         results["species"] = Gse.draw_single_tree(species)
         return JsonResponse(results)
     else:

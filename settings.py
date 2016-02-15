@@ -97,6 +97,10 @@ STATICFILES_DIRS = (
 
 # Celery settings
 
+# Whether celery and websockets should be used for delivering computation results.
+# May be disabled for development.
+DELEGATE_TASKS = True
+
 if 'DJANGO_SETTINGS_MODULE' not in os.environ:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

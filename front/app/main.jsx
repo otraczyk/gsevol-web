@@ -38,7 +38,7 @@ var App = {
               this.setState(_.merge({}, this.state, {'data': response}));
             }.bind(this))
           .catch(function(response) {
-              this.setState(_.merge({}, this.state, {'error': request.responseText}));
+              this.setState(_.merge({}, this.state, {'error': response.responseText}));
             }.bind(this));
       }
     }.bind(this));

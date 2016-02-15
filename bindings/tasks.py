@@ -1,68 +1,62 @@
+from celery import Task
 from settings import app
+from django.conf import settings
+
 from api.view_utils import broadcast_message
 from bindings.base import GseError
 from bindings import gsevol as Gse
 from bindings import urec as Urec
 
-@app.task
-def add(x, y):
-    """Test task.
+
+class GseTask(Task):
     """
-    return x + y
+    Supports two ways of launching tasks and communicating results:
 
-# TODO: Find a way to get rid of copy-paste.
-# with a decorator all tasks are named "wrapper" and only the last one works.
-def broadcast_results(op_func):
-    def wrapper(channel, *args, **kwargs):
+    ** Async: delegate task to celery and send results via websocket.
+    ** Traditional: run task directly, send results in http response.
+    """
+    def deploy(self, socket_channel, params):
+        if settings.DELEGATE_TASKS:
+            self.delay(socket_channel, *params)
+            return {}  # for type consistency when falling back to rest.
+        else:
+            return self.core(*params)
+
+    def run(self, socket_channel, *args, **kwargs):
         try:
-            results = op_func(*args)
-            broadcast_message(results, channel)
+            results = self.core(*args, **kwargs)
+            broadcast_message(results, socket_channel)
         except GseError as exc:
-            broadcast_message({"error": str(exc)}, channel)
-    return wrapper
+            broadcast_message({"error": str(exc)}, socket_channel)
+
+    def core(self, *args, **kwargs):
+        raise NotImplemented
 
 
-@app.task
-def draw_gene_species(channel, gene, species):
-    try:
+class DrawGeneSpecies(GseTask):
+    def core(self, gene, species):
         gtree, stree = Gse.draw_trees(gene, species)
-        results = {"gene": gtree, "species": stree}
-        broadcast_message(results, channel)
-    except GseError as exc:
-        broadcast_message({"error": str(exc)}, channel)
+        return {"gene": gtree, "species": stree}
 
-@app.task
-def draw_mapping(channel, gene, species):
-    try:
+class DrawMapping(GseTask):
+    def core(self, gene, species):
         mapping = Gse.draw_mapping(gene, species)
-        results = {"mapping": mapping}
-        broadcast_message(results, channel)
-    except GseError as exc:
-        broadcast_message({"error": str(exc)}, channel)
+        return {"mapping": mapping}
 
-@app.task
-def all_scenarios(channel, gene, species):
-    try:
-        results = {"scenarios": Gse.scenarios(gene, species)}
-        broadcast_message(results, channel)
-    except GseError as exc:
-        broadcast_message({"error": str(exc)}, channel)
+class AllScenarios(GseTask):
+    def core(self, gene, species):
+        return {"scenarios": Gse.scenarios(gene, species)}
 
-
-def scenario(scen, species, name="scenario"):
-    d, l = Gse.scenario_cost(scen)
-    return {name: {'scen': scen,
-                   'pic' : Gse.draw_embedding(species, scen),
-                   'cost': {'dups': d, 'losses': l}
+class Scenario(GseTask):
+    def core(self, scen, species, name="scenario"):
+        d, l = Gse.scenario_cost(scen)
+        return {name: {'scen': scen,
+                       'pic' : Gse.draw_embedding(species, scen),
+                       'cost': {'dups': d, 'losses': l}
+                    }
                 }
-            }
 
-@app.task
-def opt_scen(channel, gene, species):
-    try:
+class OptScen(GseTask):
+    def core(self, gene, species):
         optimal = Gse.optscen(gene, species)
-        results = scenario(optimal, species, "optscen")
-        broadcast_message(results, channel)
-    except GseError as exc:
-        broadcast_message({"error": str(exc)}, channel)
-
+        return Scenario().core(optimal, species, "optscen")
