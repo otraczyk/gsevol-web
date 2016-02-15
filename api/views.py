@@ -5,8 +5,7 @@ from api.view_utils import JsonResponse, pass_errors_to_response, websocket_chan
 from bindings import gsevol as Gse
 from bindings import urec as Urec
 
-import bindings.tasks as O
-
+from bindings import tasks
 
 @pass_errors_to_response
 def draw(request):
@@ -27,10 +26,10 @@ def draw(request):
 
     if gene and species:
         ws = websocket_channel(request)
-        O.draw_gene_species.delay(ws, gene, species)
-        O.draw_mapping.delay(ws, gene, species)
-        O.opt_scen.delay(ws, gene, species)
-        O.all_scenarios.delay(ws, gene, species)
+        tasks.draw_gene_species.delay(ws, gene, species)
+        tasks.draw_mapping.delay(ws, gene, species)
+        tasks.opt_scen.delay(ws, gene, species)
+        tasks.all_scenarios.delay(ws, gene, species)
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
@@ -87,13 +86,11 @@ def draw_unrooted(request):
 
 @pass_errors_to_response
 def scenario(request):
-
     input_trees = json.loads(request.body)
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:
         results = {}
-        results["scenario"] = {'scen': scenario,
-                               'pic': Gse.draw_embedding(species, scenario)}
+        results.update(tasks.scenario(scenario, species))
         results["species"] = Gse.draw_single_tree(species)
         return JsonResponse(results)
     else:

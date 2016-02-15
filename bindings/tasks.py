@@ -48,16 +48,21 @@ def all_scenarios(channel, gene, species):
     except GseError as exc:
         broadcast_message({"error": str(exc)}, channel)
 
+
+def scenario(scen, species, name="scenario"):
+    d, l = Gse.scenario_cost(scen)
+    return {name: {'scen': scen,
+                   'pic' : Gse.draw_embedding(species, scen),
+                   'cost': {'dups': d, 'losses': l}
+                }
+            }
+
 @app.task
 def opt_scen(channel, gene, species):
     try:
         optimal = Gse.optscen(gene, species)
-        results = {
-            "optscen": {
-                'scen': optimal,
-                'pic': Gse.draw_embedding(species, optimal)
-                }
-            }
+        results = scenario(optimal, species, "optscen")
         broadcast_message(results, channel)
     except GseError as exc:
         broadcast_message({"error": str(exc)}, channel)
+

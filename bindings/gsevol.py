@@ -92,3 +92,8 @@ def draw_diagram(gene, species):
     diag_command = ['-dd', '-C outputfile="/dev/stdout"']
     diag_output = launch(diag_command, stdin=scen_file, timeout=1200)
     return diag_output
+
+def scenario_cost(scenario):
+    command = ['-t %s' % scenario, '-cc']
+    dups,losses = launch(command).split(' ')[:2]
+    return dups, losses
