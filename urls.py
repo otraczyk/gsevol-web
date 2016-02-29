@@ -19,4 +19,5 @@ urlpatterns += [
     url(r'^api/diagram/', api_views.draw_diagram),
     url(r'^api/unrooted/', api_views.draw_unrooted),
     url(r'^api/scenario/', api_views.scenario),
+    url(r'^api/options/', api_views.options),
 ]

@@ -101,3 +101,14 @@ def scenario(request):
     else:
         msg = "'scenario' and 'species' are required"
         return JsonResponse(msg, status=400)
+
+@pass_errors_to_response
+def options(request):
+    available_opts = [{
+        "name": "scale",
+        "label": "Scale",
+        "default": 2,
+        "input": "number",
+    },
+    ]
+    return JsonResponse(available_opts)

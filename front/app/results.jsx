@@ -32,10 +32,19 @@ var ResultTile = React.createClass({
   }
 });
 var TreePic = React.createClass({
+  renderOptions: function() {
+    var opt_comp = React.render(
+                React.createElement(Options, {"kind": "gene"}),
+                document.getElementById('options')
+              );
+    document.getElementById('options').style.visibility = "visible";
+    this.setState({'optionsComp': opt_comp});
+  },
   render: function() {
     return (
       // Simple for now, but e.g. download button should be added
       <div>
+      <button className="slim" onClick={this.renderOptions}> Options </button>
       {this.props.noted}
       <div dangerouslySetInnerHTML={{__html: this.props.svg}}></div>
       </div>

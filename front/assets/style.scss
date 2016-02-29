@@ -79,13 +79,16 @@ svg  {
 button.slim  {
     padding: 5px;
 }
-#input-form {
+#input-form, #options-form {
     @extend .pure-form;
     @extend .pure-form-aligned;
 }
 #input-form input[type="text"]  {
     @extend .pure-input;
     width: 70%;
+}
+#options input {
+    @extend .pure-input;
 }
 
 #results svg {
@@ -111,4 +114,32 @@ button.slim  {
 }
 button {
     @extend .pure-button;
+}
+#options {
+    background: #333333;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    border-left: 1px #000000 solid;
+    color: #ffffff;
+    padding: 20px;
+}
+#options input {
+    color: #000000;
+}
+#options h3 {
+    font-family: Montserrat, sans-serif;
+}
+#options .fold {
+    position: relative;
+    top: -20px;
+    left: -40px;
+    background: #333333;
+    color: #ffffff;
+    font-family: Montserrat, sans-serif;
+    font-size: 13pt;
+    margin-bottom: -20px;
+    border: 1px solid;
 }
