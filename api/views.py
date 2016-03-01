@@ -2,6 +2,7 @@
 import json
 
 from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
+from api.styling import rendering_task, make_options
 from bindings import gsevol as Gse
 from bindings import urec as Urec
 
@@ -28,13 +29,14 @@ def draw(request):
     if gene and species:
         ws = websocket_channel(request)
         delegables = [
-            tasks.DrawGeneSpecies(),
-            tasks.DrawMapping(),
-            tasks.OptScen(),
-            tasks.AllScenarios()
+            (tasks.DrawGene(), [gene]),
+            (tasks.DrawSpecies(), [species]),
+            (tasks.DrawMapping(), (gene, species)),
+            (tasks.OptScen(), (gene, species)),
+            (tasks.AllScenarios(), (gene, species))
         ]
-        for task in delegables:
-            results.update(task.deploy(ws, [gene, species]))
+        for task, params in delegables:
+            results.update(task.deploy(ws, params))
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
@@ -107,8 +109,29 @@ def options(request):
     available_opts = [{
         "name": "scale",
         "label": "Scale",
-        "default": 2,
+        "default": 1,
         "input": "number",
-    },
+    },{
+        "name": "resolution",
+        "label": "Resolution",
+        "default": 1,
+        "input": "number"
+    }
     ]
     return JsonResponse(available_opts)
+
+@pass_errors_to_response
+def restyle(request):
+    # params = json.loads(request.body)
+    # kind, config = params.get("kind"), params.get("config")
+    redraw_gene(request)
+    return JsonResponse("OK")
+
+def redraw_gene(request):
+    # TODO: some refactor, sonmething's redundant here
+    params = json.loads(request.body)
+    gene, config = params.get("gene"), params.get("config", {})
+    options_string = make_options("gene", config)
+    ws = websocket_channel(request)
+    task = tasks.DrawGene()
+    task.deploy(ws, [gene, options_string])

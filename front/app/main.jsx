@@ -10,8 +10,8 @@ var App = {
         + '?subscribe-broadcast&publish-broadcast&echo'
       );
       socket.onopen = function() {
-          console.log("websocket connected");
-      };
+        this.requestResults();
+      }.bind(this);
       socket.onerror = function(e) {
           console.error(e);
       };
@@ -23,6 +23,8 @@ var App = {
         console.log("Received: " + Object.keys(data));
         if ("error" in data){
           this.setState(_.merge({}, this.state, data));
+        } else if (this.state.error) {
+            this.setState({"error": null});
         }
         this.setState(_.merge({}, this.state, {'data': data}));
       }.bind(this);
@@ -30,18 +32,19 @@ var App = {
       resolve();
     }.bind(this));
   },
+  requestResults: function() {
+    if (this.state.params){
+      jsonRequestPromise(this.apiUrl, this.state.params, 'POST')
+        .then(function(response) {
+            this.setState(_.merge({}, this.state, {'data': response}));
+          }.bind(this))
+        .catch(function(response) {
+            this.setState(_.merge({}, this.state, {'error': response.responseText}));
+          }.bind(this));
+    }
+  },
   componentWillMount: function() {
-    this.openSocket().then(function(){
-      if (this.state.params){
-        jsonRequestPromise(this.apiUrl, this.state.params, 'POST')
-          .then(function(response) {
-              this.setState(_.merge({}, this.state, {'data': response}));
-            }.bind(this))
-          .catch(function(response) {
-              this.setState(_.merge({}, this.state, {'error': response.responseText}));
-            }.bind(this));
-      }
-    }.bind(this));
+    this.openSocket();
   },
   baseRender: function() {
     if (this.state.data && this.state.error){

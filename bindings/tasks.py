@@ -33,10 +33,15 @@ class GseTask(Task):
         raise NotImplemented
 
 
-class DrawGeneSpecies(GseTask):
-    def core(self, gene, species):
-        gtree, stree = Gse.draw_trees(gene, species)
-        return {"gene": gtree, "species": stree}
+class DrawGene(GseTask):
+    def core(self, gene, options=''):
+        gtree = Gse.draw_single_tree(gene, options)
+        return {"gene": gtree}
+
+class DrawSpecies(GseTask):
+    def core(self, species, options=''):
+        stree = Gse.draw_single_tree(species)
+        return {"species": stree}
 
 class DrawMapping(GseTask):
     def core(self, gene, species):

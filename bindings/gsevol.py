@@ -27,8 +27,8 @@ def split_to_pictures(source):
     return source.split('<?xml version="1.0" encoding="UTF-8"?>\n')[1:]
 
 
-def draw_single_tree(tree):
-    return launch(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout"'])
+def draw_single_tree(tree, options=''):
+    return launch(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout";%s' % options])
 
 
 def draw_trees(gene, species):
@@ -95,5 +95,5 @@ def draw_diagram(gene, species):
 
 def scenario_cost(scenario):
     command = ['-t %s' % scenario, '-cc']
-    dups,losses = launch(command).split(' ')[:2]
+    dups, losses = launch(command).split(' ')[:2]
     return dups, losses

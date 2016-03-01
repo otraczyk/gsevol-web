@@ -89,6 +89,7 @@ button.slim  {
 }
 #options input {
     @extend .pure-input;
+    width: 30%;
 }
 
 #results svg {
@@ -117,7 +118,7 @@ button {
 }
 #options {
     background: #333333;
-    width: 300px;
+    width: 230px;
     height: 100%;
     position: fixed;
     right: 0;
