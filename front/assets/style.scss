@@ -144,3 +144,19 @@ button {
     margin-bottom: -20px;
     border: 1px solid;
 }
+table.tree {
+    margin: auto;
+}
+.tree .tree-menu {
+    vertical-align: top;
+    padding-top: 20px;
+    text-align: left;
+}
+.tree-menu .fa {
+    color: #dddddd;
+    font-size: 16pt;
+    margin: 1px;
+    &:hover {
+        color: #333333;
+    }
+}

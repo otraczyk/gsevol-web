@@ -42,11 +42,16 @@ var TreePic = React.createClass({
   },
   render: function() {
     return (
-      // Simple for now, but e.g. download button should be added
       <div>
-      <button className="slim" onClick={this.renderOptions}> Options </button>
       {this.props.noted}
-      <div dangerouslySetInnerHTML={{__html: this.props.svg}}></div>
+      <table className="tree">
+      <td className="tree-menu">
+        {this.props.otherOptions}
+        <i className="fa fa-download" onClick={this.renderOptions}></i><br/>
+        <i className="fa fa-cogs" onClick={this.renderOptions}></i>
+      </td>
+      <td dangerouslySetInnerHTML={{__html: this.props.svg}}></td>
+      </table>
       </div>
     );
   }
@@ -54,17 +59,10 @@ var TreePic = React.createClass({
 
 var Scenario = React.createClass({
   render: function() {
-    return (
-      // Simple for now, but e.g. download button should be added
-      <div>
-      {this.props.noted}
-      <div className="scen-cost">
-        Duplications: {this.props.cost.dups}<br/>
-        Losses: {this.props.cost.losses}
-      </div>
-      <div dangerouslySetInnerHTML={{__html: this.props.svg}}></div>
-      </div>
-    );
+    var costs = (<div> Duplications: {this.props.cost.dups}<br/>
+                      Losses: {this.props.cost.losses}
+                </div>)
+    return <TreePic svg={this.props.svg} otherOptions={costs}  noted={this.props.noted}/>;
   }
 });
 
