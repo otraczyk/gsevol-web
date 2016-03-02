@@ -40,12 +40,12 @@ def draw_trees(gene, species):
     source = launch(command)
     return split_to_pictures(source)
 
-def draw_mapping(gene, species):
+def draw_mapping(gene, species, options=''):
     """
     Draw LCA mapping for a tree pair.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dmS',
-               '-C outputfile="/dev/stdout"']
+               '-C outputfile="/dev/stdout";%s' % options]
     source = launch(command)
     return split_to_pictures(source)
 

@@ -9,7 +9,7 @@ from bindings import urec as Urec
 from bindings import tasks
 
 
-@pass_errors_to_response
+# @pass_errors_to_response
 def draw(request):
     """Provide basic data for one or two rooted trees.
 
@@ -27,16 +27,15 @@ def draw(request):
     gene, species = input_trees.get("gene"), input_trees.get("species")
 
     if gene and species:
-        ws = websocket_channel(request)
         delegables = [
-            (tasks.DrawGene(), [gene]),
-            (tasks.DrawSpecies(), [species]),
-            (tasks.DrawMapping(), (gene, species)),
-            (tasks.OptScen(), (gene, species)),
-            (tasks.AllScenarios(), (gene, species))
+            tasks.DrawGene(request),
+            tasks.DrawSpecies(request),
+            tasks.DrawMapping(request),
+            # tasks.OptScen(request),
+            # tasks.AllScenarios(request),
         ]
-        for task, params in delegables:
-            results.update(task.deploy(ws, params))
+        for task in delegables:
+            task.deploy()
     else:
         for tree_type in ["gene", "species"]:
             if input_trees.get(tree_type):
@@ -122,14 +121,15 @@ def options(request):
 
 @pass_errors_to_response
 def restyle(request):
-    # params = json.loads(request.body)
-    # kind, config = params.get("kind"), params.get("config")
+    params = json.loads(request.body)
+    kind, config = params.get("kind"), params.get("config")
     redraw_gene(request)
     return JsonResponse("OK")
 
 def redraw_gene(request):
     # TODO: some refactor, sonmething's redundant here
     params = json.loads(request.body)
+    import ipdb; ipdb.set_trace()
     gene, config = params.get("gene"), params.get("config", {})
     options_string = make_options("gene", config)
     ws = websocket_channel(request)

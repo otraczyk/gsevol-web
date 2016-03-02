@@ -17,6 +17,12 @@ JsonResponse = lambda data, status=200: HttpResponse(
     content_type="application/json"
 )
 
+def error_message(exception):
+    if settings.DEBUG:
+        return str(exception)
+    else:
+        return "Server error"
+
 def pass_errors_to_response(view_func):
     def wrapper(request):
         try:
@@ -25,10 +31,7 @@ def pass_errors_to_response(view_func):
             # error = re.search(r'Exception\("([^"]*)', str(exc)).group(1)
             return JsonResponse(str(exc), status=500)
         except Exception as exc:
-            if settings.DEBUG:
-                error = str(exc)
-            else:
-                error = "Server error"
+            error = error_message(exc)
             return JsonResponse(error, status=500)
 
     return wrapper
@@ -47,3 +50,17 @@ def broadcast_message(text, channel):
     """
     msg = RedisMessage(json.dumps(text))
     RedisPublisher(facility=channel, broadcast=True).publish_message(msg)
+
+
+class ProcessedRequest(object):
+
+    def __init__(self, http_request):
+        self.socket = websocket_channel(http_request)
+        req_body = json.loads(http_request.body)
+        self.params = {}
+        for param, value in req_body.items():
+            self.params[param] = value
+
+    def check_required_params(self, params):
+        for param in params:
+            assert param in self.params, "Required params: %s" % params
