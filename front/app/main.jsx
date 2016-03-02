@@ -10,6 +10,7 @@ var App = {
         + '?subscribe-broadcast&publish-broadcast&echo'
       );
       socket.onopen = function() {
+        console.log("socket opened");
         this.requestResults();
       }.bind(this);
       socket.onerror = function(e) {

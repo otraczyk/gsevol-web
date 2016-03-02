@@ -37,7 +37,7 @@ var ListItem = React.createClass({
   showPicture: function(){
     if (this.state.picture){
       return (
-        <TreePic svg={this.state.picture} />
+        <TreePic svg={this.state.picture} kind={this.props.kind} />
       );
     }
   }
@@ -46,7 +46,7 @@ var ListItem = React.createClass({
 var List = {
   renderItem: function(item){
     return ( <ListItem noted={item} pictureRequest={this.pictureRequest}
-            showAdditional={this.showAdditional} />);
+            showAdditional={this.showAdditional} kind={this.itemKind} />);
   },
   baseRender: function() {
     var scenRows = this.props.content.map(this.renderItem);
@@ -60,6 +60,7 @@ var List = {
 
 var ScenarioList = React.createClass({
   mixins: [List],
+  itemKind: "scenarios",
   pictureRequest: function(item){
     var params = {"scenario": item,
                   "species": document.getElementById("species").value};
@@ -85,6 +86,7 @@ var ScenarioList = React.createClass({
 
 var RootingList = React.createClass({
   mixins: [List],
+  itemKind: "rootings",
   pictureRequest: function(item){
     return jsonRequestPromise('/api/draw_single/', item, 'POST');
   },

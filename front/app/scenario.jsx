@@ -17,7 +17,7 @@ var ScenarioResults = React.createClass({
   },
   render: function() {
     var tiles = [['scenario', this.props.data["scenario"], "Scenario"],
-                 ['tree', this.props.data["species"], "Species tree"]
+                 ['species', this.props.data["species"], "Species tree"]
           ];
     var tiles = tiles.map(function(tile){
       return (

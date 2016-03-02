@@ -1,8 +1,8 @@
 var ResultTile = React.createClass({
   renderChild: function(){
     // Better solution?
-    if (this.props.kind == 'tree'){
-      return <TreePic svg={this.props.content} />;
+    if (_.includes(["gene", "species", "mapping", "unrooted"], this.props.kind)) {
+      return <TreePic svg={this.props.content} kind={this.props.kind} />;
     } else if (this.props.kind == 'scenarios'){
       return <ScenarioList content={this.props.content} />;
     } else if (this.props.kind == 'rootings'){
@@ -34,7 +34,7 @@ var ResultTile = React.createClass({
 var TreePic = React.createClass({
   renderOptions: function() {
     var opt_comp = React.render(
-                React.createElement(Options, {"kind": "gene"}),
+                React.createElement(Options, {"kind": this.props.kind}),
                 document.getElementById('options')
               );
     document.getElementById('options').style.visibility = "visible";
@@ -47,8 +47,8 @@ var TreePic = React.createClass({
       <table className="tree">
       <td className="tree-menu">
         {this.props.otherOptions}
-        <i className="fa fa-download" onClick={this.renderOptions}></i><br/>
-        <i className="fa fa-cogs" onClick={this.renderOptions}></i>
+        <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
+        <i className="fa fa-cogs" onClick={this.renderOptions} title="Stype options"></i>
       </td>
       <td dangerouslySetInnerHTML={{__html: this.props.svg}}></td>
       </table>
@@ -62,7 +62,7 @@ var Scenario = React.createClass({
     var costs = (<div> Duplications: {this.props.cost.dups}<br/>
                       Losses: {this.props.cost.losses}
                 </div>)
-    return <TreePic svg={this.props.svg} otherOptions={costs}  noted={this.props.noted}/>;
+    return <TreePic svg={this.props.svg} otherOptions={costs}  noted={this.props.noted} kind="scenario"/>;
   }
 });
 
