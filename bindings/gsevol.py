@@ -50,37 +50,37 @@ def draw_mapping(gene, species, options=''):
     return split_to_pictures(source)
 
 
-def scenarios(gene, species):
+def scenarios(gene, species, options=''):
     """List all possible evolutionary scenarios for a pair of trees.
 
     Order: optimal to worst.
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-eGa']
+    command = ['-g %s' % gene, '-s %s' % species, '-eGa', '-C %s' % options]
     scenarios = launch(command, timeout=100).strip().split('\n')
     scenarios.reverse()
     return scenarios
 
 
-def optscen(gene, species):
+def optscen(gene, species, options=''):
     """Generate optimal evolutionary scenario for the tree pair.
 
     Separated from scenarios(), which can be slow for larger trees.
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-eGn']
+    command = ['-g %s' % gene, '-s %s' % species, '-eGn', '-C %s' % options]
     scenario = launch(command).strip()
     return scenario
 
 
-def draw_embedding(species, scenario):
+def draw_embedding(species, scenario, options=''):
     """
     Return svg source for embedding of a species tree into given scenario.
     """
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
-               '-C outputfile="/dev/stdout";scale=2.5']
+               '-C outputfile="/dev/stdout";scale=2.5 %s' % options]
     return launch(command)
 
 
-def draw_diagram(gene, species):
+def draw_diagram(gene, species, options=''):
     """Draw reduction diagram for a pair of trees.
 
     - Generate 'fat scenario', format species and the scenario as '.gse' script.
@@ -89,7 +89,7 @@ def draw_diagram(gene, species):
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
     scen_output = launch(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
-    diag_command = ['-dd', '-C outputfile="/dev/stdout"']
+    diag_command = ['-dd', '-C outputfile="/dev/stdout"; %s' % options]
     diag_output = launch(diag_command, stdin=scen_file, timeout=1200)
     return diag_output
 

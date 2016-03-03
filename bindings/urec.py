@@ -16,7 +16,7 @@ def launch_fasturec(params, timeout=300, stdin=None, *args, **kwargs):
 def launch_urec(params, timeout=300, stdin=None, *args, **kwargs):
     return launch(['urec/urec'], params, timeout, stdin, *args, **kwargs)
 
-def draw_unrooted(gene, species, cost):
+def draw_unrooted(gene, species, cost, options=''):
     assert cost in ("DL", "D", "L", "DC", "RF"), "Wrong cost function: %s" % cost
     fu_command = ['-g %s' % gene, '-s %s' % species, '-bX%s' % cost]
     fu_output = launch_fasturec(fu_command)
@@ -24,7 +24,7 @@ def draw_unrooted(gene, species, cost):
     # Fasturec and gsevol outputs interfere and damage the picture if it's
     # printed to stdout.
     tmp = tempfile.NamedTemporaryFile()
-    gse_command = ['-dSz', '-C arrowlength=0.4;scale=2;outputfile="%s"' % tmp.name]
+    gse_command = ['-dSz', '-C arrowlength=0.4;scale=2;outputfile="%s"; %s' % (tmp.name, options)]
     Gse.launch(gse_command, stdin=fu_out_file)
     gse_output = tmp.read()
     return gse_output

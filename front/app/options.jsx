@@ -39,8 +39,10 @@ var Options = React.createClass({
     document.getElementById('options').style.visibility = "hidden";
   },
   submit: function() {
+    var currentConf = {}
+    currentConf[this.props.kind] = _.omit(this.state, ["options"]);
     var params = {
-      "config": _.omit(this.state, ["options"]),
+      "config": currentConf,
       "kind": this.props.kind
     };
     _.merge(params, getUrlParams())

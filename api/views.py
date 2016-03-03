@@ -31,8 +31,8 @@ def draw(request):
             tasks.DrawGene(request),
             tasks.DrawSpecies(request),
             tasks.DrawMapping(request),
-            # tasks.OptScen(request),
-            # tasks.AllScenarios(request),
+            tasks.OptScen(request),
+            tasks.AllScenarios(request),
         ]
         for task in delegables:
             task.deploy()
@@ -122,16 +122,7 @@ def options(request):
 @pass_errors_to_response
 def restyle(request):
     params = json.loads(request.body)
-    kind, config = params.get("kind"), params.get("config")
-    redraw_gene(request)
+    kind = params.get("kind")
+    task_class  = rendering_task(kind)
+    task = task_class(request).deploy()
     return JsonResponse("OK")
-
-def redraw_gene(request):
-    # TODO: some refactor, sonmething's redundant here
-    params = json.loads(request.body)
-    import ipdb; ipdb.set_trace()
-    gene, config = params.get("gene"), params.get("config", {})
-    options_string = make_options("gene", config)
-    ws = websocket_channel(request)
-    task = tasks.DrawGene()
-    task.deploy(ws, [gene, options_string])

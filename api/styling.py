@@ -3,16 +3,17 @@
 Module for handling style options.
 """
 import json
-from bindings import tasks
 
 
 def rendering_task(tree_kind):
+    from bindings import tasks
     task_for_kind = {
         "gene": tasks.DrawGene,
         "species": tasks.DrawSpecies,
         "mapping": tasks.DrawMapping,
         "optscen": tasks.OptScen,
         "scenario": tasks.Scenario,
+        "unrooted": tasks.DrawUnrooted,
         # TODO: diagram
     }
     assert tree_kind in task_for_kind.keys(), "Wrong tree kind"
