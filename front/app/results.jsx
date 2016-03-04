@@ -32,6 +32,11 @@ var ResultTile = React.createClass({
   }
 });
 var TreePic = React.createClass({
+  getDefaultProps: function() {
+    return {
+      stylable: true
+    };
+  },
   renderOptions: function() {
     var opt_comp = React.render(
                 React.createElement(Options, {"kind": this.props.kind}),
@@ -41,6 +46,11 @@ var TreePic = React.createClass({
     this.setState({'optionsComp': opt_comp});
   },
   render: function() {
+    var styleIcon = ''
+    if (this.props.stylable) {
+      var styleIcon = <i className="fa fa-cogs"
+        onClick={this.renderOptions} title="Stype options"></i>
+    }
     return (
       <div>
       {this.props.noted}
@@ -48,7 +58,7 @@ var TreePic = React.createClass({
       <td className="tree-menu">
         {this.props.otherOptions}
         <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
-        <i className="fa fa-cogs" onClick={this.renderOptions} title="Stype options"></i>
+        {styleIcon}
       </td>
       <td dangerouslySetInnerHTML={{__html: this.props.svg}}></td>
       </table>

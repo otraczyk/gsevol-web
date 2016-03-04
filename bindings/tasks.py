@@ -26,18 +26,19 @@ class GseTask(Task):
         if request:
             self.req = ProcessedRequest(request)
 
-    def deploy(self):
+    def deploy(self, skip_delegate=False):
         # Tricky: we need to pass the arguments to self.delay (and as a result
         # self.core), even if it should be able to access it from self.
         # Code from delay()/run() is being run inside celery task and has no access
         # to attributes calculated at runtime.
         try:
             self.prepare()
-            if settings.DELEGATE_TASKS:
+            if not skip_delegate and settings.DELEGATE_TASKS:
                 self.delay(self.params, self.req.socket)
             else:
                 result = self.core(self.params)
                 self.send_result(result)
+            return {}
         except (GseError, AssertionError) as exc:
             self.send_error(error_message(exc))
 
@@ -73,7 +74,7 @@ class DrawGene(GseTask):
     variable_translations = {"gene": "tree"}
     def core(self, params):
         gtree = Gse.draw_single_tree(**params)
-        return {"gene": gtree}
+        return {self.kind: gtree}
 
 class DrawSpecies(GseTask):
     kind = "species"
@@ -82,7 +83,7 @@ class DrawSpecies(GseTask):
     variable_translations = {"species": "tree"}
     def core(self, params):
         stree = Gse.draw_single_tree(**params)
-        return {"species": stree}
+        return {self.kind: stree}
 
 class DrawMapping(GseTask):
     kind = "mapping"
@@ -90,24 +91,24 @@ class DrawMapping(GseTask):
     other_params = {"options": ""}
     def core(self, params):
         mapping = Gse.draw_mapping(**params)
-        return {"mapping": mapping}
+        return {self.kind: mapping}
 
 class AllScenarios(GseTask):
     kind = "scenarios"
     required_params = ("gene", "species")
     other_params = {"options": ""}
     def core(self, params):
-        return {"scenarios": Gse.scenarios(**params)}
+        return {self.kind: Gse.scenarios(**params)}
 
 class Scenario(GseTask):
     kind = "scenario"
-    required_params = ("species", "scen")
-    other_params = {"options": "", "name": "scenario"}
+    required_params = ("species", "scenario")
+    other_params = {"options": ""}
     def core(self, params):
-        scen = params["scen"]
+        scen = params["scenario"]
         d, l = Gse.scenario_cost(scen)
         return {
-            params["name"]: {
+            self.kind: {
             'scen': scen,
             'pic' : Gse.draw_embedding(params["species"], scen, params["options"]),
             'cost': {'dups': d, 'losses': l}
@@ -121,12 +122,13 @@ class OptScen(GseTask):
     def core(self, params):
         optimal = Gse.optscen(**params)
         scenario_params = {
-            "scen": optimal,
+            "scenario": optimal,
             "species": params["species"],
             "name": "optscen",
             "options": params["options"]
         }
-        return Scenario().core(scenario_params)
+        scen = Scenario().core(scenario_params)
+        return {self.kind: scen["scenario"]}
 
 class DrawUnrooted(GseTask):
     kind = "unrooted"
@@ -135,3 +137,11 @@ class DrawUnrooted(GseTask):
     def core(self, params):
         utree = Urec.draw_unrooted(**params)
         return {self.kind: utree}
+
+class OptRootings(GseTask):
+    kind = "rootings"
+    required_params = ("gene", "species")
+    other_params = {"cost": "DL"}
+    def core(self, params):
+        res = Urec.optimal_rootings(**params)
+        return {self.kind: res}

@@ -37,7 +37,7 @@ var ListItem = React.createClass({
   showPicture: function(){
     if (this.state.picture){
       return (
-        <TreePic svg={this.state.picture} kind={this.props.kind} />
+        <TreePic svg={this.state.picture} kind={this.props.kind} stylable={false} />
       );
     }
   }

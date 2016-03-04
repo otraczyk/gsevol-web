@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*
 import json
 
-from api.view_utils import JsonResponse, pass_errors_to_response, websocket_channel
+from api.view_utils import (JsonResponse, pass_errors_to_response,
+    websocket_channel, deploy_tasks)
 from api.styling import rendering_task, make_options
 from bindings import gsevol as Gse
 from bindings import urec as Urec
@@ -9,7 +10,7 @@ from bindings import urec as Urec
 from bindings import tasks
 
 
-# @pass_errors_to_response
+@pass_errors_to_response
 def draw(request):
     """Provide basic data for one or two rooted trees.
 
@@ -22,26 +23,15 @@ def draw(request):
 
     All pictures are returned as svg source.
     """
-    results = {}
-    input_trees = json.loads(request.body)
-    gene, species = input_trees.get("gene"), input_trees.get("species")
-
-    if gene and species:
-        delegables = [
-            tasks.DrawGene(request),
-            tasks.DrawSpecies(request),
-            tasks.DrawMapping(request),
-            tasks.OptScen(request),
-            tasks.AllScenarios(request),
-        ]
-        for task in delegables:
-            task.deploy()
-    else:
-        for tree_type in ["gene", "species"]:
-            if input_trees.get(tree_type):
-                svg = Gse.draw_single_tree(input_trees[tree_type])
-                results[tree_type] = svg
-    return JsonResponse(results)
+    delegables = [
+        tasks.DrawGene,
+        tasks.DrawSpecies,
+        tasks.DrawMapping,
+        tasks.OptScen,
+        tasks.AllScenarios,
+    ]
+    deploy_tasks(delegables, request)
+    return JsonResponse()
 
 
 @pass_errors_to_response
@@ -74,34 +64,15 @@ def draw_diagram(request):
 
 @pass_errors_to_response
 def draw_unrooted(request):
-    req_params = json.loads(request.body)
-    gene, species = req_params.get("gene"), req_params.get("species")
-    cost = req_params.get("cost") or "DL"
-    if gene and species:
-        picture = Urec.draw_unrooted(gene, species, cost)
-        rootings = Urec.optimal_rootings(gene, species, cost)
-        species = Gse.draw_single_tree(species)
-        return JsonResponse({
-            "unrooted": picture,
-            "rootings": rootings,
-            "species": species
-        })
-    else:
-        msg = "'gene' and 'species' are required"
-        return JsonResponse(msg, status=400)
+    delegables = [tasks.DrawUnrooted, tasks.OptRootings, tasks.DrawSpecies]
+    deploy_tasks(delegables, request)
+    return JsonResponse()
 
 @pass_errors_to_response
 def scenario(request):
-    input_trees = json.loads(request.body)
-    scenario, species = input_trees.get("scenario"), input_trees.get("species")
-    if scenario and species:
-        results = {}
-        results.update(tasks.Scenario().core(scenario, species))
-        results["species"] = Gse.draw_single_tree(species)
-        return JsonResponse(results)
-    else:
-        msg = "'scenario' and 'species' are required"
-        return JsonResponse(msg, status=400)
+    delegables = [tasks.Scenario, tasks.DrawSpecies]
+    deploy_tasks(delegables, request)
+    return JsonResponse()
 
 @pass_errors_to_response
 def options(request):
@@ -123,6 +94,6 @@ def options(request):
 def restyle(request):
     params = json.loads(request.body)
     kind = params.get("kind")
-    task_class  = rendering_task(kind)
+    task_class = rendering_task(kind)
     task = task_class(request).deploy()
-    return JsonResponse("OK")
+    return JsonResponse()

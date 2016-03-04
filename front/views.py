@@ -11,7 +11,7 @@ def fill_gene_and_species(request):
     If neither is given, generate random example trees in their place.
     """
     gene, species = request_params(request)
-    if not gene and not species:
+    if gene is None and species is None:
         try:
             gene, species = Gse.random_trees()
         except Exception as e:

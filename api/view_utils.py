@@ -11,7 +11,7 @@ from django.conf import settings
 
 from bindings.base import GseError
 
-JsonResponse = lambda data, status=200: HttpResponse(
+JsonResponse = lambda data='', status=200: HttpResponse(
     json.dumps(data),
     status=status,
     content_type="application/json"
@@ -63,4 +63,12 @@ class ProcessedRequest(object):
 
     def check_required_params(self, params):
         for param in params:
-            assert param in self.params, "Required params: %s" % params
+            assert self.params.get(param), "Required params: %s" % (params,)
+
+
+def deploy_tasks(task_list, request):
+    proc_req = ProcessedRequest(request)
+    for task_class in task_list:
+        task = task_class()
+        task.req = proc_req
+        task.deploy()

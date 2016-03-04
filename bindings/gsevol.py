@@ -76,7 +76,7 @@ def draw_embedding(species, scenario, options=''):
     Return svg source for embedding of a species tree into given scenario.
     """
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
-               '-C outputfile="/dev/stdout";scale=2.5 %s' % options]
+               '-C outputfile="/dev/stdout";scale=2.5; %s' % options]
     return launch(command)
 
 
