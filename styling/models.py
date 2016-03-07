@@ -16,3 +16,15 @@ class Option(models.Model):
     type = models.CharField(max_length=100)
     default = models.CharField(max_length=100)
     description = models.CharField(max_length=100, default='', blank=True)
+
+
+    def __str__(self):
+        return self.label
+
+    def serialize(self):
+        return {
+            'label': self.label,
+            'name': self.name,
+            'input': self.html_input,
+            'default': self.default,
+        }

@@ -4,7 +4,7 @@ from settings import app
 from django.conf import settings
 
 from api.view_utils import broadcast_message, ProcessedRequest, error_message
-from api.styling import make_options
+from styling.utils import make_options
 from bindings.base import GseError
 from bindings import gsevol as Gse
 from bindings import urec as Urec

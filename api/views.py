@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*
 import json
 
-from api.view_utils import (JsonResponse, pass_errors_to_response,
-    websocket_channel, deploy_tasks)
-from api.styling import rendering_task, make_options
+from api.view_utils import JsonResponse, pass_errors_to_response, deploy_tasks
 from bindings import gsevol as Gse
 from bindings import urec as Urec
 
@@ -74,26 +72,4 @@ def scenario(request):
     deploy_tasks(delegables, request)
     return JsonResponse()
 
-@pass_errors_to_response
-def options(request):
-    available_opts = [{
-        "name": "scale",
-        "label": "Scale",
-        "default": 1,
-        "input": "number",
-    },{
-        "name": "resolution",
-        "label": "Resolution",
-        "default": 1,
-        "input": "number"
-    }
-    ]
-    return JsonResponse(available_opts)
 
-@pass_errors_to_response
-def restyle(request):
-    params = json.loads(request.body)
-    kind = params.get("kind")
-    task_class = rendering_task(kind)
-    task = task_class(request).deploy()
-    return JsonResponse()

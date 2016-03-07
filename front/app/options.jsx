@@ -5,7 +5,7 @@ var Options = React.createClass({
   },
   componentWillMount: function() {
     // Fetch available props for current kind of tree to be styled
-    jsonRequestPromise('/api/options/', {'kind': this.props.kind}, 'GET')
+    jsonRequestPromise('/api/options/', {'kind': this.props.kind}, 'POST')
       .then(function(results) {
         this.setState({'options': results});
         var conf = {}

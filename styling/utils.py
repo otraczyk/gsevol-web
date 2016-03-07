@@ -3,7 +3,13 @@
 Module for handling style options.
 """
 import json
+from styling.models import Option
 
+# KINDS =
+
+
+def get_available_options(kind):
+    return Option.objects.filter(**{kind: True, "html_input": "number"})
 
 def rendering_task(tree_kind):
     from bindings import tasks

@@ -3,6 +3,7 @@ from django.views.generic.base import RedirectView
 
 from front import views as front_views
 from api import views as api_views
+from styling import views as styling_views
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/rooted')),
@@ -19,6 +20,6 @@ urlpatterns += [
     url(r'^api/diagram/', api_views.draw_diagram),
     url(r'^api/unrooted/', api_views.draw_unrooted),
     url(r'^api/scenario/', api_views.scenario),
-    url(r'^api/options/', api_views.options),
-    url(r'^api/restyle/', api_views.restyle),
+    url(r'^api/options/', styling_views.options),
+    url(r'^api/restyle/', styling_views.restyle),
 ]

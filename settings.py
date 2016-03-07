@@ -2,7 +2,6 @@
 Django settings for gsevol project.
 
 """
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(__file__)
@@ -105,6 +104,8 @@ DELEGATE_TASKS = True
 
 if 'DJANGO_SETTINGS_MODULE' not in os.environ:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+import django
+django.setup()
 
 from celery import Celery
 app = Celery('gsevol')

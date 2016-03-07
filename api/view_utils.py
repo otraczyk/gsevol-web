@@ -36,15 +36,6 @@ def pass_errors_to_response(view_func):
 
     return wrapper
 
-def websocket_channel(request):
-    """Get redis channel id for websocket corresponding to given request.
-
-    Currently it's simply query string from refering view.
-    """
-    channel = request.META["HTTP_REFERER"].split('?')[1]
-    channel = urllib.unquote(channel).decode('utf8')
-    return channel
-
 def broadcast_message(text, channel):
     """Send broadcast message to a websocket.
     """
@@ -55,7 +46,7 @@ def broadcast_message(text, channel):
 class ProcessedRequest(object):
 
     def __init__(self, http_request):
-        self.socket = websocket_channel(http_request)
+        self.socket = self.websocket_channel(http_request)
         req_body = json.loads(http_request.body)
         self.params = {}
         for param, value in req_body.items():
@@ -65,6 +56,14 @@ class ProcessedRequest(object):
         for param in params:
             assert self.params.get(param), "Required params: %s" % (params,)
 
+    def websocket_channel(self, request):
+        """Get redis channel id for websocket corresponding to given request.
+
+        Currently it's simply query string from refering view.
+        """
+        channel = request.META["HTTP_REFERER"].split('?')[1]
+        channel = urllib.unquote(channel).decode('utf8')
+        return channel
 
 def deploy_tasks(task_list, request):
     proc_req = ProcessedRequest(request)
