@@ -4,6 +4,7 @@
 *.log
 *.svg
 *.png
+db.sqlite3
 
 *.o
 */fasturec
