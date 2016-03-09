@@ -7,8 +7,8 @@ var ResultTile = React.createClass({
       return <ScenarioList content={this.props.content} />;
     } else if (this.props.kind == 'rootings'){
       return <RootingList content={this.props.content} />;
-    } else if (this.props.kind == 'scenario'){
-      return <Scenario noted={this.props.content.scen}
+    } else if (_.includes(['scenario', 'optscen'], this.props.kind)){
+      return <Scenario noted={this.props.content.scen} kind={this.props.kind}
       svg={this.props.content.pic} cost={this.props.content.cost} />;
     } else if (this.props.kind == 'button'){
       return (
@@ -72,7 +72,8 @@ var Scenario = React.createClass({
     var costs = (<div> Duplications: {this.props.cost.dups}<br/>
                       Losses: {this.props.cost.losses}
                 </div>)
-    return <TreePic svg={this.props.svg} otherOptions={costs}  noted={this.props.noted} kind="scenario"/>;
+    return <TreePic svg={this.props.svg} otherOptions={costs}
+              noted={this.props.noted} kind={this.props.kind} />;
   }
 });
 

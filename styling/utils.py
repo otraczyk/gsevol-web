@@ -5,10 +5,12 @@ Module for handling style options.
 import json
 from styling.models import Option
 
-# KINDS =
-
+KINDS = ['unrooted', 'scenario', 'mapping', 'optscen', 'gene', 'species', 'diagram']
 
 def get_available_options(kind):
+    assert kind in KINDS, "Wrong tree kind %s" % kind
+    if kind == 'optscen':
+        kind = 'scenario'
     return Option.objects.filter(**{kind: True, "html_input": "number"})
 
 def rendering_task(tree_kind):
@@ -28,8 +30,12 @@ def rendering_task(tree_kind):
 
 def clean_options(kind, config):
     # Filter config for options available for given tree type
-    # TODO
-    return config
+    filtered_config = {}
+    available = get_available_options(kind)
+    for opt in available:
+        if config.get(opt.name):
+            filtered_config[opt.name] = config.get(opt.name)
+    return filtered_config
 
 
 def stringify_options(config):

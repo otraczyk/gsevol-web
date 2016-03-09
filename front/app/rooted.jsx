@@ -21,7 +21,7 @@ var Results = React.createClass({
       ['gene', this.props.data["gene"], "Gene tree"],
       ['species', this.props.data["species"], "Species tree"],
       ['mapping', this.props.data["mapping"], "LCA Mapping"],
-      ['scenario', this.props.data.optscen, "Optimal evolutionary scenario in duplication-loss model"],
+      ['optscen', this.props.data.optscen, "Optimal evolutionary scenario in duplication-loss model"],
       ['scenarios', this.props.data["scenarios"], "All scenarios"]
     ];
     if (this.props.data["gene"] && this.props.data["species"]) {

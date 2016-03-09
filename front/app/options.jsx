@@ -19,6 +19,9 @@ var Options = React.createClass({
             conf[opt.name] = opt.default;
           });
         this.setState(conf);
+      }.bind(this))
+      .catch(function(error){
+        this.setState({'options': []});
       }.bind(this));
   },
   renderFormField: function(field) {

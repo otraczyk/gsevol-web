@@ -1,4 +1,4 @@
-'label'	'name'	'gene'	'species'	'mapping'	'embedding'	'diagram'	'type'	'html_input'	'scope'	'verbose_scope'	'default'	'description'
+'label'	'name'	'gene'	'species'	'mapping'	'scenario'	'diagram'	'type'	'html_input'	'scope'	'verbose_scope'	'default'	'description'
 'Font size'	'fontsize'	1	1	1	1	1	'float'	'number'			'12'	'Font size in points'
 'Scale '	'scale'	1	1	1	1	1	'float'	'number'			'1'	'Scale factor for non-font objects'
 'Resolution'	'resolution'	1	1	1	1	1	'float'	'number'			'1'	'Scale factor for all objects'
