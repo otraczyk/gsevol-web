@@ -20,6 +20,7 @@ class GseTask(Task):
     """
     required_params = []
     variable_translations = {}
+    other_params = {}
 
     def __init__(self, request=None):
         Task.__init__(self)
@@ -96,7 +97,6 @@ class DrawMapping(GseTask):
 class AllScenarios(GseTask):
     kind = "scenarios"
     required_params = ("gene", "species")
-    other_params = {"options": ""}
     def core(self, params):
         return {self.kind: Gse.scenarios(**params)}
 

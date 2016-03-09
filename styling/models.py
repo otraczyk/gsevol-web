@@ -26,10 +26,15 @@ class Option(models.Model):
     def __str__(self):
         return self.label
 
+    def fix_boolean(self, value):
+        if self.type == "bool":
+            return bool(int(value))
+        return value
+
     def serialize(self):
         return {
             'label': self.label,
             'name': self.name,
             'input': self.html_input,
-            'default': self.default,
+            'default': self.fix_boolean(self.default),
         }

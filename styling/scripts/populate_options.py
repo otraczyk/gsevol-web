@@ -9,7 +9,7 @@ import csv
 from styling.models import Option
 
 def fix_bool_values(val_dict):
-    for key in ["gene", "species", "mapping", "embedding", "diagram"]:
+    for key in ["gene", "species", "mapping", "scenario", "diagram"]:
         val_dict[key] = bool(int(val_dict[key]))
 
 def run(*args, **kwargs):

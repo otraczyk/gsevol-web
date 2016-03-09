@@ -11,7 +11,7 @@ def get_available_options(kind):
     assert kind in KINDS, "Wrong tree kind %s" % kind
     if kind == 'optscen':
         kind = 'scenario'
-    return Option.objects.filter(**{kind: True, "html_input": "number"})
+    return Option.objects.filter(**{kind: True})
 
 def rendering_task(tree_kind):
     from bindings import tasks
@@ -33,7 +33,7 @@ def clean_options(kind, config):
     filtered_config = {}
     available = get_available_options(kind)
     for opt in available:
-        if config.get(opt.name):
+        if config.get(opt.name) is not None:
             filtered_config[opt.name] = config.get(opt.name)
     return filtered_config
 

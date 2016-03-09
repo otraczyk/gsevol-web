@@ -26,12 +26,27 @@ var Options = React.createClass({
   },
   renderFormField: function(field) {
     var name = field.name;
+    if (field.input === "checkbox") {
+      var input = <input type={field.input} name={name}
+            checkedLink={this.linkState(name)}
+            onClick={this.handleFieldChange} />
+    } else if (field.input === 'dropdown'){
+      // TODO
+      var input = <div></div>
+    } else {
+      var input = <input type={field.input} name={name}
+            valueLink={this.linkState(name)}
+            onClick={this.handleFieldChange} />
+    }
     return (
       <div className="pure-control-group">
           <label htlmFor="field">{field.label} </label>
-          <input type={field.input} name={name} valueLink={this.linkState(name)} />
+          {input}
       </div>
       );
+  },
+  handleFieldChange: function(event) {
+    event.stopPropagation();  // Avoiding .preventDefault() from form
   },
   renderForm: function() {
     var fields = this.state.options.map(this.renderFormField);
