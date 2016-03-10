@@ -31,8 +31,12 @@ var Options = React.createClass({
             checkedLink={this.linkState(name)}
             onClick={this.handleFieldChange} />
     } else if (field.input === 'dropdown'){
-      // TODO
-      var input = <div></div>
+      var options = _.map(field.scope, function(variant){
+        return <option value={variant[0]}>{variant[1]}</option>
+      });
+      var input = (<select name={field.name} valueLink={this.linkState(name)}>
+                      {options}
+                  </select>);
     } else {
       var input = <input type={field.input} name={name}
             valueLink={this.linkState(name)}

@@ -91,6 +91,10 @@ button.slim  {
     @extend .pure-input;
     width: 30%;
 }
+#options select {
+    color: #000000;
+    width: 30%;
+}
 
 #results svg {
     /* Changed by pure.css, needed to show tags in pictures. */

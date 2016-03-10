@@ -31,10 +31,21 @@ class Option(models.Model):
             return bool(int(value))
         return value
 
+    def get_scope(self):
+        if self.html_input == 'dropdown':
+            verbose = self.verbose_scope.split('/')
+            if not self.verbose_scope:
+                verbose = self.scope.split(',')
+            return zip(self.scope.split(','), verbose)
+        elif self.html_input == 'number':
+            return self.scope.split('-')
+        return []
+
     def serialize(self):
         return {
             'label': self.label,
             'name': self.name,
             'input': self.html_input,
             'default': self.fix_boolean(self.default),
+            'scope': self.get_scope(),
         }
