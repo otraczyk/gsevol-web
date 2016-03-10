@@ -41,6 +41,34 @@ class Option(models.Model):
             return self.scope.split('-')
         return []
 
+    def in_scope(self, value):
+        if not self.scope:
+            return True
+        if self.html_input == 'number':
+            inf, sup = self.get_scope()
+            try:
+                return float(value) <= float(sup) and float(value) >= float(inf)
+            except ValueError:
+                return False
+        if self.html_input =="dropdown":
+            possible = self.scope.split(',')
+            possible = map(self.fix_type, possible)
+            return value in possible
+
+    def fix_type(self, value):
+        """Cast value to required type. Throws ValueError.
+        """
+        valid_types = ('float', 'bool', 'int', 'str')
+        assert self.type in valid_types
+        cast = eval(self.type)
+        return cast(value)
+
+    def valid(self, value):
+        validations = [
+            self.in_scope(value),
+        ]
+        return all(validations)
+
     def serialize(self):
         return {
             'label': self.label,

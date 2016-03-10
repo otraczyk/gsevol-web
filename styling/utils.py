@@ -34,7 +34,19 @@ def clean_options(kind, config):
     available = get_available_options(kind)
     for opt in available:
         if config.get(opt.name) is not None:
-            filtered_config[opt.name] = config.get(opt.name)
+            try:
+                value = opt.fix_type(config.get(opt.name))
+            except ValueError:
+                print "type: rejected", opt.name, config[opt.name]
+                continue
+            if opt.valid(value):
+                filtered_config[opt.name] = value
+                del config[opt.name]
+            else:
+                print "scope: rejected", opt.name, value
+    print config
+    # TODO: change prints to logged warnings?
+    # TODO: remove unnwanted options by resetting state in forntend.
     return filtered_config
 
 
