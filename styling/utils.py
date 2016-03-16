@@ -44,9 +44,7 @@ def clean_options(kind, config):
                 del config[opt.name]
             else:
                 print "scope: rejected", opt.name, value
-    print config
     # TODO: change prints to logged warnings?
-    # TODO: remove unnwanted options by resetting state in forntend.
     return filtered_config
 
 

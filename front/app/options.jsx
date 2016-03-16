@@ -7,6 +7,7 @@ var Options = React.createClass({
     this.fetchOptions(this.props.kind);
   },
   componentWillReceiveProps: function(newProps) {
+    this.replaceState(this.getInitialState());
     this.fetchOptions(newProps.kind);
   },
   fetchOptions: function(kind) {
