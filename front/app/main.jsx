@@ -5,22 +5,12 @@ var App = {
   openSocket: function(){
     // We neet the socket open before any results can come, or they'll be lost.
     return new Promise(function(resolve, reject) {
-      socket = new WebSocket(
-        'ws://' + location.host + '/ws/' + location.search.slice(1)
-        + '?subscribe-broadcast&publish-broadcast&echo'
-      );
-      socket.onopen = function() {
+      var onSocketOpen = function() {
         console.log("socket opened");
         this.requestResults();
       }.bind(this);
-      socket.onerror = function(e) {
-          console.error(e);
-      };
-      socket.onclose = function(e) {
-          console.log("connection closed");
-      }
-      socket.onmessage = function(message) {
-        data = JSON.parse(message.data)
+      var onSocketMessage = function(data) {
+        data = JSON.parse(data)
         console.log("Received: " + Object.keys(data));
         if ("error" in data){
           this.setState(_.merge({}, this.state, data));
@@ -29,6 +19,13 @@ var App = {
         }
         this.setState(_.merge({}, this.state, {'data': data}));
       }.bind(this);
+      var uri = 'ws://' + location.host + '/ws/' + location.search.slice(1)
+        + '?subscribe-broadcast&publish-broadcast&echo';
+      socket = new WS4Redis({
+        uri: uri,
+        connected: onSocketOpen,
+        receive_message: onSocketMessage,
+      });
       this.socket = socket;
       resolve();
     }.bind(this));
