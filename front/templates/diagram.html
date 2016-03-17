@@ -1,13 +1,26 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="pl">
-    <head>
-     <meta charset="utf-8">
-     <title>Gsevol - phylogenetic analysis tool</title>
-    </head>
-    <body>
-        {% autoescape off %}
-            {{ picture }}
-        {% endautoescape %}
-    </body>
-    </html>
+
+{% block scripts %}
+{{ block.super }}
+        <script src="{% static 'main.js' %}"></script>
+        <script src="{% static 'results.js' %}"></script>
+        <script src="{% static 'options.js' %}"></script>
+        <script src="{% static 'diagram.js' %}"></script>
+        <script>
+    $(function(){
+        var app = React.render(
+            React.createElement(DiagramApp, {}),
+            document.getElementById('results')
+        );
+    })
+    </script>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+        <d1iv id="results">
+        </div>
+{% endblock %}

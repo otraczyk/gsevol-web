@@ -123,13 +123,16 @@ button {
 #options {
     background: #333333;
     width: 230px;
-    height: 100%;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
+    bottom: 0;
     border-left: 1px #000000 solid;
     color: #ffffff;
     padding: 20px;
+    background-repeat: repeat-y;
+    bottom: 0px !important;
+    min-height: 100%;
 }
 #options input {
     color: #000000;

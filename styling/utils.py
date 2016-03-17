@@ -22,7 +22,7 @@ def rendering_task(tree_kind):
         "optscen": tasks.OptScen,
         "scenario": tasks.Scenario,
         "unrooted": tasks.DrawUnrooted,
-        # TODO: diagram
+        "diagram": tasks.DrawDiagram,
     }
     assert tree_kind in task_for_kind.keys(), "Wrong tree kind"
     return task_for_kind[tree_kind]

@@ -51,14 +51,8 @@ def draw_embedding(request):
 
 @pass_errors_to_response
 def draw_diagram(request):
-    input_trees = json.loads(request.body)
-    gene, species = input_trees["gene"], input_trees["species"]
-    if gene and species:
-        result = Gse.draw_diagram(gene, species)
-        return JsonResponse(result)
-    else:
-        msg = "'gene' and 'species' are required"
-        return JsonResponse(msg, status=400)
+    deploy_tasks((tasks.DrawDiagram,), request)
+    return JsonResponse()
 
 @pass_errors_to_response
 def draw_unrooted(request):

@@ -145,3 +145,11 @@ class OptRootings(GseTask):
     def core(self, params):
         res = Urec.optimal_rootings(**params)
         return {self.kind: res}
+
+class DrawDiagram(GseTask):
+    kind = "diagram"
+    required_params = ("gene", "species")
+    other_params = {"options": ""}
+    def core(self, params):
+        diagram = Gse.draw_diagram(**params)
+        return {self.kind: diagram}
