@@ -122,28 +122,28 @@ button {
 }
 #options {
     background: #333333;
-    width: 230px;
-    position: absolute;
+    width: 250px;
+    position: fixed;
+    overflow-y: auto;
     right: 0;
     top: 0;
     bottom: 0;
     border-left: 1px #000000 solid;
     color: #ffffff;
-    padding: 20px;
-    background-repeat: repeat-y;
-    bottom: 0px !important;
-    min-height: 100%;
+    padding: 0 15px 15px 15px;
 }
 #options input {
     color: #000000;
 }
 #options h3 {
     font-family: Montserrat, sans-serif;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 #options .fold {
     position: relative;
-    top: -20px;
-    left: -40px;
+    top: -15px;
+    left: -15px;
     background: #333333;
     color: #ffffff;
     font-family: Montserrat, sans-serif;
