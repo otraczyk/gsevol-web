@@ -46,9 +46,7 @@ def draw_mapping(gene, species, options=''):
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dmS',
                '-C outputfile="/dev/stdout";%s' % options]
-    source = launch(command)
-    return split_to_pictures(source)
-
+    return launch(command)
 
 def scenarios(gene, species, options=''):
     """List all possible evolutionary scenarios for a pair of trees.
