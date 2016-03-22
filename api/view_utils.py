@@ -18,18 +18,22 @@ JsonResponse = lambda data='', status=200: HttpResponse(
 )
 
 def error_message(exception):
-    if settings.DEBUG:
-        return str(exception)
+    error = re.search(r'Exception\("([^"]*)', str(exception))
+    if error:
+        error = error.group(1)
+    elif settings.DEBUG:
+        error = str(exception)
     else:
-        return "Server error"
+        error = "Server error"
+    return error
 
 def pass_errors_to_response(view_func):
     def wrapper(request):
         try:
             return view_func(request)
         except GseError as exc:
-            # error = re.search(r'Exception\("([^"]*)', str(exc)).group(1)
-            return JsonResponse(str(exc), status=500)
+            error = error_message(exc)
+            return JsonResponse(error, status=500)
         except Exception as exc:
             error = error_message(exc)
             return JsonResponse(error, status=500)

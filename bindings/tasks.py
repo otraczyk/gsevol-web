@@ -41,17 +41,25 @@ class GseTask(Task):
                 self.send_result(result)
             return {}
         except (GseError, AssertionError) as exc:
-            self.send_error(error_message(exc))
+            # This catches only errors from prepare and other code outside task.
+            # Separate try/except is needed inside, in run()
+            self.send_error(exc)
 
-    def send_result(self, data):
-        broadcast_message(data, self.req.socket)
+    def send_result(self, data, socket=None):
+        if socket is None:
+            socket = self.req.socket
+        broadcast_message(data, socket)
 
-    def send_error(self, message):
-        self.send_result({"error": message})
+    def send_error(self, exc, socket=None):
+        message = error_message(exc)
+        self.send_result({self.kind: {"error": message}}, socket)
 
     def run(self, params, socket):
-        result = self.core(params)
-        broadcast_message(result, socket)
+        try:
+            result = self.core(params)
+            broadcast_message(result, socket)
+        except (GseError, AssertionError) as exc:
+            self.send_error(exc, socket)
 
     def prepare(self):
         self.req.check_required_params(self.required_params)

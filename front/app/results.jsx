@@ -1,5 +1,8 @@
 var ResultTile = React.createClass({
   renderChild: function(){
+    if (_.includes(Object.keys(this.props.content), "error")){
+      return <Error message={this.props.content.error} />
+    }
     // Better solution?
     if (_.includes(["gene", "species", "mapping", "unrooted"], this.props.kind)) {
       return <TreePic svg={this.props.content} kind={this.props.kind} />;

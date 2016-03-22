@@ -33,9 +33,6 @@ var App = {
   requestResults: function() {
     if (this.state.params){
       jsonRequestPromise(this.apiUrl, this.state.params, 'POST')
-        .then(function(response) {
-            this.setState(_.merge({}, this.state, {'data': response}));
-          }.bind(this))
         .catch(function(response) {
             this.setState(_.merge({}, this.state, {'error': response.responseText}));
           }.bind(this));

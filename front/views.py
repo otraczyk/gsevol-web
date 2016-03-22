@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, redirect
 
 from bindings import gsevol as Gse
+from bindings.base import GseError
 
 
 def request_params(request):
@@ -53,10 +54,13 @@ def scenario_index(request):
     show_results = bool(scenario)
     gene, species = request_params(request)
     if not scenario and gene and species:
-        scenario = Gse.optscen(gene, species)
+        try:
+            scenario = Gse.optscen(gene, species)
+        except GseError:
+            pass
     template_data = {
-        "default_scenario": scenario,
-        "default_species": species,
+        "default_scenario": scenario or '',
+        "default_species": species or '',
         "form_url": "/scenario/",
         "result_component": "ScenarioApp",
         "show_results": show_results,
