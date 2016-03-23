@@ -54,13 +54,13 @@ var TreePic = React.createClass({
       var styleIcon = <i className="fa fa-cogs"
         onClick={this.renderOptions} title="Stype options"></i>
     }
+        // <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
     return (
       <div>
       {this.props.noted}
       <table className="tree">
       <td className="tree-menu">
         {this.props.otherOptions}
-        <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
         {styleIcon}
       </td>
       <td dangerouslySetInnerHTML={{__html: this.props.svg}}></td>
