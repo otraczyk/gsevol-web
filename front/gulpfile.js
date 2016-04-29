@@ -10,7 +10,15 @@ var gulp  = require('gulp-help')(require('gulp')),
 
 
 var react = require('gulp-react');
+var babel = require('gulp-babel');
 var wiredep = require('wiredep').stream;
+var useref = require('gulp-useref');
+var inject = require('gulp-inject');
+var rename = require('gulp-rename');
+var runSequence = require('run-sequence'),
+    gulpif = require('gulp-if'),
+    uglify = require('gulp-uglify'),
+    minifyCss = require('gulp-minify-css');
 
 gulp.task(
     'watch',
@@ -25,12 +33,18 @@ gulp.task('watch-deps', watchDeps);
 gulp.task('inject', injectDeps);
 gulp.task('styles', false, compileStyles);
 gulp.task('watch-scss', ['styles'], watchScss);
+gulp.task('apply-static', applyStatic);
+gulp.task('concat', ['styles', 'build-react', 'inject'], concat);
+gulp.task('build-production', production);
 
 
 function buildReact(){
     return gulp.src('./app/*.jsx')
-        .pipe(react())
-        .pipe(gulp.dest('./dist'));
+        // .pipe(react())
+        .pipe(babel({
+            presets: ["react"]
+        }))
+        .pipe(gulp.dest('./build'));
 }
 
 function watchReact(){
@@ -47,7 +61,7 @@ function watchDeps(){
 
 function injectDeps(){
     console.log("Injecting bower dependencies");
-    return gulp.src('templates/base.html')
+    return gulp.src('templates/dependencies-empty.html')
         .pipe(wiredep(
         {
             directory: 'bower_components/',
@@ -55,12 +69,16 @@ function injectDeps(){
             fileTypes: {
                 html: {
                   replace: {
-                    js: '<script src="{% static \'{{filePath}}\' %}"></script>',
-                    css: '<link rel="stylesheet" href="{% static \'{{filePath}}\' %}" />'
+                    js: '<script src="\'{{filePath}}\'"></script>',
+                    css: '<link rel="stylesheet" href="\'{{filePath}}\'" />'
                   }
                 }
               }
         }))
+        .pipe(inject(gulp.src(['build/*.*', 'assets/**/*.js'], {read: false}),
+            {relative: true}, {
+        }))
+    .pipe(rename('dependencies.html'))
     .pipe(gulp.dest('templates/'));
 }
 
@@ -75,7 +93,31 @@ function compileStyles() {
     var sassStream = gulp.src('assets/*.scss')
         .pipe(plugins.plumber())
             .pipe(plugins.sass())
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('build/'));
 
     return sassStream;
+}
+
+function concat() {
+    return gulp.src('templates/dependencies.html')
+                .pipe(useref())
+                .pipe(gulpif('*.js', uglify()))
+                .pipe(gulpif('*.css', minifyCss()))
+                .pipe(gulp.dest('templates/'));
+}
+
+function applyStatic() {
+    var buildStatic = function(content) {
+        var re = /\.\.\/dist\/([^"]*)/g;
+        var subst = '{% static \'$1\' %}';
+        var content = content.replace(re, subst);
+        return content;
+    }
+    return gulp.src('templates/dependencies.html')
+            .pipe(useref({buildStatic: buildStatic}))
+            .pipe(gulp.dest('templates/'))
+}
+
+function production(done) {
+    runSequence('concat', 'apply-static', done);
 }

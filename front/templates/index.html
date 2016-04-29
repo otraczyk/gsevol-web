@@ -3,13 +3,7 @@
 
 {% block scripts %}
 {{ block.super }}
-    <script src="{% static 'main.js' %}"></script>
-    <script src="{% static 'options.js' %}"></script>
-    <script src="{% static 'lists.js' %}"></script>
-    <script src="{% static 'results.js' %}"></script>
-    <script src="{% static 'unrooted.js' %}"></script>
-    <script src="{% static 'rooted.js' %}"></script>
-    <script src="{% static 'scenario.js' %}"></script>
+
     <script>
         $(function(){
             var app = React.render(

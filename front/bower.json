@@ -19,5 +19,10 @@
     "lodash": "~4.0.0",
     "purecss-sass": "~0.6.0",
     "react": "~0.13.3"
+  },
+  "overrides": {
+    "react": {
+      "main": "react-with-addons.js"
+    }
   }
 }

@@ -16,6 +16,7 @@ urec/treeman
 front/node_modules/*
 front/bower_components/*
 front/dist/*
+front/build/*
 
 ###################################
 # Gumby.css gitignore

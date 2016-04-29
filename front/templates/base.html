@@ -2,22 +2,10 @@
 <!DOCTYPE html>
 <html lang="pl">
 	<head>
-	 <meta charset="utf-8">
-	 <link rel="stylesheet" href="{% static 'style.css' %}">
-	 <!-- bower:css -->
-	 <link rel="stylesheet" href="{% static 'font-awesome-bower/css/font-awesome.css' %}" />
-	 <!-- endbower -->
-	 <title>Gsevol - phylogenetic analysis tool</title>
-	 </head>
-	<body>
-	<!-- bower:js -->
-	<script src="{% static 'jquery/dist/jquery.js' %}"></script>
-	<script src="{% static 'lodash/lodash.js' %}"></script>
-	<script src="{% static 'react/react.js' %}"></script>
-	<!-- endbower -->
-	<script src="{% static 'react/react-with-addons.js' %}"></script>
-	<script src="{% static 'utils.js' %}"></script>
-	<script src="{% static 'ws4redis.js' %}"></script>
+     <title>Gsevol - phylogenetic analysis tool</title>
+
+	{% include 'dependencies.html' %}
+
 	{% block scripts %}
 	{% endblock %}
 	{% block navbar %}
