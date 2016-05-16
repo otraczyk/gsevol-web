@@ -10,20 +10,19 @@ var gulp  = require('gulp-help')(require('gulp')),
 
 
 var react = require('gulp-react');
-var babel = require('gulp-babel');
 var wiredep = require('wiredep').stream;
 var useref = require('gulp-useref');
 var inject = require('gulp-inject');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence'),
-    gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
-    minifyCss = require('gulp-clean-css');
+    minifyCss = require('gulp-clean-css'),
+    replace = require('gulp-replace');
 
 gulp.task(
     'watch',
     'Watch for any changes in js, scss, html files',
-    ['watch-react', 'watch-deps', 'watch-scss'],
+    ['watch-react', 'watch-deps', 'watch-scss', 'inject-dev'],
     function(){}
 );
 
@@ -42,13 +41,14 @@ gulp.task('concat', [
     ], concat);
 gulp.task('build-production',production);
 
+gulp.task('inject-dev', function(done) {
+    runSequence('inject', 'apply-static', done);
+});
+
 
 function buildReact(){
     return gulp.src('./app/*.jsx')
         .pipe(react())
-        // .pipe(babel({
-        //     presets: ["react"]
-        // }))
         .pipe(gulp.dest('./build'));
 }
 
@@ -60,17 +60,15 @@ function watchReact(){
 
 function watchDeps(){
     return watch('./bower_components/**/*.*', function(){
-        gulp.start('inject');
+        runSequence('inject', 'apply-static');
     });
 }
 
 function injectDeps(){
-    console.log("Injecting bower dependencies");
     return gulp.src('templates/dependencies-empty.html')
         .pipe(wiredep(
         {
             directory: 'bower_components/',
-            // ignorePath: '../bower_components/',
             fileTypes: {
                 html: {
                   replace: {
@@ -106,27 +104,26 @@ function compileStyles() {
 function concat() {
     return gulp.src('templates/dependencies.html')
                 .pipe(useref())
-                // .pipe(gulpif('*.js', uglify()))
-                // .pipe(gulpif('*.css', minifyCss()))
                 .pipe(gulp.dest('templates/'));
 }
 
 function applyStatic() {
-    var buildStatic = function(content) {
-        var re = /\.\.\/dist\/([^"]*)/g;
-        var subst = '{% static \'$1\' %}';
-        var content = content.replace(re, subst);
-        return content;
-    }
+    var re = /\"\.\.\/(dist|bower_components|build|assets)\/([^"]*)\"/g;
+    var subst = '"{% static \'$2\' %}"';
+
     return gulp.src('templates/dependencies.html')
-            .pipe(useref({buildStatic: buildStatic}))
+            .pipe(replace(re, subst))
             .pipe(gulp.dest('templates/'))
 }
 
 function minifyCombined() {
     // Minification in useref doesn't work.
     gulp.src('dist/combined.js')
-        .pipe(uglify())
+        .pipe(uglify({
+            compress: {
+                 drop_console: true
+            }
+        }))
         .pipe(gulp.dest('dist/'));
     gulp.src('dist/combined.css')
         .pipe(minifyCss())
