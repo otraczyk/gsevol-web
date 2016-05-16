@@ -67,8 +67,8 @@ var ScenarioList = React.createClass({
     return jsonRequestPromise('/api/embedding/', params, 'POST');
   },
   showAdditional: function(item) {
-    var scenarioLink = '/scenario/?scenario=' + item
-        + "&species=" + document.getElementById("species").value;
+    var scenarioLink = '/scenario/?scenario=' + item +
+      "&species=" + document.getElementById("species").value;
     return (
       <td>
        <div className="small info btn">
@@ -77,7 +77,7 @@ var ScenarioList = React.createClass({
          </a>
       </div>
       </td>
-    )
+    );
   },
   render: function() {
     return this.baseRender();
@@ -91,8 +91,8 @@ var RootingList = React.createClass({
     return jsonRequestPromise('/api/draw_single/', item, 'POST');
   },
   showAdditional: function(item) {
-    var rootingLink = '/rooted/?gene=' + item
-        + "&species=" + document.getElementById("species").value;
+    var rootingLink = '/rooted/?gene=' + item +
+      "&species=" + document.getElementById("species").value;
     return (
       <td>
        <div className="small info btn">
@@ -101,7 +101,7 @@ var RootingList = React.createClass({
          </a>
       </div>
       </td>
-    )
+    );
   },
   render: function() {
     return this.baseRender();

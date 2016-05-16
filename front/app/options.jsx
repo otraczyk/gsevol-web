@@ -15,7 +15,7 @@ var Options = React.createClass({
     jsonRequestPromise('/api/options/', {'kind': kind}, 'POST')
       .then(function(results) {
         this.setState({'options': results});
-        var conf = {}
+        var conf = {};
         _.each(results, function(opt) {
             conf[opt.name] = opt.default;
           });
@@ -30,10 +30,10 @@ var Options = React.createClass({
     if (field.input === "checkbox") {
       var input = <input type={field.input} name={name}
             checkedLink={this.linkState(name)}
-            onClick={this.handleFieldChange} />
+            onClick={this.handleFieldChange} />;
     } else if (field.input === 'dropdown'){
       var options = _.map(field.scope, function(variant){
-        return <option value={variant[0]}>{variant[1]}</option>
+        return <option value={variant[0]}>{variant[1]}</option>;
       });
       var input = (<select name={field.name} valueLink={this.linkState(name)}>
                       {options}
@@ -41,7 +41,7 @@ var Options = React.createClass({
     } else {
       var input = <input type={field.input} name={name}
             valueLink={this.linkState(name)}
-            onClick={this.handleFieldChange} />
+            onClick={this.handleFieldChange} />;
     }
     return (
       <div className="pure-control-group">
@@ -62,29 +62,26 @@ var Options = React.createClass({
         <button onClick={this.submit}>Submit</button>
       </div>
       </form>
-      )
+      );
   },
   hideSidebar: function() {
     document.getElementById('options').style.visibility = "hidden";
   },
   submit: function() {
-    var currentConf = {}
+    var currentConf = {};
     currentConf[this.props.kind] = _.omit(this.state, ["options"]);
     var params = {
       "config": currentConf,
       "kind": this.props.kind
     };
-    _.merge(params, getUrlParams())
-    jsonRequestPromise('/api/restyle/', params, 'POST')
-      .then(function(results){
-        console.log(results);
-      })
+    _.merge(params, getUrlParams());
+    jsonRequestPromise('/api/restyle/', params, 'POST');
   },
   pass: function(form) {
     form.preventDefault();
   },
   render: function() {
-    var form = this.renderForm()
+    var form = this.renderForm();
     return (<div>
       <button className="fold" onClick={this.hideSidebar}> X </button>
       <h3> Style options - {this.props.kind} </h3>

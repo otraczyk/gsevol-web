@@ -10,7 +10,7 @@ var App = {
         this.requestResults();
       }.bind(this);
       var onSocketMessage = function(data) {
-        data = JSON.parse(data)
+        data = JSON.parse(data);
         console.log("Received: " + Object.keys(data));
         if ("error" in data){
           this.setState(_.merge({}, this.state, data));
@@ -19,8 +19,8 @@ var App = {
         }
         this.setState(_.merge({}, this.state, {'data': data}));
       }.bind(this);
-      var uri = 'ws://' + location.host + '/ws/' + location.search.slice(1)
-        + '?subscribe-broadcast&publish-broadcast&echo';
+      var uri = 'ws://' + location.host + '/ws/' + location.search.slice(1) +
+        '?subscribe-broadcast&publish-broadcast&echo';
       socket = new WS4Redis({
         uri: uri,
         connected: onSocketOpen,
@@ -43,7 +43,7 @@ var App = {
   },
   baseRender: function() {
     if (this.state.data && this.state.error){
-      return <div> <Error message={this.state.error} /> {this.renderResults()} </div>
+      return <div> <Error message={this.state.error} /> {this.renderResults()} </div>;
     }
     else if (this.state.error) {
       return <Error message={this.state.error} />;

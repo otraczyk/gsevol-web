@@ -1,8 +1,8 @@
 function getUrlParams() {
-    var queryDict = {}
+    var queryDict = {};
     location.search.substr(1).split("&")
         .forEach(function(item) {
-            queryDict[item.split("=")[0]] = decodeURIComponent(item.split("=")[1])
+            queryDict[item.split("=")[0]] = decodeURIComponent(item.split("=")[1]);
         });
     return queryDict;
 }
@@ -27,6 +27,6 @@ function jsonRequestPromise(url, params, method) {
                 reject(request.responseText);
             }
         };
-        request.send(JSON.stringify(params))
+        request.send(JSON.stringify(params));
     });
 }

@@ -34,8 +34,13 @@ gulp.task('inject', injectDeps);
 gulp.task('styles', false, compileStyles);
 gulp.task('watch-scss', ['styles'], watchScss);
 gulp.task('apply-static', applyStatic);
-gulp.task('concat', concat);
-gulp.task('build-production', ['build-react', 'styles', 'inject'], production);
+gulp.task('minify', minifyCombined);
+gulp.task('concat', [
+        'build-react',
+        'styles',
+        'inject'
+    ], concat);
+gulp.task('build-production',production);
 
 
 function buildReact(){
@@ -118,6 +123,16 @@ function applyStatic() {
             .pipe(gulp.dest('templates/'))
 }
 
+function minifyCombined() {
+    // Minification in useref doesn't work.
+    gulp.src('dist/combined.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/'));
+    gulp.src('dist/combined.css')
+        .pipe(minifyCss())
+        .pipe(gulp.dest('dist/'));
+}
+
 function production(done) {
-    runSequence('concat', 'apply-static', done);
+    runSequence('concat', 'apply-static', 'minify', done);
 }

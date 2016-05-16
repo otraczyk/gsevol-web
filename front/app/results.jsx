@@ -1,7 +1,7 @@
 var ResultTile = React.createClass({
   renderChild: function(){
     if (_.includes(Object.keys(this.props.content), "error")){
-      return <Error message={this.props.content.error} />
+      return <Error message={this.props.content.error} />;
     }
     // Better solution?
     if (_.includes(["gene", "species", "mapping", "unrooted"], this.props.kind)) {
@@ -49,10 +49,10 @@ var TreePic = React.createClass({
     this.setState({'optionsComp': opt_comp});
   },
   render: function() {
-    var styleIcon = ''
+    var styleIcon = '';
     if (this.props.stylable) {
       var styleIcon = <i className="fa fa-cogs"
-        onClick={this.renderOptions} title="Style options"></i>
+        onClick={this.renderOptions} title="Style options"></i>;
     }
         // <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
     return (
@@ -74,7 +74,7 @@ var Scenario = React.createClass({
   render: function() {
     var costs = (<div> Duplications: {this.props.cost.dups}<br/>
                       Losses: {this.props.cost.losses}
-                </div>)
+                </div>);
     return <TreePic svg={this.props.svg} otherOptions={costs}
               noted={this.props.noted} kind={this.props.kind} />;
   }
