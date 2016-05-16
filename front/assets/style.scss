@@ -1,4 +1,4 @@
-@import "../bower_components/purecss-sass/vendor/assets/stylesheets/purecss";
+@import "bower_components/purecss-sass/vendor/assets/stylesheets/_purecss.scss";
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 #main  {
     margin-top: 0px;
@@ -85,12 +85,12 @@ button.slim  {
     @extend .pure-form-aligned;
 }
 #input-form input[type="text"]  {
-    @extend .pure-input;
-    width: 70%;
+    @extend .pure-input-1;
+    width: 70% !important;
 }
 #options input {
-    @extend .pure-input;
-    width: 30%;
+    @extend .pure-input-1;
+    width: 30% !important;
 }
 #options select {
     color: #000000;

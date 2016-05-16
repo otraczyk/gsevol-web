@@ -52,7 +52,7 @@ var TreePic = React.createClass({
     var styleIcon = ''
     if (this.props.stylable) {
       var styleIcon = <i className="fa fa-cogs"
-        onClick={this.renderOptions} title="Stype options"></i>
+        onClick={this.renderOptions} title="Style options"></i>
     }
         // <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
     return (

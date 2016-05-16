@@ -17,6 +17,7 @@ front/node_modules/*
 front/bower_components/*
 front/dist/*
 front/build/*
+front/templates/dependencies.html
 
 ###################################
 # Gumby.css gitignore

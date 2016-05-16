@@ -18,7 +18,7 @@ var rename = require('gulp-rename');
 var runSequence = require('run-sequence'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
-    minifyCss = require('gulp-minify-css');
+    minifyCss = require('gulp-clean-css');
 
 gulp.task(
     'watch',
@@ -34,16 +34,16 @@ gulp.task('inject', injectDeps);
 gulp.task('styles', false, compileStyles);
 gulp.task('watch-scss', ['styles'], watchScss);
 gulp.task('apply-static', applyStatic);
-gulp.task('concat', ['styles', 'build-react', 'inject'], concat);
-gulp.task('build-production', production);
+gulp.task('concat', concat);
+gulp.task('build-production', ['build-react', 'styles', 'inject'], production);
 
 
 function buildReact(){
     return gulp.src('./app/*.jsx')
-        // .pipe(react())
-        .pipe(babel({
-            presets: ["react"]
-        }))
+        .pipe(react())
+        // .pipe(babel({
+        //     presets: ["react"]
+        // }))
         .pipe(gulp.dest('./build'));
 }
 
@@ -65,12 +65,12 @@ function injectDeps(){
         .pipe(wiredep(
         {
             directory: 'bower_components/',
-            ignorePath: '../bower_components/',
+            // ignorePath: '../bower_components/',
             fileTypes: {
                 html: {
                   replace: {
-                    js: '<script src="\'{{filePath}}\'"></script>',
-                    css: '<link rel="stylesheet" href="\'{{filePath}}\'" />'
+                    js: '<script src="{{filePath}}"></script>',
+                    css: '<link rel="stylesheet" href="{{filePath}}" />'
                   }
                 }
               }
@@ -101,8 +101,8 @@ function compileStyles() {
 function concat() {
     return gulp.src('templates/dependencies.html')
                 .pipe(useref())
-                .pipe(gulpif('*.js', uglify()))
-                .pipe(gulpif('*.css', minifyCss()))
+                // .pipe(gulpif('*.js', uglify()))
+                // .pipe(gulpif('*.css', minifyCss()))
                 .pipe(gulp.dest('templates/'));
 }
 
