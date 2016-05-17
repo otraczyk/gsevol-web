@@ -1,20 +1,18 @@
 {% load staticfiles %}
 
-<!-- build:buildStatic -->
-    <!-- build:css ../dist/combined.css -->
-        <!-- bower:css -->
-        <!-- endbower -->
-        <!-- inject:css -->
-        <!-- endinject -->
-    <!-- endbuild -->
-    <!-- Temporary workaround: -->
-    <link rel="stylesheet" href="{% static 'font-awesome-bower/css/font-awesome.css' %}" />
-    </head>
-    <body>
-    <!-- build:js ../dist/combined.js -->
-        <!-- bower:js -->
-        <!-- endbower -->
-        <!-- inject:js -->
-        <!-- endinject -->
-    <!-- endbuild -->
+<!-- build:css ../dist/combined.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- inject:css -->
+    <!-- endinject -->
+<!-- endbuild -->
+<!-- Temporary workaround: -->
+<link rel="stylesheet" href="{% static 'font-awesome-bower/css/font-awesome.css' %}" />
+</head>
+<body>
+<!-- build:js ../dist/combined.js -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- inject:js -->
+    <!-- endinject -->
 <!-- endbuild -->

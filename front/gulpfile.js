@@ -5,68 +5,79 @@ var plugins = require('gulp-load-plugins')({
   lazy: true
 });
 
-var gulp  = require('gulp-help')(require('gulp')),
-    watch = require('gulp-watch');
+var gulp  = require('gulp-help')(require('gulp'));
 
 
-var react = require('gulp-react');
-var wiredep = require('wiredep').stream;
-var useref = require('gulp-useref');
-var inject = require('gulp-inject');
-var rename = require('gulp-rename');
-var runSequence = require('run-sequence'),
-    uglify = require('gulp-uglify'),
-    minifyCss = require('gulp-clean-css'),
-    replace = require('gulp-replace');
-
+gulp.task('clean', clean);
+gulp.task('build-react', buildReact);
+gulp.task('build-styles', buildStyles);
+gulp.task('watch-react', watchReact);
+gulp.task('watch-styles', watchStyles);
+gulp.task(
+    'inject',
+    'Add reference to all bower dependencies and local js files to html.',
+    injectDeps
+);
+gulp.task('watch-deps', watchDeps);
+gulp.task(
+    'apply-static',
+    'Change all dependencies\'s refs for serving static files from django.',
+    applyStatic
+);
+gulp.task('concat', concat);
+gulp.task('minify', minifyCombined);
+gulp.task('build-production', buildProduction);
+gulp.task('build-dev', buildDev);
 gulp.task(
     'watch',
-    'Watch for any changes in js, scss, html files',
-    ['watch-react', 'watch-deps', 'watch-scss', 'inject-dev'],
+    'Rebuild react, styles and dependencies after code changes.',
+    ['build-dev', 'watch-react', 'watch-deps', 'watch-styles'],
     function(){}
 );
-
-gulp.task('build-react', false, buildReact);
-gulp.task('watch-react', ['build-react'], watchReact);
-gulp.task('watch-deps', watchDeps);
-gulp.task('inject', injectDeps);
-gulp.task('styles', false, compileStyles);
-gulp.task('watch-scss', ['styles'], watchScss);
-gulp.task('apply-static', applyStatic);
-gulp.task('minify', minifyCombined);
-gulp.task('concat', [
-        'build-react',
-        'styles',
-        'inject'
-    ], concat);
-gulp.task('build-production',production);
-
 gulp.task('inject-dev', function(done) {
-    runSequence('inject', 'apply-static', done);
+    plugins.runSequence('inject', 'apply-static', done);
 });
 
 
+function clean(done) {
+    return plugins.del(['dist/*.*', 'build/*.*'], done);
+}
+
 function buildReact(){
     return gulp.src('./app/*.jsx')
-        .pipe(react())
+        .pipe(plugins.react())
         .pipe(gulp.dest('./build'));
 }
 
+function buildStyles() {
+    return gulp.src('assets/*.scss')
+        .pipe(plugins.plumber())
+            .pipe(plugins.sass())
+        .pipe(gulp.dest('build/'));
+}
+
 function watchReact(){
-    return watch('./app/*.jsx', function(){
+    return plugins.watch('./app/*.jsx', function(){
         gulp.start('build-react');
     });
 }
 
 function watchDeps(){
-    return watch('./bower_components/**/*.*', function(){
-        runSequence('inject', 'apply-static');
+    return plugins.watch('./bower_components/**/*.*', function(){
+        plugins.runSequence('inject', 'apply-static');
     });
+}
+
+function watchStyles() {
+  return plugins.watch(['assets/**/*.scss', 'assets/*.scss'],
+    function () {
+        gulp.start('build-styles');
+  });
 }
 
 function injectDeps(){
     return gulp.src('templates/dependencies-empty.html')
-        .pipe(wiredep(
+        .pipe(plugins.wiredep.stream(
         {
             directory: 'bower_components/',
             fileTypes: {
@@ -78,32 +89,17 @@ function injectDeps(){
                 }
               }
         }))
-        .pipe(inject(gulp.src(['build/*.*', 'assets/**/*.js'], {read: false}),
+        .pipe(plugins.inject(gulp.src(['build/*.*', 'assets/**/*.js'], {read: false}),
             {relative: true}, {
         }))
-    .pipe(rename('dependencies.html'))
+    .pipe(plugins.rename('dependencies.html'))
     .pipe(gulp.dest('templates/'));
 }
 
-function watchScss() {
-  plugins.watch(['assets/**/*.scss', 'assets/*.scss'],
-    function () {
-        gulp.start('styles');
-  });
-}
-
-function compileStyles() {
-    var sassStream = gulp.src('assets/*.scss')
-        .pipe(plugins.plumber())
-            .pipe(plugins.sass())
-        .pipe(gulp.dest('build/'));
-
-    return sassStream;
-}
 
 function concat() {
     return gulp.src('templates/dependencies.html')
-                .pipe(useref())
+                .pipe(plugins.useref())
                 .pipe(gulp.dest('templates/'));
 }
 
@@ -112,24 +108,28 @@ function applyStatic() {
     var subst = '"{% static \'$2\' %}"';
 
     return gulp.src('templates/dependencies.html')
-            .pipe(replace(re, subst))
+            .pipe(plugins.replace(re, subst))
             .pipe(gulp.dest('templates/'))
 }
 
 function minifyCombined() {
-    // Minification in useref doesn't work.
     gulp.src('dist/combined.js')
-        .pipe(uglify({
+        .pipe(plugins.uglify({
             compress: {
                  drop_console: true
             }
         }))
         .pipe(gulp.dest('dist/'));
     gulp.src('dist/combined.css')
-        .pipe(minifyCss())
+        .pipe(plugins.cleanCss())
         .pipe(gulp.dest('dist/'));
 }
 
-function production(done) {
-    runSequence('concat', 'apply-static', 'minify', done);
+function buildProduction(done) {
+    plugins.runSequence('clean', ['build-react', 'build-styles'], 'inject', 'concat',
+                'apply-static', 'minify', done);
+}
+
+function buildDev(done){
+    plugins.runSequence('clean', ['build-react', 'build-styles'], 'inject-dev', done);
 }
