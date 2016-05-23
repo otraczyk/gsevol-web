@@ -4,20 +4,13 @@
 *.log
 *.svg
 *.png
-db.sqlite3
 
 *.o
-*/fasturec
-urec/urec
-urec/tt
-urec/treeman
 
 # Frontend
 front/node_modules/*
 front/bower_components/*
-front/dist/*
 front/build/*
-front/templates/dependencies.html
 
 collectedstatic/*
 

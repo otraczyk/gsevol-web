@@ -90,21 +90,21 @@ STATIC_URL = '/static/'
 STATIC_ROOT =  os.path.join(BASE_DIR, 'collectedstatic')
 
 STATICFILES_DIRS = (
-    'front/dist/',
+    os.path.join(BASE_DIR, 'front/dist/'),
 )
 if DEBUG:
         STATICFILES_DIRS += (
-            'front/bower_components/',
-            'front/build/',
-            'front/assets'
+            os.path.join(BASE_DIR, 'front/bower_components/'),
+            os.path.join(BASE_DIR, 'front/build/'),
+            os.path.join(BASE_DIR, 'front/assets')
         )
 
 # Celery settings
 
 # Whether celery and websockets should be used for delivering computation results.
 # May be disabled for development.
-DELEGATE_TASKS = True
-# DELEGATE_TASKS = False
+# DELEGATE_TASKS = True
+DELEGATE_TASKS = False
 
 if 'DJANGO_SETTINGS_MODULE' not in os.environ:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
