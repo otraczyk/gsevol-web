@@ -18,7 +18,7 @@ JsonResponse = lambda data='', status=200: HttpResponse(
 )
 
 def error_message(exception):
-    error = re.search(r'Exception\("([^"]*)', str(exception))
+    error = re.search(r'(Exception\("([^"]*)|([A-Z]+\w*Error: ([^"\["]*)))', str(exception))
     if error:
         error = error.group(1)
     elif settings.DEBUG:
