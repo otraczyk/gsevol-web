@@ -1,5 +1,5 @@
 apt-get -qq update
-apt-get -y install build-essential tcl8.5 >/dev/null
+apt-get -y install build-essential tcl8.5 python2.7-dev python-gtk2-dev >/dev/null
 # apt-get -y install git >/dev/null
 
 # git clone https://github.com/otraczyk/gsevol-web.git
@@ -51,13 +51,13 @@ chmod +x fasturec/fasturec
 cd ~/gsevol-web/
 ~/gsevol-web/manage.py migrate
 ~/gsevol-web/manage.py loaddata options.json
-
+~/gsevol-web/manage.py collectstatic <<< "yes"
 
 apt-get -y install nginx supervisor > /dev/null
 pip install uwsgi
 # cat ~/gsevol-web/system-requirements.txt | xargs apt-get -y  install
 # cp ~/gsevol-web/ops/nginx.conf /etc/nginx/nginx.conf
-cp ~/gsevol-web/ops/sv-uwsgi /etc/supervisor/conf.d/uwsgi-gsevolapp.conf
-cp ~/gsevol-web/options/gsevol-web /etc/nginx/sites-available/
+cp ~/gsevol-web/ops/sv-uwsgi.conf /etc/supervisor/conf.d/uwsgi-gsevolapp.conf
+cp ~/gsevol-web/ops/gsevol-web /etc/nginx/sites-available/
 ln -s /etc/nginx/sites-available/gsevol-web /etc/nginx/sites-enabled/gsevol-web
 rm /etc/nginx/sites-available/default
