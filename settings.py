@@ -123,3 +123,12 @@ app.conf.update(
 )
 
 app.autodiscover_tasks(lambda: INSTALLED_APPS)
+
+# Local settings can overload values defined in this file.
+# They should define:
+# SECRET_KEY = ''
+# ALLOWED_HOSTS = [] - for production setup
+try:
+    from .settings_local import *
+except ImportError:
+    pass

@@ -1,0 +1,1 @@
+build-essential tcl8.5 python2.7-dev python-gtk2-dev fonts-inconsolata npm nginx supervisor
