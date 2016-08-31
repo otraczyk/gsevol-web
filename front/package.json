@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "dependencies": {
+    "bluebird": "^3.4.4",
     "bower": "^1.5.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
