@@ -1,5 +1,6 @@
 apt-get -qq update
-/home/gsevolapp/gsevol-web/system-requirements.txt | xargs apt-get -y  install > /dev/null
+cat /home/gsevolapp/gsevol-web/ops/system-requirements.txt | xargs apt-get -y  install > /dev/null
+ln -s "$(which nodejs)" /usr/bin/node
 npm --silent install -g gulp bower
 
 cd /home/gsevolapp
@@ -14,10 +15,9 @@ cd utils
 # update-rc.d redis_6379 defaults
 echo "bind 127.0.0.1" >> /etc/redis/6379.conf
 
-apt-get -y install nginx supervisor > /dev/null
 cp /home/gsevolapp/gsevol-web/ops/nginx/nginx.conf /etc/nginx/nginx.conf
 cp /home/gsevolapp/gsevol-web/ops/supervisor/uwsgi-gsevolapp.conf /etc/supervisor/conf.d/
-cp /home/gsevolapp/gsevol-web/ops/sv-celery.conf /etc/supervisor/conf.d/
+cp /home/gsevolapp/gsevol-web/ops/supervisor/celery-gsevolapp.conf /etc/supervisor/conf.d/
 cp /home/gsevolapp/gsevol-web/ops/gsevol-web /etc/nginx/sites-available/
 ln -s /etc/nginx/sites-available/gsevol-web /etc/nginx/sites-enabled/gsevol-web
 rm /etc/nginx/sites-available/default

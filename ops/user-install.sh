@@ -1,3 +1,4 @@
+export DJANGO_SETTINGS_MODULE=settings.production
 echo "export WORKON_HOME=~/Env" >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 source ~/.bashrc
@@ -5,9 +6,9 @@ virtualenv --python=python2.7 --system-site-packages ~/Env/gsevol
 source ~/Env/gsevol/bin/activate
 pip install -r ~/gsevol-web/requirements.txt
 
-npm --silent install --prefix ~/gsevol-web/front/
 cd ~/gsevol-web/front
-bower install --allow-root
+npm --silent install
+bower install
 gulp build-production
 cd ~
 

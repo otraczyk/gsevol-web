@@ -1,1 +1,1 @@
-build-essential tcl8.5 python2.7-dev python-gtk2-dev fonts-inconsolata npm nginx supervisor
+build-essential tcl8.5 python2.7-dev python-virtualenv virtualenvwrapper python-gtk2-dev fonts-inconsolata npm nginx supervisor
