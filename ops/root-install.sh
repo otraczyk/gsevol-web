@@ -1,3 +1,4 @@
+export DJANGO_SETTINGS_MODULE=settings.production
 apt-get -qq update
 cat /home/gsevolapp/gsevol-web/ops/system-requirements.txt | xargs apt-get -y  install > /dev/null
 ln -s "$(which nodejs)" /usr/bin/node
@@ -21,3 +22,5 @@ cp /home/gsevolapp/gsevol-web/ops/supervisor/celery-gsevolapp.conf /etc/supervis
 cp /home/gsevolapp/gsevol-web/ops/gsevol-web /etc/nginx/sites-available/
 ln -s /etc/nginx/sites-available/gsevol-web /etc/nginx/sites-enabled/gsevol-web
 rm /etc/nginx/sites-available/default
+
+# Fill ALLOWED_HOSTS = ['serv'] in settings/local.py or all requests would be HTTP 400

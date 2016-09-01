@@ -4,7 +4,7 @@ Django settings for gsevol project.
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 # Quick-start development settings - unsuitable for production
@@ -99,36 +99,15 @@ if DEBUG:
             'front/assets'
         )
 
-# Celery settings
 
-# Whether celery and websockets should be used for delivering computation results.
-# May be disabled for development.
-DELEGATE_TASKS = True
-# DELEGATE_TASKS = False
-
-if 'DJANGO_SETTINGS_MODULE' not in os.environ:
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.base'
-import django
-django.setup()
-
-from celery import Celery
-app = Celery('gsevol')
-
-app.conf.update(
-    BROKER_URL = 'redis://localhost/',
-    CELERY_RESULT_BACKEND = "redis://localhost/",
-    CELERY_ACCEPT_CONTENT = ['json', 'msgpack'],
-    CELERY_TASK_SERIALIZER = 'json',
-    CELERY_RESULT_SERIALIZER = 'json'
-)
-
-app.autodiscover_tasks(lambda: INSTALLED_APPS)
+if os.environ['DJANGO_SETTINGS_MODULE'] == 'settings.base':
+    from settings.celeryapp import *
 
 # Local settings can overload values defined in this file.
 # They should define:
 # SECRET_KEY = ''
 # ALLOWED_HOSTS = [] - for production setup
 try:
-    from .local import *
+    from settings.local import *
 except ImportError:
     pass

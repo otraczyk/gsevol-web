@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 from celery import Task
-from settings.base import app
+from settings.celeryapp import app
 from django.conf import settings
 
 from api.view_utils import broadcast_message, ProcessedRequest, error_message

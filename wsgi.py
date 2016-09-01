@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.base')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.production')
 from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 from ws4redis.uwsgi_runserver import uWSGIWebsocketServer
