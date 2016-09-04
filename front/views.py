@@ -61,6 +61,7 @@ def scenario_index(request):
     template_data = {
         "default_scenario": scenario or '',
         "default_species": species or '',
+        "default_gene": gene or '',
         "form_url": "/scenario/",
         "result_component": "ScenarioApp",
         "show_results": show_results,
