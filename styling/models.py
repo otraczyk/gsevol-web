@@ -7,7 +7,7 @@ class Option(models.Model):
 
     This data is constant, at least within app runtime.
     """
-    label = models.CharField(max_length=100)
+    label = models.TextField(max_length=100)
     name = models.CharField(max_length=100, db_index=True)
     gene = models.BooleanField(default=False)
     species = models.BooleanField(default=False)
@@ -20,7 +20,7 @@ class Option(models.Model):
     verbose_scope = models.CharField(max_length=100, default='', blank=True)
     type = models.CharField(max_length=100)
     default = models.CharField(max_length=100)
-    description = models.CharField(max_length=100, default='', blank=True)
+    description = models.TextField(max_length=300, default='', blank=True)
 
 
     def __str__(self):
