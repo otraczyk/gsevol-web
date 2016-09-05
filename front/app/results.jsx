@@ -49,13 +49,16 @@ var TreePic = React.createClass({
     this.setState({'optionsComp': opt_comp});
   },
   render: function() {
+    var img = "data:image/svg+xml," + encodeURIComponent(this.props.svg);
     var styleIcon = '';
     if (this.props.stylable) {
       var styleIcon = <i className="fa fa-cogs"
         onClick={this.renderOptions} title="Style options"></i>;
+      var filename = this.props.kind + ".svg";
+      var downloadIcon = <a href={img} download={filename}>
+                           <br/><i className="fa fa-download" title="Download"></i>
+                         </a>;
     }
-        // <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
-    var img = "data:image/svg+xml," + encodeURIComponent(this.props.svg);
     return (
       <div>
       {this.props.noted}
@@ -63,6 +66,7 @@ var TreePic = React.createClass({
       <td className="tree-menu">
         {this.props.otherOptions}
         {styleIcon}
+        {downloadIcon}
       </td>
       <td>
       <img src={img}></img>
