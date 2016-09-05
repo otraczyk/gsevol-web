@@ -28,7 +28,7 @@ def split_to_pictures(source):
 
 
 def draw_single_tree(tree, options=''):
-    return launch(['-g %s' % tree, '-dgS', '-C fonttext=("Inconsolata",);outputfile="/dev/stdout";%s' % options])
+    return launch(['-g %s' % tree, '-dgS', '-C outputfile="/dev/stdout";%s' % options])
 
 
 def draw_trees(gene, species):
@@ -36,7 +36,7 @@ def draw_trees(gene, species):
     Draw basic output for a tree pair: gene tree and species tree.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dgsS',
-               '-C fonttext=("Inconsolata",);outputfile="/dev/stdout"']
+               '-C outputfile="/dev/stdout"']
     source = launch(command)
     return split_to_pictures(source)
 
@@ -45,7 +45,7 @@ def draw_mapping(gene, species, options=''):
     Draw LCA mapping for a tree pair.
     """
     command = ['-g %s' % gene, '-s %s' % species, '-dmS',
-               '-C fonttext=("Inconsolata",);outputfile="/dev/stdout";%s' % options]
+               '-C outputfile="/dev/stdout";%s' % options]
     return launch(command)
 
 def scenarios(gene, species, options=''):
@@ -53,7 +53,7 @@ def scenarios(gene, species, options=''):
 
     Order: optimal to worst.
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-eGa', '-C fonttext=("Inconsolata",);%s' % options]
+    command = ['-g %s' % gene, '-s %s' % species, '-eGa', '-C %s' % options]
     scenarios = launch(command, timeout=100).strip().split('\n')
     scenarios.reverse()
     return scenarios
@@ -64,7 +64,7 @@ def optscen(gene, species, options=''):
 
     Separated from scenarios(), which can be slow for larger trees.
     """
-    command = ['-g %s' % gene, '-s %s' % species, '-eGn', '-C fonttext=("Inconsolata",);%s' % options]
+    command = ['-g %s' % gene, '-s %s' % species, '-eGn', '-C %s' % options]
     scenario = launch(command).strip()
     return scenario
 
@@ -74,7 +74,7 @@ def draw_embedding(species, scenario, options=''):
     Return svg source for embedding of a species tree into given scenario.
     """
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
-               '-C fonttext=("Inconsolata",);outputfile="/dev/stdout";scale=2.5; %s' % options]
+               '-C outputfile="/dev/stdout";scale=2.5; %s' % options]
     return launch(command)
 
 
@@ -87,7 +87,7 @@ def draw_diagram(gene, species, options=''):
     scen_command = ['-g %s' % gene, '-s %s' % species, '-esfG', '-vp']
     scen_output = launch(scen_command)
     scen_file = wrap_in_tempfile(scen_output)
-    diag_command = ['-dd', '-C fonttext=("Inconsolata",);outputfile="/dev/stdout"; %s' % options]
+    diag_command = ['-dd', '-C outputfile="/dev/stdout"; %s' % options]
     diag_output = launch(diag_command, stdin=scen_file, timeout=1200)
     return diag_output
 

@@ -58,5 +58,13 @@ def stringify_options(config):
 
 def make_options(kind, config):
     cleaned = clean_options(kind, config)
+    cleaned.update(system_options())
     return stringify_options(cleaned)
+
+def system_options():
+    try:
+        from django.conf import settings
+        return settings.GSEVOL_STYLE_OPTIONS
+    except NameError:
+        return {}  # System options not set, nothing to do.
 

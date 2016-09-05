@@ -4,7 +4,7 @@ import json
 from api.view_utils import JsonResponse, pass_errors_to_response, deploy_tasks
 from bindings import gsevol as Gse
 from bindings import urec as Urec
-
+from styling.utils import make_options
 from bindings import tasks
 
 
@@ -35,7 +35,8 @@ def draw(request):
 @pass_errors_to_response
 def draw_single(request):
     tree = json.loads(request.body)
-    picture = Gse.draw_single_tree(tree)
+    options = make_options('gene', {})
+    picture = Gse.draw_single_tree(tree, options)
     return JsonResponse(picture)
 
 @pass_errors_to_response
@@ -43,7 +44,8 @@ def draw_embedding(request):
     input_trees = json.loads(request.body)
     scenario, species = input_trees.get("scenario"), input_trees.get("species")
     if scenario and species:
-        result = Gse.draw_embedding(species, scenario)
+        options = make_options('scenario', {})
+        result = Gse.draw_embedding(species, scenario, options)
         return JsonResponse(result)
     else:
         msg = "'scenario' and 'species' are required"

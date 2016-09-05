@@ -108,6 +108,13 @@ if DEBUG:
 if os.environ['DJANGO_SETTINGS_MODULE'] == 'settings.base':
     from settings.celeryapp import *
 
+# System-specific style options for Gsevol
+GSEVOL_STYLE_OPTIONS = {
+    # Fonts to be used in gsevol trees.
+    'fonttext': ('Arial',),
+    # 'fontmath': ('Inconsolata',),
+}
+
 # Local settings can overload values defined in this file.
 # They should define:
 # SECRET_KEY = ''
