@@ -55,6 +55,7 @@ var TreePic = React.createClass({
         onClick={this.renderOptions} title="Style options"></i>;
     }
         // <i className="fa fa-download" onClick={this.renderOptions} title="Download"></i><br/>
+    var img = "data:image/svg+xml," + encodeURIComponent(this.props.svg);
     return (
       <div>
       {this.props.noted}
@@ -63,7 +64,9 @@ var TreePic = React.createClass({
         {this.props.otherOptions}
         {styleIcon}
       </td>
-      <td dangerouslySetInnerHTML={{__html: this.props.svg}}></td>
+      <td>
+      <img src={img}></img>
+      </td>
       </table>
       </div>
     );

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from bindings.base import launch as base_launch
 from bindings.utils import wrap_in_tempfile
 
