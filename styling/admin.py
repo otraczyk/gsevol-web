@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.forms import TextInput, Textarea
+from django.forms import TextInput, Textarea, NumberInput
 from django.db import models
 
 from styling.models import Option
@@ -19,16 +19,17 @@ admin_site = OptionAdminSite(name='site')
 
 
 class OptionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'label', 'type', 'default', 'unrooted', 'gene',
+    list_display = ('name', 'label', 'type', 'default', 'step', 'unrooted', 'gene',
                      'species', 'scenario', 'diagram', 'mapping', 'html_input',
                      'description')
     list_filter = ('unrooted', 'scenario', 'diagram', 'mapping', 'gene')
     list_editable = ('unrooted', 'scenario', 'default', 'type', 'label',
                      'diagram', 'mapping', 'gene', 'html_input', 'species',
-                     'description')
+                     'description', 'step')
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size':'5'})},
         models.TextField: {'widget': TextInput(attrs={'size':'18'})},
+        models.FloatField: {'widget': NumberInput(attrs={'style':'width:40px'})},
     }
 
 admin_site.register(Option, OptionAdmin)

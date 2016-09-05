@@ -21,6 +21,7 @@ class Option(models.Model):
     type = models.CharField(max_length=100)
     default = models.CharField(max_length=100)
     description = models.TextField(max_length=300, default='', blank=True)
+    step = models.FloatField(default=1)
 
 
     def __str__(self):
@@ -76,4 +77,5 @@ class Option(models.Model):
             'input': self.html_input,
             'default': self.fix_boolean(self.default),
             'scope': self.get_scope(),
+            'step': self.step,
         }

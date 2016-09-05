@@ -31,13 +31,17 @@ var Options = React.createClass({
       var input = <input type={field.input} name={name}
             checkedLink={this.linkState(name)}
             onClick={this.handleFieldChange} />;
-    } else if (field.input === 'dropdown'){
+    } else if (field.input === 'dropdown') {
       var options = _.map(field.scope, function(variant){
         return <option value={variant[0]}>{variant[1]}</option>;
       });
       var input = (<select name={field.name} valueLink={this.linkState(name)}>
                       {options}
                   </select>);
+    } else  if (field.input ==='number') {
+      var input = <input type={field.input} name={name}
+            valueLink={this.linkState(name)} step={field.step}
+            onClick={this.handleFieldChange} />;
     } else {
       var input = <input type={field.input} name={name}
             valueLink={this.linkState(name)}
