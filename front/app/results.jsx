@@ -21,17 +21,13 @@ var ResultTile = React.createClass({
     }
   },
   render: function() {
-    if (this.props.content){
-      var child = this.renderChild();
-      return (
-        <div className="result-tile">
-          <div className="title"> {this.props.title} </div>
-          {child}
-        </div>
-      );
-    } else {
-      return <div></div>;
-    }
+    var child = this.renderChild();
+    return (
+      <div className="result-tile">
+        <div className="title"> {this.props.title} </div>
+        {child}
+      </div>
+    );
   }
 });
 var TreePic = React.createClass({
@@ -50,14 +46,20 @@ var TreePic = React.createClass({
   },
   render: function() {
     var img = "data:image/svg+xml," + encodeURIComponent(this.props.svg);
+    var imgTag = <img src={img}></img>
     var styleIcon = '';
-    if (this.props.stylable) {
-      var styleIcon = <i className="fa fa-cogs"
+    var downloadIcon = '';
+    if (this.props.svg && ! _.isEmpty(this.props.svg)){
+      if (this.props.stylable) {
+        var styleIcon = <i className="fa fa-cogs"
         onClick={this.renderOptions} title="Style options"></i>;
-      var filename = this.props.kind + ".svg";
-      var downloadIcon = <a href={img} download={filename}>
-                           <br/><i className="fa fa-download" title="Download"></i>
-                         </a>;
+        var filename = this.props.kind + ".svg";
+        var downloadIcon = <a href={img} download={filename}>
+                             <br/><i className="fa fa-download" title="Download"></i>
+                           </a>;
+      }
+    } else {
+      imgTag = <i className="fa fa-spinner fa-spin fa-4x fa-fw" title="Loading"></i>
     }
     return (
       <div>
@@ -69,7 +71,7 @@ var TreePic = React.createClass({
         {downloadIcon}
       </td>
       <td>
-      <img src={img}></img>
+      {imgTag}
       </td>
       </table>
       </div>
@@ -79,9 +81,13 @@ var TreePic = React.createClass({
 
 var Scenario = React.createClass({
   render: function() {
-    var costs = (<div> Duplications: {this.props.cost.dups}<br/>
-                      Losses: {this.props.cost.losses}
-                </div>);
+    if (this.props.cost) {
+      var costs = (<div> Duplications: {this.props.cost.dups}<br/>
+                        Losses: {this.props.cost.losses}
+                  </div>);
+    } else {
+      var costs = <p></p>;
+    }
     return <TreePic svg={this.props.svg} otherOptions={costs}
               noted={this.props.noted} kind={this.props.kind} />;
   }

@@ -27,7 +27,7 @@ var UnrootedResults = React.createClass({
           ];
     var tiles = tiles.map(function(tile){
       return (
-        <ResultTile kind={tile[0]} content={tile[1]} title={tile[2]} />
+        <ResultTile kind={tile[0]} content={tile[1] || {}} title={tile[2]} />
       );
     });
     return <div className="row">{tiles} </div>;

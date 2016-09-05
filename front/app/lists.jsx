@@ -49,12 +49,16 @@ var List = {
             showAdditional={this.showAdditional} kind={this.itemKind} />);
   },
   baseRender: function() {
-    var scenRows = this.props.content.map(this.renderItem);
-    return (
-      <table><tbody>
-        {scenRows}
-      </tbody></table>
-    );
+    if (this.props.content && !_.isEmpty(this.props.content)){
+      var scenRows = this.props.content.map(this.renderItem);
+      return (
+        <table><tbody>
+          {scenRows}
+        </tbody></table>
+      );
+    } else {
+      return <i className="fa fa-spinner fa-spin fa-5x fa-fw" title="Loading"></i>;
+    }
   }
 };
 

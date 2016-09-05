@@ -1,6 +1,6 @@
 var App = {
   getInitialState: function() {
-    return {'params': getUrlParams()};
+    return {'params': getUrlParams(), data: {}};
   },
   openSocket: function(){
     // We neet the socket open before any results can come, or they'll be lost.

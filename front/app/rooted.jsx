@@ -28,7 +28,7 @@ var Results = React.createClass({
       tiles.push(['button', {text: "Open diagram", resType: "diagram"}, 'Diagram']);
     }
     var tiles = tiles.map(function(tile){
-      return <ResultTile kind={tile[0]} content={tile[1]} title={tile[2]} />;
+      return <ResultTile kind={tile[0]} content={tile[1] || {}} title={tile[2]} />;
     });
     return <div className="row">{tiles} </div>;
   }
