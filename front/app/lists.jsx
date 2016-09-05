@@ -52,7 +52,7 @@ var List = {
     if (this.props.content && !_.isEmpty(this.props.content)){
       var scenRows = this.props.content.map(this.renderItem);
       return (
-        <table><tbody>
+        <table className="list-table"><tbody>
           {scenRows}
         </tbody></table>
       );
@@ -72,7 +72,8 @@ var ScenarioList = React.createClass({
   },
   showAdditional: function(item) {
     var scenarioLink = '/scenario/?scenario=' + item +
-      "&species=" + document.getElementById("species").value;
+      "&species=" + document.getElementById("species").value +
+      "&gene=" + document.getElementById("gene").value;
     return (
       <td>
        <div className="small info btn">

@@ -22,7 +22,7 @@ class OptionAdmin(admin.ModelAdmin):
     list_display = ('name', 'label', 'type', 'default', 'step', 'unrooted', 'gene',
                      'species', 'scenario', 'diagram', 'mapping', 'html_input',
                      'description')
-    list_filter = ('unrooted', 'scenario', 'diagram', 'mapping', 'gene')
+    list_filter = ('gene', 'species', 'unrooted', 'mapping', 'scenario', 'diagram')
     list_editable = ('unrooted', 'scenario', 'default', 'type', 'label',
                      'diagram', 'mapping', 'gene', 'html_input', 'species',
                      'description', 'step')
