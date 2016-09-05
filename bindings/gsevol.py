@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import tempfile
 from bindings.base import launch as base_launch
 from bindings.utils import wrap_in_tempfile
 
@@ -72,9 +73,11 @@ def draw_embedding(species, scenario, options=''):
     """
     Return svg source for embedding of a species tree into given scenario.
     """
+    tmp = tempfile.NamedTemporaryFile()
     command = ['-t %s' % scenario, '-s %s' % species, '-de',
-               '-C outputfile="/dev/stdout";scale=2.5; %s' % options]
-    return launch(command)
+               '-C outputfile="%s";scale=2.5; %s' % (tmp.name, options)]
+    launch(command)
+    return tmp.read()
 
 
 def draw_diagram(gene, species, options=''):

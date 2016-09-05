@@ -62,7 +62,11 @@ class Option(models.Model):
         valid_types = ('float', 'bool', 'int', 'str')
         assert self.type in valid_types
         cast = eval(self.type)
-        return cast(value)
+        casted = cast(value)
+        if self.type != 'str':
+            return casted
+        else:
+            return '\'' + casted + '\''
 
     def valid(self, value):
         validations = [
