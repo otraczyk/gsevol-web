@@ -40,6 +40,7 @@ def form_data(request, unrooted=False):
 
 
 def index(request, unrooted=False):
+    request.session.create()
     data = form_data(request, unrooted)
     if any(request_params(request)):
         data["show_results"] = True

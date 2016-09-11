@@ -3,7 +3,7 @@ from celery import Task
 from settings.celeryapp import app
 from django.conf import settings
 
-from api.view_utils import broadcast_message, ProcessedRequest, error_message
+from api.view_utils import send_message, ProcessedRequest, error_message
 from styling.utils import make_options
 from bindings.base import GseError
 from bindings import gsevol as Gse
@@ -35,7 +35,7 @@ class GseTask(Task):
         try:
             self.prepare()
             if not skip_delegate and settings.DELEGATE_TASKS:
-                self.delay(self.params, self.req.socket)
+                self.delay(self.params, self.req.socket, self.req.session)
             else:
                 result = self.core(self.params)
                 self.send_result(result)
@@ -48,18 +48,20 @@ class GseTask(Task):
     def send_result(self, data, socket=None):
         if socket is None:
             socket = self.req.socket
-        broadcast_message(data, socket)
+        if session is None:
+            session = self.req.session
+        send_message(data, socket, self.req.session)
 
-    def send_error(self, exc, socket=None):
+    def send_error(self, exc, socket=None, session=None):
         message = error_message(exc)
-        self.send_result({self.kind: {"error": message}}, socket)
+        self.send_result({self.kind: {"error": message}}, socket, session)
 
-    def run(self, params, socket):
+    def run(self, params, socket, session):
         try:
             result = self.core(params)
-            broadcast_message(result, socket)
+            send_message(result, socket, session)
         except (GseError, AssertionError) as exc:
-            self.send_error(exc, socket)
+            self.send_error(exc, socket, session)
 
     def prepare(self):
         self.req.check_required_params(self.required_params)

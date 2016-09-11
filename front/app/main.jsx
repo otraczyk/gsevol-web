@@ -20,7 +20,7 @@ var App = {
         this.setState(_.merge({}, this.state, {'data': data}));
       }.bind(this);
       var uri = 'ws://' + location.host + '/ws/' + location.search.slice(1) +
-        '?subscribe-broadcast&publish-broadcast&echo';
+        '?subscribe-session';
       socket = new WS4Redis({
         uri: uri,
         connected: onSocketOpen,

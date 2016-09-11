@@ -40,11 +40,11 @@ def pass_errors_to_response(view_func):
 
     return wrapper
 
-def broadcast_message(text, channel):
-    """Send broadcast message to a websocket.
+def send_message(text, channel, session):
+    """Send a message to a websocket.
     """
     msg = RedisMessage(json.dumps(text))
-    RedisPublisher(facility=channel, broadcast=True).publish_message(msg)
+    RedisPublisher(facility=channel, sessions=[session]).publish_message(msg)
 
 
 class ProcessedRequest(object):
@@ -53,6 +53,7 @@ class ProcessedRequest(object):
         self.socket = self.websocket_channel(http_request)
         req_body = json.loads(http_request.body)
         self.params = {}
+        self.session = http_request.session.session_key
         for param, value in req_body.items():
             self.params[param] = value
 
