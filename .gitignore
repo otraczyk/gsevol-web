@@ -21,6 +21,8 @@ front/templates/dependencies.html
 
 collectedstatic/*
 
+lib/*
+
 ###################################
 # Gumby.css gitignore
 ###################################

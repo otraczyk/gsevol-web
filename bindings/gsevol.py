@@ -5,7 +5,7 @@ from bindings.utils import wrap_in_tempfile
 
 
 def launch(params, timeout=300, stdin=None, *args, **kwargs):
-    command = ['python2', 'gsevol2013/src/gsevol.py']
+    command = ['python2', 'lib/gsevol2013/src/gsevol.py']
     return base_launch(command, params, timeout, stdin, *args, **kwargs)
 
 

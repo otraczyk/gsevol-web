@@ -11,10 +11,10 @@ from bindings.utils import wrap_in_tempfile
 
 
 def launch_fasturec(params, timeout=300, stdin=None, *args, **kwargs):
-    return launch(['fasturec/fasturec'], params, timeout, stdin, *args, **kwargs)
+    return launch(['lib/fasturec/fasturec'], params, timeout, stdin, *args, **kwargs)
 
 def launch_urec(params, timeout=300, stdin=None, *args, **kwargs):
-    return launch(['urec/urec'], params, timeout, stdin, *args, **kwargs)
+    return launch(['lib/urec/urec'], params, timeout, stdin, *args, **kwargs)
 
 def draw_unrooted(gene, species, cost, options=''):
     assert cost in ("DL", "D", "L", "DC", "RF"), "Wrong cost function: %s" % cost
