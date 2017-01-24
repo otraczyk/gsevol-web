@@ -1,5 +1,7 @@
 # Gsevol-web
 
+![App screenshot](https://github.com/otraczyk/gsevol-web/blob/master/demo.png)
+
 Gsevol is a web application for reconciling and visualizing phylogenetic trees.
 It was started as a thesis project in Bioinformatics.
 
